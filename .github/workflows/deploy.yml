@@ -1,0 +1,49 @@
+name: Test and deploy
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: production-${{ github.ref }}
+  cancel-in-progress: false
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+          cache-dependency-path: app/package-lock.json
+      - run: npm ci
+        working-directory: app
+      - run: node --experimental-strip-types --test tests/game.test.ts tests/lesson-web.test.mjs tests/explore-model.test.mjs tests/explore-v1.test.mjs
+        working-directory: app
+      - run: npm run build
+        working-directory: app
+        env:
+          DEPLOY_BASE: /music/
+      - uses: actions/upload-artifact@v4
+        with:
+          name: site
+          path: app/dist
+          retention-days: 14
+      - name: Deploy verified build
+        if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
+        env:
+          DEPLOY_KEY: ${{ secrets.DEPLOY_KEY }}
+          DEPLOY_KNOWN_HOSTS: ${{ secrets.DEPLOY_KNOWN_HOSTS }}
+          RELEASE: ${{ github.sha }}
+        run: |
+          install -m 700 -d ~/.ssh
+          printf '%s\n' "$DEPLOY_KEY" > ~/.ssh/id_ed25519
+          chmod 600 ~/.ssh/id_ed25519
+          printf '%s\n' "$DEPLOY_KNOWN_HOSTS" > ~/.ssh/known_hosts
+          tar -czf "$RELEASE.tar.gz" -C app/dist .
+          scp -o BatchMode=yes "$RELEASE.tar.gz" fretdeploy@43.142.118.254:/srv/fret2tone/incoming/
+          ssh -o BatchMode=yes fretdeploy@43.142.118.254 "/usr/local/bin/fret2tone-activate $RELEASE"
+          rm ~/.ssh/id_ed25519

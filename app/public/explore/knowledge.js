@@ -4,7 +4,7 @@ export function articleMarkup(article, level = 'h1') {
   return `<p class="eyebrow">${article.category}</p><${level}>${article.title}</${level}><p class="article-summary">${article.summary}</p>${article.body}`;
 }
 export function presetUrl(article) {
-  return '/explore/';
+  return '../explore/';
 }
 export function initWiki() {
   const list = document.querySelector('#article-list'), search = document.querySelector('#search');
@@ -47,7 +47,7 @@ export function initPanel(applyPreset) {
       const button = document.createElement('button'); button.className = 'primary'; button.textContent = '在指板查看';
       button.onclick = () => { applyPreset(article.preset); close(); }; actions.append(button);
     }
-    const link = document.createElement('a'); link.href = `/wiki/#${article.id}`; link.textContent = '打开完整文章 ↗'; actions.append(link);
+    const link = document.createElement('a'); link.href = `../wiki/#${article.id}`; link.textContent = '打开完整文章 ↗'; actions.append(link);
     panel.scrollTop = 0;
   }
   function open(id, trigger) {
