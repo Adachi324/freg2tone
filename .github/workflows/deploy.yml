@@ -12,6 +12,7 @@ concurrency:
 jobs:
   build:
     runs-on: ubuntu-latest
+    timeout-minutes: 10
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -44,6 +45,6 @@ jobs:
           chmod 600 ~/.ssh/id_ed25519
           printf '%s\n' "$DEPLOY_KNOWN_HOSTS" > ~/.ssh/known_hosts
           tar -czf "$RELEASE.tar.gz" -C app/dist .
-          scp -o BatchMode=yes "$RELEASE.tar.gz" fretdeploy@43.142.118.254:/srv/fret2tone/incoming/
-          ssh -o BatchMode=yes fretdeploy@43.142.118.254 "/usr/local/bin/fret2tone-activate $RELEASE"
+          scp -o BatchMode=yes -o ConnectTimeout=30 "$RELEASE.tar.gz" fretdeploy@43.142.118.254:/srv/fret2tone/incoming/
+          ssh -o BatchMode=yes -o ConnectTimeout=30 fretdeploy@43.142.118.254 "/usr/local/bin/fret2tone-activate $RELEASE"
           rm ~/.ssh/id_ed25519
