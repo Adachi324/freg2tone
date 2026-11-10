@@ -1,0 +1,13 @@
+stories:
+  - id: '1'
+    title: 第一章教学
+    status: in-review
+    file: stories/1-lesson.md
+  - id: '2'
+    title: 自由探索与Wiki
+    status: in-review
+    file: stories/2-explore-wiki.md
+  - id: '3'
+    title: 集成验证与交付
+    status: in-review
+    file: stories/3-verification.md

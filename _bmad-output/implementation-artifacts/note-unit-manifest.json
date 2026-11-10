@@ -1,0 +1,52 @@
+[
+  {
+    "path": "app/playwright.config.ts",
+    "before": "91c66bf547aea730f672d705cad8fb87d9d16446960493fe001ff5f2d179f245",
+    "after": "6932fd0590e1bbd776da77f51f505867fe8ceaa93d4c4e94ecb47150b1ec1632"
+  },
+  {
+    "path": "app/src/art.ts",
+    "before": "d208f367bd112a33ec35236de269d71493db02bb6835b6e7bcfd737ec828e9bf",
+    "after": "f85768dbf4cf162c5b77c130b54a65f32eec985deb158582b9ae459c733717d3"
+  },
+  {
+    "path": "app/src/audio.ts",
+    "before": "f7cdd8d93decfaed3101a9222f80d48bda94ec81b51e410f65169e395df0cfc3",
+    "after": "69ded823dd486e6499746043a02b04d226c2e3adffd1c40cc41d46194c6e5a74"
+  },
+  {
+    "path": "app/src/game.ts",
+    "before": "b64d24fe0bb8e8182a4433c89648cdd58aee80190777f5a6a174eaf97001214d",
+    "after": "c4e9cf788713c19d42687ba1fa3dbfa7486a1841096158b3bf1a324828d343c4"
+  },
+  {
+    "path": "app/src/lesson.ts",
+    "before": null,
+    "after": "41913e582763a291d16e3e53a0e94f47a020771d3a5381ab708f7d5992a91ef6"
+  },
+  {
+    "path": "app/src/main.ts",
+    "before": "f4e02a08e68431ea2daff932b5dc61a1237b3778a2adafad55b8b4b38e1ec50e",
+    "after": "6bb7ba21d1b62ba2dcbb271577b201a3f3bfc4eff201a530147b4c92d1e7267c"
+  },
+  {
+    "path": "app/src/scene.ts",
+    "before": "f8f11ed98e68302ab53200c8a9c0ad64a9be6025a93db7dd2f632e545a4b0154",
+    "after": "bb616b27cbfa359c887608aa22dc44819656862f8e1465f174b769be418a101d"
+  },
+  {
+    "path": "app/src/style.css",
+    "before": "1f3de14998bc6cea6f185f0f032730e187876b101d79c7abf2c32df675e8c3c6",
+    "after": "3a19cfbcdadab036541ca36ea0fc743c1fa13d572650e864d2121777cc4a9cc2"
+  },
+  {
+    "path": "app/tests/browser.test.ts",
+    "before": "17597df563369dcdfab8a1e2b03ae3df1b99606d42996454fe9106e9ab01aec3",
+    "after": "a1705e173da7abf71046f6799fe5bc50c4c6def13e5cc69eed6ce5a4bf481033"
+  },
+  {
+    "path": "app/tests/game.test.ts",
+    "before": "98ab1ed20d9797408acf5ef9a6648ea49c9bd7a4574431cf0d7ce1a4dd4c2603",
+    "after": "2af159b4f661fdb544ab1268d406aa637955aa1d6ce7146dace0fa663dfbb36f"
+  }
+]

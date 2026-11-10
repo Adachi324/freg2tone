@@ -1,0 +1,12 @@
+[workflow]
+persistent_facts = ["file:{project-root}/docs/agents/workflow.md"]
+
+[[workflow.review_layers]]
+id = "blind-hunter"
+name = "Matt Standards"
+instruction = """
+Launch one context-free reviewer with the following bounded task:
+Read the unified diff at {diff_file} and project conventions. Read /Users/yichen_yang/.codex/skills/code-review/SKILL.md only as reference for its Standards criteria and smell baseline; do not execute its orchestration or spawn further reviewers.
+Report concrete convention violations and actionable design concerns under Standards, citing the rule, location and consequence. Repo standards override smell heuristics. Skip what tooling already enforces. Zero findings is valid. Make no edits.
+The existing acceptance-auditor layer owns Spec checks; do not duplicate them here.
+"""

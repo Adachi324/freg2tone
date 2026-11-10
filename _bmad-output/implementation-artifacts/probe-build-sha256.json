@@ -1,0 +1,26 @@
+{
+  "recorded_at": "2026-10-15T14:50:05.187827+08:00",
+  "vcs": "NO_VCS",
+  "algorithm": "SHA-256",
+  "files": {
+    "app/.gitignore": "463b5f9362420aaa6bbf70c200b7cef361af47f34e60e6767851406f3091a39a",
+    "app/README.md": "f90cd6ee1c476e161a2f78bca347007cee2716bc5a687ad21c2833341639fd95",
+    "app/dist/assets/index-9gtnxDFg.css": "902cb90d6e0186fa88b2fe2816064633574fc31f6b4323f4b76f74e9bf7d902c",
+    "app/dist/assets/index-BzeFJmwb.js": "64f6947c352b21f49e98232dbfa65a965322a987c0e5b735541647544835ff48",
+    "app/dist/index.html": "de9331dea5e7bbd796a6a9989ba8ef28d59b7b36de96b93cdda51838f276d799",
+    "app/index.html": "96141009a8413ed7c12e7d19f770060f6d697e0bda8f36ac0418851937c78c4b",
+    "app/package-lock.json": "91ac04f29ab9edb4403bae60cdfc0fe3d48af09891a3444ebfe6a5cfa39d330f",
+    "app/package.json": "62b6e2bbb7ec7accc4fc4814363a6abac049a8e7ce84d8f356c25d42d1e5c8ae",
+    "app/playwright.config.ts": "91c66bf547aea730f672d705cad8fb87d9d16446960493fe001ff5f2d179f245",
+    "app/src/art.ts": "d208f367bd112a33ec35236de269d71493db02bb6835b6e7bcfd737ec828e9bf",
+    "app/src/audio.ts": "f7cdd8d93decfaed3101a9222f80d48bda94ec81b51e410f65169e395df0cfc3",
+    "app/src/game.ts": "da534274b8ac4ecc787b4d827368a623369eef4dea07378662bcb5395fe31780",
+    "app/src/main.ts": "72eb6126b68868cf0fa96f503da9af7ee52aa036bad62cab8336348c98444c25",
+    "app/src/scene.ts": "89b24b9383048950cc3e005bfcb733e1ff32f93d11e3564216faf29cc162cccb",
+    "app/src/style.css": "78b65c5eb8dbc4e598f0e44ed683be08f60387eaaa850aec5ce248feca54df4d",
+    "app/tests/browser.test.ts": "062d2cba9cd050434a1592819fc86f46a36f4bfa01e6ef0e5f18b0145360d4f2",
+    "app/tests/game.test.ts": "7205ece019244779cdebe4f9f9f0e3e28c2345132c1a1d564818a6532b5a1669",
+    "app/tsconfig.json": "3df8150ab036300952206e1c790578f655043026dcdc4f5aa8057cb04bd6a2e5",
+    "app/vite.config.ts": "f2c2eded401ebf965092620b8a70a631f25d07d0065936a42ce9c6557201f59c"
+  }
+}

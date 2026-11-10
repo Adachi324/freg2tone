@@ -1,0 +1,13 @@
+_bmad/render/
+_bmad/**/*.user.toml
+_bmad/**/__pycache__/
+.agents/skills/**/__pycache__/
+
+# Local configuration and credentials
+.DS_Store
+.env
+.env.*
+!.env.example
+!.env.sample
+*.pem
+*.key

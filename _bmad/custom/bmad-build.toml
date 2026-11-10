@@ -1,0 +1,25 @@
+[workflow]
+persistent_facts = ["file:{project-root}/docs/agents/workflow.md"]
+implementation_handoff = """
+Implement {spec_file} in the current agent; delegate only genuinely independent work with clear inputs, outputs and completion criteria when it saves time or improves quality.
+Read the spec fully and every file in its frontmatter context list. The spec is the implementation contract.
+Read /Users/yichen_yang/.codex/skills/codebase-design/SKILL.md as design guidance. For core behavior and bug fixes, use /Users/yichen_yang/.codex/skills/tdd/SKILL.md at the testing boundaries already agreed in the spec. Reversible low-impact changes use proportionate direct checks under the project rules.
+Report changes, verification evidence, and incomplete work. Return to BMAD's existing review step after implementation.
+"""
+
+[[workflow.review_layers]]
+id = "blind-hunter"
+name = "Matt Standards and Spec"
+instruction = """
+Launch one context-free reviewer with the following bounded task:
+Read the unified diff at {diff_file}, the spec at {claims_file}, the project's AGENTS.md and referenced standards. Read /Users/yichen_yang/.codex/skills/code-review/SKILL.md only as a reference for its Standards / Spec criteria and smell baseline; do not execute its orchestration or spawn further reviewers.
+Return separate Standards and Spec sections. Standards: documented convention violations and actionable design concerns, with source and consequence; repo standards override smell heuristics. Spec: missing, partial, incorrect or unrequested behavior, with the relevant requirement and diff evidence. Read surrounding code to verify claims. Zero findings is valid. Report missing evidence explicitly. Make no edits.
+"""
+
+[[workflow.oneshot_review_layers]]
+id = "blind-hunter"
+name = "Matt Standards and Spec"
+instruction = """
+Review the actual changed files against the current oneshot spec and project conventions. Read /Users/yichen_yang/.codex/skills/code-review/SKILL.md as reference for the two review axes only, without running another review workflow.
+Report Standards and Spec separately with concrete evidence. Verify practical consequences, allow zero findings, and omit concerns already enforced by tooling. If the oneshot spec cannot be located, report that limitation instead of claiming requirements compliance. Continue through BMAD's normal triage.
+"""

@@ -1,0 +1,298 @@
+--- a/app/README.md
++++ b/app/README.md
+@@ -1,6 +1,6 @@
+ # 调音花园 · 声音之桥
+ 
+-单场景技术样本：平面说明 → 示例与练习 → 真实 3D 展开 → 材料选择 → 开桥通行。C/D/E 匹配是技术测试夹具，不是完整教案或学习效果测试。
++单场景技术样本：固定立体花园中的纸面说明 → 示例与练习 → 收起教学 → 材料挑战 → 开桥通行。C/D/E 匹配是技术测试夹具，不是完整教案或学习效果测试。
+ 
+ ## 运行
+ 
+@@ -31,7 +31,7 @@
+ 
+ 浏览器测试默认调用 macOS 上已安装的 Google Chrome；其他环境可用 `CHROME_PATH` 指定浏览器可执行文件。测试使用当前静态构建，改动后先 build。Playwright 不代表 iPhone Safari 真机。
+ 
+-手机体验重点：点击区域是否好用、说明是否易读、花园展开后是否仍认得对象、音符与亮起是否跟手；分别试一次后台返回及静音。测试使用 `932×430` 等 CSS 视口是布局检查，不是设备仿真证明。
++手机体验重点：点击区域是否好用、说明是否易读、收起说明后能否自然继续操作、音符与亮起是否跟手；分别试一次后台返回及静音。测试使用 `932×430` 等 CSS 视口是布局检查，不是设备仿真证明。
+ 
+ ## 实现与素材
+ 
+--- a/app/src/game.ts
++++ b/app/src/game.ts
+@@ -1,5 +1,5 @@
+ export type MaterialId = 'C' | 'D' | 'E';
+-export type Phase = 'arrival' | 'approach' | 'intro' | 'demo' | 'practice' | 'transition' | 'challenge' | 'bridge' | 'crossing' | 'complete';
++export type Phase = 'arrival' | 'approach' | 'intro' | 'demo' | 'practice' | 'challenge' | 'bridge' | 'crossing' | 'complete';
+ export type Game = {
+   phase: Phase; run: number; selected: MaterialId | null;
+   help: boolean; helpUsed: boolean; portrait: boolean; suspended: boolean;
+@@ -7,7 +7,7 @@
+ };
+ export type Action =
+   | { type: 'approach' | 'next' | 'submit' | 'enterChallenge' | 'suspend' | 'resume' | 'replay' }
+-  | { type: 'arrived' | 'transitionFinished' | 'bridgeReady' | 'exitReached'; run: number }
++  | { type: 'arrived' | 'bridgeReady' | 'exitReached'; run: number }
+   | { type: 'select'; id: MaterialId }
+   | { type: 'help'; open: boolean }
+   | { type: 'portrait'; value: boolean };
+@@ -42,10 +42,9 @@
+     else if (g.result === 'right') g.phase = 'bridge';
+   }
+   if (action.type === 'enterChallenge' && g.phase === 'practice' && g.practiceDone) {
+-    g.phase = 'transition'; g.selected = null; g.result = null;
++    g.phase = 'challenge'; g.selected = null; g.result = null;
+   }
+   if ('run' in action && action.run === g.run) {
+-    if (action.type === 'transitionFinished' && g.phase === 'transition') g.phase = 'challenge';
+     if (action.type === 'bridgeReady' && g.phase === 'bridge') g.phase = 'crossing';
+     if (action.type === 'exitReached' && g.phase === 'crossing') g.phase = 'complete';
+   }
+--- a/app/src/main.ts
++++ b/app/src/main.ts
+@@ -43,7 +43,7 @@
+ let noticeUntil = 0;
+ let audioRequest = 0, lifecycleEpoch = 0;
+ let previousPanel = '', previousOverlay = '', returnFocus: HTMLElement | null = null;
+-const duration: Partial<Record<Phase, number>> = { approach: 0.9, transition: 1.8, bridge: 1.25, crossing: 2.2 };
++const duration: Partial<Record<Phase, number>> = { approach: 0.9, bridge: 1.25, crossing: 2.2 };
+ const isInteractive = () => !paused(game) && !failure && (game.phase === 'challenge' || (game.phase === 'practice' && !game.practiceDone));
+ const button = (action: string, text: string, secondary = false) => `<button class="${secondary ? 'secondary' : 'primary'}" data-action="${action}">${text}</button>`;
+ const explanation = `<p>C、D、E 是三个音的<b>音名</b>，像名字一样，帮我们认出不同的声音。</p><p>点一下材料可以听它的声音。这里的机关需要 <b>C</b>：先选 C，再点机关的圆槽。</p>`;
+@@ -79,10 +79,10 @@
+   if (game.phase !== before.phase || game.run !== before.run) {
+     phaseTime = 0; pulse = null; playingDemo = false; sound.stop();
+     if (game.phase === 'demo') startDemo();
+-    if (game.phase === 'transition' || game.phase === 'intro') sound.page();
++    if (game.phase === 'challenge' || game.phase === 'intro') sound.page();
+   }
+   if (paused(game) && !paused(before)) { sound.stop(); pulse = null; }
+-  if (game.help !== before.help && !paused(game)) sound.page();
++  if (game.help !== before.help && !game.suspended && !game.portrait) sound.page();
+   if (action.type === 'select' && isInteractive() && game.selected) playNote(game.selected);
+   if (action.type === 'submit' && game.result !== 'empty' && game.selected && !paused(game)) playNote(game.selected);
+   updateUI();
+@@ -116,13 +116,19 @@
+     if (phase === 'arrival' || phase === 'approach') html = `<span class="eyebrow">声音之桥 / 01</span><h1 id="lesson-title">给花园<br>一个声音。</h1><p>小拍的路，被一座安静的桥挡住了。<br>走近机关，看看它需要什么。</p><div class="sketch-divider">· · ♪ · ·</div><p class="hint">${phase === 'approach' ? '小拍正在靠近…' : '轻点右边的机关，开始这段冒险。'}</p>`;
+     if (phase === 'intro') html = `<span class="eyebrow">认识一个小秘密</span><h1 id="lesson-title">声音，也有名字。</h1>${explanation}<div class="actions">${button('listen', '听听看 →')}${button('silent', '无声继续', true)}</div>`;
+     if (phase === 'demo') html = `<span class="eyebrow">看看，也听听</span><h1 id="lesson-title">三个名字，三个音。</h1><p>发声时，对应的材料会亮起来。<br>你也可以单独点一个音，再听一次。</p><div class="note-row"><button data-note="C">C</button><button data-note="D">D</button><button data-note="E">E</button></div><div class="actions">${button('practice', '我来试试 →')}${button('demo', '再听一遍', true)}</div>`;
+-    if (phase === 'practice') html = `<span class="eyebrow">一起试一次</span><h1 id="lesson-title">${game.practiceDone ? '就是这个声音！' : '把 C 交给机关。'}</h1><p>${game.practiceDone ? '你找到了 C。接下来，带着这三个音，走进花园深处。' : '先点标着 C 的材料，再点机关的圆槽。<br>选错也没关系，换一枚再试试。'}</p>${game.practiceDone ? button('challenge', '让花园展开 →') : '<div class="mini-rule"><span>C</span><b>→</b><span class="slot-symbol">○</span></div>'}`;
+-    if (phase === 'challenge') html = `<span class="eyebrow">轮到你了</span><h1 id="lesson-title">唤醒声音之桥。</h1><p>机关还在等着 <b>C</b> 的声音。<br>找出材料，让小拍继续往前走。</p><div class="target"><small>这次需要</small><strong>C</strong></div>`;
++    if (phase === 'practice') html = `<span class="eyebrow">一起试一次</span><h1 id="lesson-title">${game.practiceDone ? '就是这个声音！' : '把 C 交给机关。'}</h1><p>${game.practiceDone ? '你找到了 C。收起说明，试着自己唤醒这座桥。' : '先点标着 C 的材料，再点机关的圆槽。<br>选错也没关系，换一枚再试试。'}</p>${game.practiceDone ? button('challenge', '收起说明，开始挑战 →') : '<div class="mini-rule"><span>C</span><b>→</b><span class="slot-symbol">○</span></div>'}`;
++    if (phase === 'challenge') html = `<span class="eyebrow">轮到你了</span><h1 id="lesson-title">唤醒声音之桥</h1><div class="target"><small>机关需要</small><strong>C</strong></div>`;
+     if (phase === 'complete') html = `<span class="eyebrow">声音，真的起作用了</span><h1 id="lesson-title">路，打开了。</h1><p>一个 C，让安静的机关转了起来。<br>小拍已经抵达桥的另一边。</p><p class="completion">${game.helpUsed ? '借助回看，完成了这次尝试。' : '你独立完成了这次尝试。'}</p>${button('replay', '再玩一次 ↻')}`;
++    lesson.classList.toggle('task-card', phase === 'challenge');
+     lesson.innerHTML = html; lesson.hidden = !html;
++    lesson.getAnimations().forEach(animation => animation.cancel());
++    if (html && !reduced.matches) lesson.animate(
++      [{ opacity: 0, translate: '-10px 0', scale: '.97 1' }, { opacity: 1, translate: '0 0', scale: '1 1' }],
++      { duration: 220, easing: 'ease-out' },
++    );
+   }
+   const resultMessage = game.result === 'wrong' ? `这枚是 ${game.selected}。机关需要 C，可以换一枚再试。` : game.result === 'empty' ? '先选一枚材料，再点机关的圆槽。' : '';
+-  $('#feedback').textContent = resultMessage || ({ arrival: '轻点机关，小拍会自己走过去。', approach: '哒、哒、哒…', intro: '先认识声音，再让声音改变花园。', demo: sound.music ? '听声音，也看材料上的名字。' : '无声模式 · 跟着亮起的材料认识它的名字。', practice: game.practiceDone ? '练习完成 · 准备进入立体花园' : game.selected ? `已选 ${game.selected} · 再点机关的圆槽` : '点选材料 → 点圆槽放入', transition: '同一座花园，正在展开…', challenge: game.selected ? `已选 ${game.selected} · 点机关的圆槽试一试` : '三枚材料，一个声音。你来决定。', bridge: '咔嗒——机关听见了。', crossing: '桥已经稳稳落下，小拍出发了。', complete: '下次再见，声音探险家。' } as Record<Phase, string>)[phase];
++  $('#feedback').textContent = resultMessage || ({ arrival: '轻点机关，小拍会自己走过去。', approach: '哒、哒、哒…', intro: '先认识声音，再让声音改变花园。', demo: sound.music ? '听声音，也看材料上的名字。' : '无声模式 · 跟着亮起的材料认识它的名字。', practice: game.practiceDone ? '练习完成 · 准备独立试一次' : game.selected ? `已选 ${game.selected} · 再点机关的圆槽` : '点选材料 → 点圆槽放入', challenge: game.selected ? `已选 ${game.selected} · 点机关的圆槽试一试` : '三枚材料，一个声音。你来决定。', bridge: '咔嗒——机关听见了。', crossing: '桥已经稳稳落下，小拍出发了。', complete: '下次再见，声音探险家。' } as Record<Phase, string>)[phase];
+   $('#feedback').classList.toggle('retry', game.result === 'wrong');
+   materials.forEach(b => {
+     b.disabled = !isInteractive(); b.hidden = !['practice', 'challenge'].includes(phase) || game.practiceDone && phase === 'practice';
+@@ -225,7 +231,6 @@
+   const progress = reduced.matches ? 1 : Math.min(phaseTime / (duration[game.phase] || 1), 1);
+   const activePulse = pulse && running && now >= pulseStart && now < pulseStart + 600 ? pulse : null;
+   scene.render({
+-    depth: game.phase === 'transition' ? progress : ['challenge', 'bridge', 'crossing', 'complete'].includes(game.phase) ? 1 : 0,
+     approach: game.phase === 'arrival' ? 0 : game.phase === 'approach' ? progress : 1,
+     bridge: game.phase === 'bridge' ? progress : ['crossing', 'complete'].includes(game.phase) ? 1 : 0,
+     travel: game.phase === 'crossing' ? progress : game.phase === 'complete' ? 1 : 0,
+@@ -240,7 +245,7 @@
+   }
+   document.querySelectorAll<HTMLButtonElement>('[data-note]').forEach(b => b.classList.toggle('sounding', b.dataset.note === activePulse));
+   if (running && progress === 1) {
+-    const finished = { approach: 'arrived', transition: 'transitionFinished', bridge: 'bridgeReady', crossing: 'exitReached' } as const;
++    const finished = { approach: 'arrived', bridge: 'bridgeReady', crossing: 'exitReached' } as const;
+     if (game.phase in finished) dispatch({ type: finished[game.phase as keyof typeof finished], run: game.run });
+   }
+   if (noticeUntil && now > noticeUntil) { $('#audio-notice').hidden = true; noticeUntil = 0; }
+--- a/app/src/scene.ts
++++ b/app/src/scene.ts
+@@ -2,7 +2,7 @@
+ import { faceTexture, paintTexture } from './art';
+ 
+ export type MaterialId = 'C' | 'D' | 'E';
+-export type SceneView = { depth: number; approach: number; bridge: number; travel: number; selected: MaterialId | null; installed: boolean; order: MaterialId[]; pulse: MaterialId | null; time: number };
++export type SceneView = { approach: number; bridge: number; travel: number; selected: MaterialId | null; installed: boolean; order: MaterialId[]; pulse: MaterialId | null; time: number };
+ 
+ /** One fixed set of authored objects. The caller owns time, input, and every game rule. */
+ export function createScene(canvas: HTMLCanvasElement) {
+@@ -59,14 +59,14 @@
+     const obj = mesh(new THREE.CylinderGeometry(radius, radius * 1.08, delta.length(), 7), material, parent);
+     obj.position.copy(a).add(b).multiplyScalar(.5); obj.quaternion.setFromUnitVectors(new THREE.Vector3(0, 1, 0), delta.normalize()); return obj;
+   }
+-  // Extruded land and water remain true geometry; the depth reveal changes projection and thickness.
+-  const floors = [
++  // 固定立体花园：教学和挑战共享真实地形与机关。
++  [
+     box(18.1, .8, 15, grass, -3.65, -.48, -1.5),
+     box(5.4, .8, 15, grass, 11.4, -.48, -1.5),
+     box(3.6, .12, 15, water, 7.2, -.42, -1.5),
+   ];
+   const path = paint('#d8cbb0');
+-  floors.push(box(17.6, .035, 2.6, path, -3.65, -.045, 1), box(4.8, .035, 2.6, path, 11.4, -.045, 1));
++  box(17.6, .035, 2.6, path, -3.65, -.045, 1); box(4.8, .035, 2.6, path, 11.4, -.045, 1);
+   // Warm irregular stepping stones and bank rocks ground the machinery.
+   for (let i = 0; i < 13; i++) {
+     const p = mesh(new THREE.CylinderGeometry(.35 + (i % 3) * .08, .42, .09, 7), stone);
+@@ -104,10 +104,8 @@
+     }
+   }
+   for (let i = 0; i < 13; i++) shrub(-11.7 + i * 1.9, -4.1 + Math.sin(i) * .6, .25 + (i % 3) * .09, i % 2 === 0);
+-  const foreground: { object: THREE.Object3D; y: number }[] = [];
+   for (const [x, z] of [[-11, 4.7], [-7.5, 5.1], [-4, 5.4], [3.3, 5], [9.5, 5.2], [12, 4]]) {
+-    const start = world.children.length; shrub(x!, z!, .42, true);
+-    world.children.slice(start).forEach(object => foreground.push({ object, y: object.position.y }));
++    shrub(x!, z!, .42, true);
+   }
+ 
+   // Exit arch: authored masonry with a curved lintel.
+@@ -172,28 +170,20 @@
+   const shadowMat = new THREE.MeshBasicMaterial({ color: '#52492d', opacity: .19, transparent: true, depthWrite: false }); materials.push(shadowMat);
+   const shadow = mesh(new THREE.CircleGeometry(.64, 28), shadowMat, world, false); shadow.rotation.x = -Math.PI / 2;
+   shadow.position.y = .025; shadow.scale.y = .7;
++  camera.position.set(7, 12, 24);
++  camera.lookAt(0, 1, 0); camera.updateMatrixWorld();
+   let width = 1, height = 1;
+-  const current: SceneView = { depth: 0, approach: 0, bridge: 0, travel: 0, selected: null, installed: false, order: ['C', 'D', 'E'], pulse: null, time: 0 };
++  const current: SceneView = { approach: 0, bridge: 0, travel: 0, selected: null, installed: false, order: ['C', 'D', 'E'], pulse: null, time: 0 };
+   function update(view: SceneView) {
+     Object.assign(current, view);
+-    const depth = THREE.MathUtils.clamp(view.depth, 0, 1);
+-    world.scale.z = .32 + .68 * depth;
+-    // Flat paper scenery unfolds into a floor while the same objects acquire depth.
+-    for (const floor of floors) { floor.rotation.x = -(1 - depth) * Math.PI / 2; floor.scale.z = .28 + .72 * depth; }
+-    machine.scale.z = character.scale.z = .08 + .92 * depth;
+-    camera.position.set(7 * depth, 1 + 11 * depth, 24);
+-    camera.lookAt(0, 1.0, 0); camera.updateMatrixWorld();
+-    bridge.rotation.order = 'YXZ';
+     bridge.rotation.z = (1 - view.bridge) * Math.PI / 2;
+-    bridge.rotation.y = (1 - depth) * Math.PI / 2;
+-    foreground.forEach(({ object, y }) => { object.position.y = y - (1 - depth) * 1.4; });
+     gear.rotation.y = view.bridge * Math.PI * 1.3;
+     // Work in screen pixels: narrow landscape screens retain disjoint 44px hit targets.
+-    const cosYaw = 24 / Math.hypot(7 * depth, 24);
++    const cosYaw = 24 / Math.hypot(7, 24);
+     const spacing = Math.max(1.5, 48 * (camera.right - camera.left) / (width * cosYaw));
+     const materialZ = 2.65;
+     const slotZ = .4 + .93 * machine.scale.z;
+-    const rightmostX = Math.min(1.75, 3.2 - spacing + (materialZ - slotZ) * world.scale.z * 7 * depth / 24);
++    const rightmostX = Math.min(1.75, 3.2 - spacing + (materialZ - slotZ) * 7 / 24);
+     const trayX = rightmostX - spacing;
+     tray.position.x = trayX; tray.scale.x = (2 * spacing + 1.4) / 4.4;
+     for (const id of ['C', 'D', 'E'] as const) {
+@@ -201,7 +191,6 @@
+       const index = view.order.indexOf(id);
+       token.position.set(trayX + (index - 1) * spacing, .79, materialZ);
+       token.scale.setScalar(view.pulse === id ? 1.12 : 1);
+-      token.scale.z *= .08 + .92 * depth;
+       if (view.selected === id) token.position.y += .28;
+       token.rotation.y = 0;
+       if (id === 'C' && view.installed) { token.position.set(3.2, 1.01, 1.38); token.scale.setScalar(.88); }
+--- a/app/src/style.css
++++ b/app/src/style.css
+@@ -7,3 +7,9 @@
+ @media(max-height:500px){.topbar{padding-top:8px;padding-bottom:8px}.brand{font-size:16px}.brand-note{width:36px;height:36px;font-size:26px}.brand small{font-size:8px}.chapter{font-size:10px}.quiet{padding:0 9px;font-size:11px}.lesson{left:max(16px,env(safe-area-inset-left));width:30%;padding:16px 18px;max-height:calc(100% - 108px);transform:translateY(-43%)}.lesson h1{font-size:25px;margin:10px 0}.lesson p{font-size:12px;line-height:1.65;margin:8px 0}.eyebrow{font-size:9px;letter-spacing:2px}.actions{margin-top:12px;gap:8px}.primary,.secondary{font-size:12px;padding:7px 12px}.sketch-divider{margin-top:12px}.note-row{margin:12px 0;gap:10px}.note-row button{width:44px;height:44px;font-size:22px}.bottom{padding-top:6px;padding-bottom:max(7px,env(safe-area-inset-bottom))}.bottom p{font-size:11px;padding:7px 12px}.edition{font-size:9px}.mini-rule{margin:12px 0 5px}.mini-rule span{font-size:24px;padding:4px 14px}.target{margin-top:10px}.target strong{width:46px;height:46px;font-size:28px}.modal-paper{padding:20px 26px}.modal-paper h2{font-size:24px;margin:12px 0}.modal-paper p{font-size:13px;line-height:1.65}.hotspot{width:44px;height:44px}.slot{width:44px;height:44px}}
+ @media(max-width:740px){.chapter{display:none}.edition{display:none}.lesson{width:34%;left:max(12px,env(safe-area-inset-left))}.topbar{padding-left:max(14px,env(safe-area-inset-left));padding-right:max(14px,env(safe-area-inset-right))}.lesson h1{font-size:21px}.bottom p{max-width:100%}.quiet{padding:0 7px}}
+ @media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important;transition:none!important}}
++
++/* 教学收起后，保留一张简短任务签；场景和镜头不切换。 */
++.lesson.task-card{top:auto;bottom:80px;transform:rotate(-.4deg);width:230px;max-width:29%;padding:16px 18px}
++.lesson.task-card h1{font-size:22px;margin:10px 0}.lesson.task-card .target{margin-top:12px}
++@media(max-height:500px){.lesson.task-card{bottom:66px;width:210px;padding:12px 16px}.lesson.task-card h1{font-size:20px}}
++@media(max-width:740px){.lesson.task-card{max-width:31%}.lesson.task-card h1{font-size:18px}}
+--- a/app/tests/browser.test.ts
++++ b/app/tests/browser.test.ts
+@@ -9,7 +9,7 @@
+   await start(page);
+   await page.getByRole('button', { name: '选择材料 C', exact: true }).click();
+   await page.getByRole('button', { name: '将选中材料放入机关', exact: true }).click();
+-  await page.getByRole('button', { name: '让花园展开 →', exact: true }).click();
++  await page.getByRole('button', { name: '收起说明，开始挑战 →', exact: true }).click();
+   await expect(page.locator('#world')).toHaveAttribute('data-phase', 'challenge');
+ }
+ async function complete(page: Page) {
+@@ -23,7 +23,7 @@
+   page.on('pageerror', e => errors.push(e.message));
+   page.on('console', m => { if (m.type() === 'error') errors.push(m.text()); });
+   await challenge(page);
+-  await page.screenshot({ path: '../_bmad-output/implementation-artifacts/probe-challenge.png' });
++  await page.screenshot({ path: '../_bmad-output/implementation-artifacts/probe-v2-challenge.png' });
+   await page.getByRole('button', { name: '选择材料 D', exact: true }).click();
+   await page.getByRole('button', { name: '将选中材料放入机关', exact: true }).click();
+   await expect(page.locator('#feedback')).toContainText('这枚是 D');
+@@ -33,7 +33,7 @@
+   await expect(page.getByRole('button', { name: '选择材料 D', exact: true })).toHaveAttribute('aria-pressed', 'true');
+   await complete(page);
+   await expect(page.locator('.completion')).toContainText('借助回看');
+-  await page.screenshot({ path: '../_bmad-output/implementation-artifacts/probe-complete.png' });
++  await page.screenshot({ path: '../_bmad-output/implementation-artifacts/probe-v2-complete.png' });
+   await page.getByRole('button', { name: '再玩一次 ↻', exact: true }).click();
+   await expect(page.locator('#world')).toHaveAttribute('data-phase', 'arrival');
+   await expect(page.locator('#world')).toHaveAttribute('data-assisted', 'false');
+@@ -113,7 +113,7 @@
+     await page.getByRole('button', {name:'我来试试 →',exact:true}).click();
+     await page.getByRole('button', {name:'选择材料 C',exact:true}).click();
+     await page.getByRole('button', {name:'将选中材料放入机关',exact:true}).click();
+-    await page.getByRole('button', {name:'让花园展开 →',exact:true}).click();
++    await page.getByRole('button', {name:'收起说明，开始挑战 →',exact:true}).click();
+     await expect(page.locator('#world')).toHaveAttribute('data-phase','challenge');
+     await page.getByRole('button', {name:'选择材料 D',exact:true}).click();
+     await page.getByRole('button', {name:'将选中材料放入机关',exact:true}).click();
+@@ -129,19 +129,19 @@
+   }
+ });
+ 
+-test('触摸取消不提交；暂停转场和桥动作后可继续且不抢跑', async ({ page }) => {
++test('触摸取消不提交；收起说明后直接可操作，暂停桥动作后可继续且不抢跑', async ({ page }) => {
+   await start(page);
+   await page.getByRole('button', {name:'选择材料 C',exact:true}).click();
+   const slot=page.getByRole('button', {name:'将选中材料放入机关',exact:true});
+   await slot.dispatchEvent('pointercancel');
+   await slot.dispatchEvent('click');
+   await expect(page.locator('#world')).toHaveAttribute('data-phase','practice');
+-  await expect(page.getByRole('button', {name:'让花园展开 →',exact:true})).toHaveCount(0);
++  await expect(page.getByRole('button', {name:'收起说明，开始挑战 →',exact:true})).toHaveCount(0);
+   await slot.click();
+-  await page.getByRole('button', {name:'让花园展开 →',exact:true}).click();
+-  await page.evaluate(() => window.dispatchEvent(new Event('pagehide')));
+-  await page.waitForTimeout(2000);
+-  await expect(page.locator('#world')).toHaveAttribute('data-phase','transition');
++  await page.getByRole('button', {name:'收起说明，开始挑战 →',exact:true}).click();
++  await page.evaluate(() => window.dispatchEvent(new Event('pagehide')));
++  await expect(page.locator('#world')).toHaveAttribute('data-phase','challenge');
++  await expect(page.locator('#world')).toHaveAttribute('data-paused','true');
+   await page.getByRole('button', {name:'继续这次冒险 →'}).click();
+   await expect(page.locator('#world')).toHaveAttribute('data-phase','challenge');
+   await page.getByRole('button', {name:'选择材料 C',exact:true}).click();
+--- a/app/tests/game.test.ts
++++ b/app/tests/game.test.ts
+@@ -26,17 +26,18 @@
+   g = act(g, { type: 'select', id: 'C' });
+   g = act(g, { type: 'submit' });
+   g = act(g, { type: 'enterChallenge' });
+-  return act(g, { type: 'transitionFinished', run: g.run });
++  return g;
+ }
+-test('练习正确后才能展开，转场不接收材料；桥打开后才让角色通过', () => {
++test('练习正确后直接进入挑战并清空选择；桥打开后才让角色通过', () => {
+   let g = practice();
+   assert.equal(act(g, { type: 'enterChallenge' }).phase, 'practice');
+   g = act(g, { type: 'select', id: 'C' });
+   g = act(g, { type: 'submit' });
+   g = act(g, { type: 'enterChallenge' });
+-  assert.equal(g.phase, 'transition');
+-  assert.equal(act(g, { type: 'select', id: 'D' }).selected, null);
+-  g = act(g, { type: 'transitionFinished', run: g.run });
++  assert.equal(g.phase, 'challenge');
++  assert.equal(g.selected, null);
++  assert.equal(g.result, null);
++  assert.equal(act(g, { type: 'submit' }).result, 'empty');
+   g = act(g, { type: 'select', id: 'D' });
+   g = act(g, { type: 'submit' });
+   assert.equal(g.phase, 'challenge');

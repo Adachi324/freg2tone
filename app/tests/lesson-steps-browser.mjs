@@ -1,0 +1,7 @@
+import {chromium} from '@playwright/test';
+import assert from 'node:assert/strict';
+const browser=await chromium.launch({headless:true,...(process.env.PLAYWRIGHT_EXECUTABLE_PATH?{executablePath:process.env.PLAYWRIGHT_EXECUTABLE_PATH}:{})});const page=await browser.newPage();
+await page.goto('http://127.0.0.1:8877/lesson-1/');await page.getByRole('button',{name:'02 看与听'}).click();assert.match(await page.locator('#content').innerText(),/距离与度数/);assert.doesNotMatch(await page.locator('#content').innerText(),/《小星星》|对照：/);
+await page.getByRole('button',{name:'下一个知识点'}).click();await page.reload();assert.match(await page.locator('#content').innerText(),/只改变一个音/);assert.doesNotMatch(await page.locator('#content').innerText(),/度数数音名字母|《小星星》/);
+await page.getByRole('button',{name:'下一个知识点'}).click();await page.reload();assert.match(await page.locator('#content').innerText(),/在旋律和跨弦中找关系/);assert.doesNotMatch(await page.locator('#content').innerText(),/度数数音名字母|对照：/);
+await page.getByRole('button',{name:'进入引导练习',exact:true}).click();assert.match(await page.locator('#content').innerText(),/向上移动 4 个半音/);await page.getByRole('button',{name:'收起提示，再练一次'}).click();await page.reload();assert.doesNotMatch(await page.locator('#content').innerText(),/[347] 个半音|相隔 [347]|向上移动/);assert.match(await page.locator('#content').innerText(),/提示默认收起/);console.log('PASS: three learning steps isolate content and survive refresh, guided hint withdrawal survives refresh without formula');await browser.close();

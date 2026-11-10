@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>让教学留在游戏里 · 场景构图提案</title>
+  <style>
+    /* Sources: ../DESIGN.md — Layout & Spacing, Components;
+       ../EXPERIENCE.md — Information Architecture, Component Patterns;
+       ../.memlog.md — 2026-09-28 approval covers teaching UI only.
+       The scene composition, mechanism and exact panel dimensions are proposals. */
+    :root { color-scheme:light; --ink:#283730; --cream:#f5ecd5; --line:#354439; --red:#a44335; --teal:#447775; }
+    * { box-sizing:border-box; }
+    body { margin:0; background:#e6e1d5; color:var(--ink); font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",sans-serif; }
+    .intro,.caption,.closing { width:min(892px,100%); margin:0 auto; padding:24px; }
+    .intro { padding-top:40px; }
+    .eyebrow { margin:0 0 10px; color:#596759; font-size:12px; font-weight:750; letter-spacing:.12em; }
+    h1 { margin:0 0 14px; font-size:30px; line-height:1.3; letter-spacing:-.03em; }
+    .intro p,.caption p,.closing p { margin:8px 0; font-size:15px; line-height:1.75; }
+    nav { display:flex; gap:8px; flex-wrap:wrap; margin-top:20px; }
+    nav a { color:var(--ink); text-decoration:none; font-size:14px; font-weight:650; border:1px solid #899282; border-radius:30px; padding:10px 15px; background:#f4f0e5; }
+    a:focus-visible { outline:3px solid var(--teal); outline-offset:4px; }
+    .screen-scroll { overflow-x:auto; padding:3px 3px 14px; }
+    .frame { position:relative; width:844px; height:390px; margin:0 auto; overflow:hidden; isolation:isolate; outline:3px solid var(--ink); border-radius:14px; background:#91a68a; box-shadow:0 8px 20px #24392b16; }
+    .landscape { display:block; width:100%; height:100%; object-fit:contain; }
+    .topbar { position:absolute; top:14px; left:18px; right:18px; display:flex; align-items:center; justify-content:space-between; gap:12px; }
+    .location,.stage { padding:7px 11px; border:2px solid var(--line); border-radius:8px 12px 9px 6px; background:#f5ecd5f5; font-size:13px; font-weight:750; line-height:1; }
+    .stage { background:#354c41; color:var(--cream); font-size:12px; }
+    .sheet { position:absolute; top:58px; left:14px; bottom:18px; width:282px; padding:17px 17px 14px; background:var(--cream); border:3px solid var(--line); border-radius:17px 10px 20px 12px; box-shadow:5px 5px 0 #314b3b55; }
+    .sheet::before { content:""; position:absolute; top:-4px; left:28px; width:43px; border-top:5px solid var(--red); border-radius:3px; }
+    .kicker { margin:0 0 5px; color:#68715c; font-size:12px; font-weight:750; }
+    .sheet h2 { margin:0 0 12px; font-size:24px; line-height:1.3; letter-spacing:-.025em; }
+    .body { margin:0; font-size:16px; line-height:1.55; }
+    .letters { display:flex; gap:5px; margin:9px 0 12px; }
+    .letters span { display:grid; place-items:center; width:30px; height:35px; border:2px solid var(--line); border-radius:7px 9px 6px 9px; background:#e6c878; font:800 21px Georgia,serif; }
+    .singing { margin:5px 0 12px; color:#8a3e30; font:700 18px Georgia,serif; word-spacing:8px; }
+    .next { width:100%; min-height:38px; margin-top:1px; padding:7px 9px; background:#e4bd65; border:2px solid var(--line); border-radius:9px 6px 9px 7px; color:var(--ink); box-shadow:2px 2px 0 #354439; font-family:inherit; font-size:14px; font-weight:700; }
+    .next:disabled { opacity:1; cursor:default; }
+    .caption { padding-top:4px; padding-bottom:30px; }
+    .caption h2 { margin:5px 0 8px; font-size:17px; }
+    .caption p { color:#546153; }
+    .closing { border-top:1px solid #b9c0b1; padding-top:18px; padding-bottom:40px; }
+    .closing p { font-size:13px; color:#586254; }
+    .closing a { color:#315e5b; }
+    @media(max-width:849px) { .frame { margin-left:0; margin-right:0; } .intro { padding-top:24px; } h1 { font-size:26px; } }
+    @media print { body { background:white; } .frame { break-inside:avoid; } nav { display:none; } }
+  </style>
+</head>
+<body>
+  <header class="intro">
+    <p class="eyebrow">MG GROUND / UX EXPLORATION · 2026.09.28</p>
+    <h1>同一个场景，给教学留出位置。</h1>
+    <p>这次先看空间关系：角色在哪里、哪些材料可以操作、机关通向哪里。展开教程后，这些对象仍应看得见。</p>
+    <p><strong>游戏构图概念稿，非引擎截图。</strong>两幅均完整显示同一张场景图，画幅为 844 × 390；窄窗口可横向滚动。造型、机关与摆放仍是提案，本页没有声音、判题或真实 3D。</p>
+    <nav aria-label="场景对照导航"><a href="#scene-full">01 完整场景</a><a href="#scene-teaching">02 教程展开</a><a href="key-learning.html#intro-screen">教学 UI 参考</a></nav>
+  </header>
+  <main>
+    <section id="scene-full" aria-labelledby="scene-full-title">
+      <div class="screen-scroll"><div class="frame">
+        <img class="landscape" src="scene-layout-base-2026-09-28.png" alt="手绘花园场景；左侧草地预留教学空间，右侧依次是节拍器角色、三枚圆形材料、通过连杆连接升降桥的机关，以及桥后的石门。">
+        <div class="topbar"><span class="location">音乐机关 · 场景提案</span><span class="stage">01 · 完整场景</span></div>
+      </div></div>
+      <div class="caption">
+        <h2 id="scene-full-title">01 / 收起教程，场景完整呈现</h2>
+        <p>右侧从节拍器角色、三枚圆形材料，接到机关、升起的桥与出口。左侧保留较安静的空间，供教学展开；圆形材料只是音乐对象的造型占位，声音和机关规则尚未确定。</p>
+      </div>
+    </section>
+    <section id="scene-teaching" aria-labelledby="scene-teaching-title">
+      <div class="screen-scroll"><div class="frame">
+        <img class="landscape" src="scene-layout-base-2026-09-28.png" alt="同一完整场景，左侧展开奶油色教学面板，右侧角色、音乐材料与机关目标仍保留。">
+        <div class="topbar"><span class="location">认识声音的名字</span><span class="stage">02 · 教程展开</span></div>
+        <div class="sheet">
+          <p class="kicker">声音也有名字</p>
+          <h2>音名与唱名</h2>
+          <p class="body"><strong>基本音名</strong>使用七个字母：</p>
+          <div class="letters" aria-label="C D E F G A B"><span>C</span><span>D</span><span>E</span><span>F</span><span>G</span><span>A</span><span>B</span></div>
+          <p class="body"><strong>唱名</strong>是用来唱读的音节，例如：</p>
+          <p class="singing">Do Re Mi …</p>
+          <button class="next" disabled>看看一个声音的标记 →</button>
+        </div>
+      </div></div>
+      <div class="caption">
+        <h2 id="scene-teaching-title">02 / 展开教程，保留操作上下文</h2>
+        <p>沿用已认可的浅色说明区与墨线边框。对照上一幅，检查教程有没有遮住角色、材料或目标，以及讲解与场景能否同时看清。文字仅用于检查布局容量，不是完整教案；按钮为停用的静态示意。</p>
+      </div>
+    </section>
+  </main>
+  <footer class="closing">
+    <p><strong>本轮评审：</strong>完整场景能否看懂角色、操作物和目标；教程展开后的遮挡是否合适。此稿不验证课程内容、机关因果反馈、转场或学习效果。</p>
+    <p><a href="scene-layout-base-2026-09-28.png">查看完整场景图</a> · <a href="key-learning.html#intro-screen">回看已认可的教学 UI</a></p>
+  </footer>
+</body>
+</html>

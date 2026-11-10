@@ -1,0 +1,16 @@
+import {chromium} from '@playwright/test';
+import assert from 'node:assert/strict';
+const browser=await chromium.launch({headless:true,...(process.env.PLAYWRIGHT_EXECUTABLE_PATH?{executablePath:process.env.PLAYWRIGHT_EXECUTABLE_PATH}:{})});
+const context=await browser.newContext(); const page=await context.newPage();
+await page.goto('http://127.0.0.1:8877/lesson-1/');
+await page.getByRole('button',{name:'04 换起音'}).click();
+const wiki=await context.newPage();await wiki.goto('http://127.0.0.1:8877/wiki/');await page.bringToFront();
+await page.waitForFunction(()=>JSON.parse(localStorage.getItem('mg-lesson-one-v1')).records['practice-0']?.help===true);
+assert.equal(await page.evaluate(()=>JSON.parse(localStorage.getItem('mg-lesson-one-v1')).records['practice-0'].first),null);
+await page.getByRole('button',{name:'05 独立听觉'}).click();
+await page.getByRole('button',{name:'听参考音程'}).click();
+await page.evaluate(()=>{Object.defineProperty(document,'hidden',{configurable:true,value:true});document.dispatchEvent(new Event('visibilitychange'));});
+await page.waitForTimeout(1800);await page.getByRole('button',{name:'1弦7品',exact:true}).click();await page.getByRole('button',{name:'提交答案',exact:true}).click();await page.getByText('请先完整听一次参考音程，再提交。').waitFor();
+const failure=await context.newPage();await failure.addInitScript(()=>{window.AudioContext=class{constructor(){throw new Error('test audio denied')}}});await failure.goto('http://127.0.0.1:8877/lesson-1/');await failure.getByRole('button',{name:'05 独立听觉'}).click();await failure.getByRole('button',{name:'听参考音程'}).click();await failure.getByRole('button',{name:'1弦7品',exact:true}).click();await failure.getByRole('button',{name:'提交答案',exact:true}).click();await failure.getByText('请先完整听一次参考音程，再提交。').waitFor();
+await page.goto('http://127.0.0.1:8877/explore/');await page.setViewportSize({width:390,height:844});const selected=page.locator('[data-string="2"][data-fret="12"]');await selected.click();await page.setViewportSize({width:844,height:390});await page.waitForTimeout(200);assert.ok(await selected.evaluate(el=>{const a=el.getBoundingClientRect(),b=el.closest('.board-scroll').getBoundingClientRect();return a.left>=b.left-1&&a.right<=b.right+1}));
+console.log('PASS: cross-tab Wiki assistance preserves first, background interruption blocks hearing submission, AudioContext failure blocks submission, selected fret visible after rotation');await browser.close();

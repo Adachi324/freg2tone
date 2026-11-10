@@ -1,0 +1,6 @@
+stories:
+  - id: '1'
+    title: 第一节最小网页
+    status: in-review
+    description: 示范、换起音、独立听觉、隔天复测与本地记录
+    file: ../../implementation-artifacts/spec-lesson-one-web.md

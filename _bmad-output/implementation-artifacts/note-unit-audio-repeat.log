@@ -1,0 +1,15 @@
+
+> mg-ground-probe@0.1.0 test:browser
+> playwright test --grep 三音提交实际 --repeat-each=2
+
+
+Running 2 tests using 1 worker
+
+(node:83924) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓  1 tests/browser.test.ts:528:1 › 三音提交实际输出与槽位一致，含错误组合与重复音回听 (30.8s)
+(node:84657) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓  2 tests/browser.test.ts:528:1 › 三音提交实际输出与槽位一致，含错误组合与重复音回听 (30.7s)
+
+  2 passed (1.1m)

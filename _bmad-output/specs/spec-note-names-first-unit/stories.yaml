@@ -1,0 +1,27 @@
+- id: "1"
+  title: 在花园里认识三个音并独立应用一次
+  description: >-
+    实现SPEC.md的CAP-1、CAP-2及CAP-3的正向匹配，完成同音双标记示范、三个引导练习与一题独立挑战。
+    暂以该题开桥作为可试玩增量，验收和依赖见stories/1-learn-and-apply.md。
+  spec_checkpoint: false
+  done_checkpoint: false
+  invoke_dev_with: >-
+    用户授权开发细节自主决定，按bmad-build执行；读取现有Story并保留其验收边界，核心行为采用TDD。
+- id: "2"
+  title: 用双向对应和三音组合打开桥
+  description: >-
+    依赖Story1，完成SPEC.md的CAP-3，加入反向匹配和可重复材料的三槽组合，替换临时开桥条件。
+    播放、中断与逐题证据的验收见stories/2-sequence-challenge.md。
+  spec_checkpoint: false
+  done_checkpoint: false
+  invoke_dev_with: >-
+    沿用本单元实现约定及现有模块；按bmad-build连续推进，只为本Story变更补充必要行为验证。
+- id: "3"
+  title: 回听与复玩完整学习单元
+  description: >-
+    依赖Story2，完成SPEC.md的CAP-4，提供结果复听、真实完成方式及第二套固定复玩任务。
+    完成整体回归并整理真机与学习观察待验项，验收见stories/3-replay-and-validation.md。
+  spec_checkpoint: false
+  done_checkpoint: true
+  invoke_dev_with: >-
+    按bmad-build完成后展示完整单元供用户体验；准确区分软件检查、真机结果与学习效果，不把待验项标为通过。

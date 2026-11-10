@@ -1,0 +1,5 @@
+stories:
+  - id: "1"
+    title: 指板探索与关联知识阅读
+    description: 可发声指板、音阶可视化、知识侧栏与独立文章入口
+    status: done

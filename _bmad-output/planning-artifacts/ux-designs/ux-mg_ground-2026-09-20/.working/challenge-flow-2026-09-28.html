@@ -1,0 +1,109 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>学到的内容，让道路打开 · 挑战与结果画稿</title>
+<style>
+/* Sources: DESIGN.md, EXPERIENCE.md and .memlog.md (2026-09-28).
+   Scene composition is accepted as a direction; task, feedback and timing remain proposals. */
+:root { color-scheme:light; --ink:#283730; --cream:#f5ecd5; --teal:#447775; --red:#964b37; }
+* { box-sizing:border-box; }
+body { margin:0; background:#e6e1d5; color:var(--ink); font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",sans-serif; }
+.intro,.caption,.closing { width:min(892px,100%); margin:auto; padding:24px; }
+.intro { padding-top:38px; }
+.eyebrow { margin:0 0 10px; color:#596759; font-size:12px; font-weight:750; letter-spacing:.12em; }
+h1 { margin:0 0 14px; font-size:30px; line-height:1.3; letter-spacing:-.03em; }
+.intro p,.caption p,.closing p { font-size:15px; line-height:1.75; margin:8px 0; }
+nav { display:flex; flex-wrap:wrap; gap:8px; margin-top:20px; }
+a { color:#315e5b; }
+nav a { text-decoration:none; font-size:14px; font-weight:650; color:var(--ink); padding:10px 15px; border:1px solid #899282; border-radius:30px; background:#f4f0e5; }
+a:focus-visible { outline:3px solid var(--teal); outline-offset:4px; }
+.screen-scroll { overflow-x:auto; padding:3px 3px 14px; }
+.frame { position:relative; width:844px; height:390px; margin:0 auto; overflow:hidden; isolation:isolate; outline:3px solid var(--ink); border-radius:14px; background:#91a68a; box-shadow:0 8px 20px #24392b16; }
+.landscape { display:block; width:100%; height:100%; object-fit:contain; }
+.topbar { position:absolute; top:14px; left:18px; right:18px; display:flex; align-items:center; justify-content:space-between; gap:12px; }
+.location,.stage { padding:7px 11px; border:2px solid var(--ink); border-radius:8px 12px 9px 6px; background:#f5ecd5f5; font-size:13px; font-weight:750; line-height:1; }
+.stage { background:#354c41; color:var(--cream); font-size:12px; }
+.sheet { position:absolute; top:65px; left:18px; width:275px; padding:17px; background:var(--cream); border:3px solid var(--ink); border-radius:17px 10px 20px 12px; box-shadow:4px 4px 0 #314b3b55; }
+.sheet::before { content:""; position:absolute; top:-4px; left:28px; width:43px; border-top:5px solid var(--red); border-radius:3px; }
+.kicker { font-size:12px; font-weight:750; margin:0 0 6px; color:#68715c; }
+.sheet h2 { font-size:23px; line-height:1.35; margin:0 0 12px; letter-spacing:-.02em; }
+.sheet p { font-size:15px; line-height:1.65; margin:8px 0; }
+.sheet .kicker { font-size:12px; line-height:1.4; margin:0 0 6px; }
+.target-note { display:inline-block; font:800 26px Georgia,serif; padding:0 4px; }
+.note { position:absolute; transform:translate(-50%,-50%); font:800 22px Georgia,serif; color:#283730; text-shadow:0 1px 0 #fff6; line-height:1; }
+.note-c { left:416px; top:220px; }
+.note-d { left:449px; top:230px; }
+.note-e { left:481px; top:240px; }
+.attempt-ring { position:absolute; left:428px; top:208px; width:42px; height:46px; border:3px dashed #f7eed6; border-radius:50%; box-shadow:0 0 0 2px #6e4736; transform:rotate(-16deg); }
+.attempt-label { position:absolute; left:412px; top:286px; padding:5px 9px; background:var(--cream); border:2px solid #7a523a; border-radius:8px 5px 9px 6px; font-size:12px; font-weight:700; }
+button { font-family:inherit; font-size:14px; font-weight:700; color:var(--ink); padding:9px 12px; border:2px solid var(--ink); border-radius:9px 6px 9px 7px; background:#f2e4bf; box-shadow:2px 2px 0 #354439; min-height:40px; }
+button:disabled { opacity:1; cursor:default; }
+.help { position:absolute; left:18px; bottom:21px; }
+.actions { display:flex; gap:9px; margin-top:15px; }
+.primary { background:#e4bd65; }
+.secondary { background:transparent; box-shadow:none; }
+.success-sheet { width:276px; }
+.success-sheet::before { border-color:var(--teal); }
+.success-sheet h2 { font-size:24px; }
+.result-c { left:525px; top:188px; }
+.result-d { left:449px; top:230px; }
+.result-e { left:481px; top:240px; }
+.caption { padding-top:4px; padding-bottom:30px; }
+.caption h2 { font-size:17px; margin:5px 0 8px; }
+.caption p { color:#546153; }
+.closing { border-top:1px solid #b9c0b1; padding-top:18px; padding-bottom:40px; }
+.closing p { font-size:13px; color:#586254; }
+.sequence { padding:12px 15px; border:1px solid #b9c0b1; border-radius:10px; background:#f1eddf; }
+@media(max-width:849px) { .frame { margin-left:0; margin-right:0; } .intro { padding-top:24px; } h1 { font-size:26px; } }
+@media print { body { background:white; } .frame { break-inside:avoid; } nav { display:none; } }
+</style>
+</head>
+<body>
+<header class="intro">
+<p class="eyebrow">MG GROUND / UX EXPLORATION · 2026.09.28</p>
+<h1>让结果发生在场景里。</h1>
+<p>接在教学与引导练习之后：自己试一次，没有成功就原位重试；成功后，音乐材料留在机关里，道路打开，角色继续前进。</p>
+<p><strong>本页是三幅静态评审画稿，非可玩 Demo。</strong>沿用已认可的场景构图方向。题目与 C / D / E 标记仅用于检查界面和反馈结构，完整教案仍待制作；本例不证明掌握乐理或学习有效。</p>
+<nav aria-label="挑战与结果导航"><a href="#challenge">01 独立挑战</a><a href="#retry">02 原位重试</a><a href="#result">03 成功通行</a><a href="key-learning.html#intro-screen">回看教学 UI</a><a href="scene-layout-2026-09-28.html#scene-full">场景构图</a></nav>
+</header>
+<main>
+<section id="challenge" aria-labelledby="challenge-title">
+<div class="screen-scroll"><div class="frame">
+<img class="landscape" src="scene-layout-base-2026-09-28.png" alt="完整花园场景；节拍器角色站在三枚音乐材料旁，机关槽位为空，前方桥板升起、道路不通。">
+<div class="topbar"><span class="location">音乐机关 · 自己试一次</span><span class="stage">独立挑战</span></div>
+<div class="sheet"><p class="kicker">这一次，你来选择</p><h2>让桥放下来</h2><p>为机关找到音名 <span class="target-note">C</span> 的材料。</p><p>选择一枚材料，再放入机关。</p></div>
+<span class="note note-c" aria-label="米色材料，音名 C">C</span><span class="note note-d" aria-label="青色材料，音名 D">D</span><span class="note note-e" aria-label="黄色材料，音名 E">E</span>
+<button class="help" disabled>回看知识介绍</button>
+</div></div>
+<div class="caption"><h2 id="challenge-title">01 / 撤去示范，让玩家自己选择</h2><p>只保留目标与求助入口，三枚材料采用相同标记样式，不高亮答案。点选后放入机关是本轮操作提案；字母匹配只占位展示布局，不是最终测试题。</p></div>
+</section>
+<section id="retry" aria-labelledby="retry-title">
+<div class="screen-scroll"><div class="frame">
+<img class="landscape" src="scene-layout-base-2026-09-28.png" alt="尝试 D 后，材料仍在托盘，机关没有接纳它，桥保持升起。原场景保留，可重新选择材料。">
+<div class="topbar"><span class="location">音乐机关 · 再试一次</span><span class="stage">原位重试</span></div>
+<div class="sheet"><p class="kicker">机关还没有启动</p><h2>换一枚，再试试</h2><p>刚才选的是 <strong>D</strong>，机关需要 <strong>C</strong>。</p><p>材料还在这里，可以重新选择。</p><div class="actions"><button class="primary" disabled>重新选择</button><button class="secondary" disabled>回看介绍</button></div></div>
+<span class="attempt-ring" aria-hidden="true"></span>
+<span class="note note-c" aria-label="米色材料，音名 C">C</span><span class="note note-d" aria-label="刚才尝试的青色材料，音名 D">D</span><span class="note note-e" aria-label="黄色材料，音名 E">E</span>
+<span class="attempt-label">刚才尝试 · D</span>
+</div></div>
+<div class="caption"><h2 id="retry-title">02 / 原因说清楚，保持场景与操作位置</h2><p>这里展示未被接纳的材料已经回到原位后的状态，不演示搬运动画。圈出刚才尝试的 D，桥保持升起；说明原因并允许重选或回看，不增加扣分、倒计时或惩罚弹窗。</p></div>
+</section>
+<section id="result" aria-labelledby="result-title">
+<div class="screen-scroll"><div class="frame">
+<img class="landscape" src="scene-result-2026-09-28.png" alt="同一花园场景中，C 材料留在机关槽内，木托只剩 D 和 E，桥已经放下，节拍器角色正在通过桥前往石门。">
+<div class="topbar"><span class="location">音乐机关 · 道路打开了</span><span class="stage">成功通行</span></div>
+<div class="sheet success-sheet"><p class="kicker">你的选择，让机关动了起来</p><h2>现在，可以过去了</h2><p><strong>C 材料进入机关 → 桥放下。</strong></p><p>刚才的选择留在场景里，伙伴也能继续向前了。</p><div class="actions"><button class="primary" disabled>再试一次</button><button class="secondary" disabled>结束本次</button></div></div>
+<span class="note result-c" aria-label="机关中已安装的 C 材料">C</span><span class="note result-d" aria-label="托盘中剩余的 D 材料">D</span><span class="note result-e" aria-label="托盘中剩余的 E 材料">E</span>
+</div></div>
+<div class="caption"><h2 id="result-title">03 / 机关与角色给出结果，文字只补充因果</h2><p>保留安装的材料、已打开的道路和角色行动，让结果成为世界的变化。短回顾不替代机关反馈，也不宣称玩家已经熟练掌握；本轮画稿不增加星级或大型结算页。</p></div>
+</section>
+</main>
+<footer class="closing">
+<p class="sequence"><strong>待实现的反馈顺序：</strong>确认音名与对应声音 → 机关响应 → 桥发生变化 → 角色行动。该时序只是设计提案，本页没有声音、动画或自动播放。</p>
+<p><strong>检查范围：</strong>三幅画面均为 844 × 390，完整显示背景，不裁切；窄窗口可横向滚动。画面中的全部按钮已停用，只有页外导航链接可点击。本页没有判题、真实 3D、音视同步或学习效果验证。</p>
+<p><a href="key-learning.html#intro-screen">知识介绍 → 对照示范 → 引导练习</a> · <a href="scene-layout-2026-09-28.html#scene-teaching">教程在场景中展开</a> · <a href="scene-result-2026-09-28.png">查看成功场景原图</a></p>
+</footer>
+</body>
+</html>

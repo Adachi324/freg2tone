@@ -1,0 +1,109 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>音乐学习 Demo · 流程线框提案</title><style>
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:#ededed;color:#252525;font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;line-height:1.6}main{max-width:1140px;margin:auto;padding:44px 24px 64px}.intro{max-width:880px}.eyebrow{font-size:13px;letter-spacing:1px;color:#555}h1{font-size:30px;line-height:1.3;margin:12px 0 16px}h2{font-size:21px;margin:0}.intro p{margin:10px 0;color:#555}nav{display:flex;gap:10px;flex-wrap:wrap;margin:26px 0 42px}a{color:inherit}nav a{padding:8px 14px;border:1px solid #aaa;text-decoration:none;background:#fff}a:focus-visible{outline:3px solid #333;outline-offset:3px}section{margin:0 0 44px;scroll-margin-top:20px}.step-head{display:flex;justify-content:space-between;gap:20px;align-items:baseline;margin-bottom:12px}.step-head h2 span{color:#777;font-weight:400;margin-right:8px}.step-head p{font-size:14px;color:#555;margin:0}.frame{background:#fff;border:1px solid #aaa;box-shadow:0 3px 10px #00000008}.frame svg{display:block;width:100%;height:auto}.label{font-size:19px;fill:#252525}.ui{font-size:20px;font-weight:600;fill:#252525}.muted{font-size:16px;fill:#555}.tiny{font-size:13px;fill:#333}.note{margin:12px 0 0;color:#555;font-size:14px;max-width:1000px}.review{border-top:1px solid #aaa;padding-top:24px}.review p{color:#555;margin:10px 0}.review strong{color:#252525}@media(max-width:700px){main{padding:24px 12px}h1{font-size:25px}.step-head{display:block}.step-head p{margin-top:6px}.frame{overflow-x:auto}.frame svg{min-width:700px}.note{font-size:13px}}@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}}@media print{body{background:#fff}main{padding:0}nav{display:none}section{break-inside:avoid;margin-bottom:25px}.frame{box-shadow:none}}
+</style></head><body><main><div class="intro"><div class="eyebrow">mg_ground · UX DISCOVERY · 2026-09-20</div><h1>学到的东西，怎样改变眼前的场景？</h1><p><strong>待评审布局提案 · 静态流程线框，非可玩 Demo。</strong>六张横屏画面依次展示进入、知识介绍、对照示范、引导练习、独立挑战和结果。几何线条仅表达固定 3D 镜头下的空间关系，不确定最终美术风格。</p><p>当前已确认：横屏 / 平面与固定镜头 3D 混合 / 独立小场景 / 点选后自动靠近。这份较早的灰度线框保留六阶段流程，尚未适配最新的平面与立体混合表现。此处提出的机关、材料摆放、提示方式与通行反馈仍是候选；具体课程规则待定。所有画内按钮均为静态示意。</p></div><nav aria-label="流程跳转"><a href="#step-1">01 进入</a><a href="#step-2">02 知识介绍</a><a href="#step-3">03 对照示范</a><a href="#step-4">04 引导练习</a><a href="#step-5">05 独立挑战</a><a href="#step-6">06 场景结果</a></nav><section id="step-1" aria-labelledby="heading-1"><header class="step-head"><h2 id="heading-1"><span>01</span> 找到可以操作的装置</h2><p>进入场景 → 点选装置 → 角色自动靠近</p></header><div class="frame"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 560" role="img" aria-labelledby="title1 desc1"><title id="title1">找到可以操作的装置</title><desc id="desc1">横屏固定镜头空间线框。角色在左侧入口，音乐材料在前景，操作装置位于中央，通行结果位于右侧。进入场景 → 点选装置 → 角色自动靠近</desc>
+ <rect width="1000" height="560" fill="#fafafa"/>
+ <path d="M62 354L439 171L918 351L540 522Z" fill="#f0f0f0" stroke="#aaa" stroke-width="2"/>
+ <path d="M62 354V373L540 541L918 370V351M540 522V541" fill="#e2e2e2" stroke="#aaa" stroke-width="2"/>
+ <path d="M204 371L483 239L790 355L540 469" fill="none" stroke="#ddd" stroke-width="35"/>
+ <path d="M556 246L723 184L832 225L665 290Z" fill="#eee" stroke="#777" stroke-width="2"/>
+ <path d="M556 246V269L665 313L832 248V225M665 290V313" fill="#d7d7d7" stroke="#777" stroke-width="2"/>
+ <text x="762" y="166" class="muted" text-anchor="middle">下一段通路</text>
+ <path d="M461 306L562 267L623 290L522 330Z" fill="#ddd" stroke="#555" stroke-width="2"/>
+ <path d="M461 306V364L522 388L623 347V290M522 330V388" fill="#c9c9c9" stroke="#555" stroke-width="2"/>
+ <ellipse cx="540" cy="304" rx="36" ry="15" fill="#fafafa" stroke="#333" stroke-width="3"/>
+ <text x="544" y="428" class="label" text-anchor="middle">操作装置</text>
+ <path d="M543 389V407" fill="none" stroke="#888"/>
+ <g transform="translate(205 380)"><ellipse cy="28" rx="22" ry="9" fill="#c8c8c8"/><path d="M-11 3L-15 21L0 29L15 21L11 3Z" fill="#777" stroke="#333" stroke-width="2"/><circle cy="-9" r="13" fill="#eee" stroke="#333" stroke-width="2"/></g>
+ <text x="180" y="444" class="muted" text-anchor="start">角色</text>
+ <rect x="24" y="20" width="952" height="52" rx="2" fill="#fff" stroke="#bbb"/>
+ <text x="43" y="53" class="ui" text-anchor="start">01  /  找到可以操作的装置</text>
+ <text x="951" y="52" class="muted" text-anchor="end">音名与唱名 · 流程示意</text>
+ <path d="M641 269V195L686 178V252Z" fill="#e4e4e4" stroke="#555" stroke-width="2"/><path d="M648 229L679 217M648 244L679 232" stroke="#777" stroke-width="4"/><text x="730" y="216" class="muted" text-anchor="start">待响应</text><ellipse cx="543" cy="330" rx="112" ry="74" fill="none" stroke="#555" stroke-width="2" stroke-dasharray="8 6"/><path d="M237 368Q327 317 415 305" fill="none" stroke="#777" stroke-width="3" stroke-dasharray="8 7"/><text x="329" y="283" class="muted" text-anchor="middle">自动靠近</text><path d="M129 433L291 364L389 402L226 472Z" fill="#eee" stroke="#999" stroke-width="2"/><g transform="translate(190 417)"><path d="M-42 0L0 -20L42 0L0 20Z" fill="#fff" stroke="#555" stroke-width="2"/><path d="M-42 0V8L0 28L42 8V0M0 20V28" fill="#ddd" stroke="#555" stroke-width="2"/><text x="0" y="4" class="tiny" text-anchor="middle">音符甲</text></g><g transform="translate(260 392)"><path d="M-42 0L0 -20L42 0L0 20Z" fill="#fff" stroke="#555" stroke-width="2"/><path d="M-42 0V8L0 28L42 8V0M0 20V28" fill="#ddd" stroke="#555" stroke-width="2"/><text x="0" y="4" class="tiny" text-anchor="middle">音符乙</text></g><g transform="translate(324 420)"><path d="M-42 0L0 -20L42 0L0 20Z" fill="#fff" stroke="#555" stroke-width="2"/><path d="M-42 0V8L0 28L42 8V0M0 20V28" fill="#ddd" stroke="#555" stroke-width="2"/><text x="0" y="4" class="tiny" text-anchor="middle">音符丙</text></g><text x="264" y="505" class="muted" text-anchor="middle">场景中的音乐材料</text><rect x="66" y="105" width="308" height="93" fill="#fff" stroke="#aaa"/><text x="85" y="136" class="label" text-anchor="start">先到装置旁看看</text><text x="85" y="168" class="muted" text-anchor="start">点选装置，角色会自己走过去。</text></svg></div><p class="note"><strong>制作说明：</strong>玩家先看见一个可改变的场景目标。点选目标区域即可行动，镜头方向保持固定。虚线仅表示待评审的引导方式。</p></section><section id="step-2" aria-labelledby="heading-2"><header class="step-head"><h2 id="heading-2"><span>02</span> 先认识两个概念</h2><p>介绍是什么 → 说明用途 → 再看例子</p></header><div class="frame"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 560" role="img" aria-labelledby="title2 desc2"><title id="title2">先认识两个概念</title><desc id="desc2">介绍是什么 → 说明用途 → 再看例子。教学区域与场景示例并排呈现。</desc><rect width="1000" height="560" fill="#fafafa"/><rect x="24" y="20" width="952" height="52" fill="#fff" stroke="#bbb"/><text x="43" y="53" class="ui">02 / 先认识两个概念</text><text x="950" y="53" text-anchor="end" class="muted">学习 · 音名与唱名</text>
+<rect x="48" y="102" width="522" height="372" fill="#fff" stroke="#aaa"/>
+<text x="72" y="142" class="ui">这一节，认识音名与唱名</text>
+<text x="72" y="195" class="label">音名：用字母标记音，例如 C、D、E。</text>
+<text x="72" y="246" class="label">唱名：用 Do、Re、Mi 等音节唱读。</text>
+<path d="M72 273H542" stroke="#ccc"/>
+<text x="72" y="312" class="label">接下来，我们通过声音和标记看一个例子。</text>
+<text x="72" y="348" class="muted">之后，你会用刚学的关系操作音乐装置。</text>
+<rect x="72" y="393" width="190" height="50" fill="#eee" stroke="#555"/>
+<text x="167" y="425" text-anchor="middle" class="label">看一个例子 →</text>
+<path d="M619 326L765 252L938 319L789 395Z" fill="#eee" stroke="#999"/>
+<path d="M673 300L758 258L845 290L760 334Z" fill="#ddd" stroke="#555"/>
+<path d="M673 300V350L760 385L845 341V290M760 334V385" fill="#ccc" stroke="#555"/>
+<ellipse cx="758" cy="290" rx="40" ry="17" fill="#fff" stroke="#333"/>
+<text x="776" y="205" text-anchor="middle" class="label">稍后在这里应用</text>
+<text x="776" y="439" text-anchor="middle" class="muted">场景保留，暂不要求解题</text></svg></div><p class="note"><strong>制作说明：</strong>新增的知识介绍是独立可读状态，不用“点这里”的操作提示代替。示例短文只展示教学区的容量与层次，不是完整教案；唱名体系、对应规则和适用范围在内容制作时明确。教学可按需要拆成多个小段，不要求全部挤在机关旁。</p></section><section id="step-3" aria-labelledby="heading-3"><header class="step-head"><h2 id="heading-3"><span>03</span> 把知识与一个例子连起来</h2><p>系统示范 → 声音与标记对应 → 可重复观察</p></header><div class="frame"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 560" role="img" aria-labelledby="title3 desc3"><title id="title3">把知识与一个例子连起来</title><desc id="desc3">系统示范 → 声音与标记对应 → 可重复观察。教学区域与场景示例并排呈现。</desc><rect width="1000" height="560" fill="#fafafa"/><rect x="24" y="20" width="952" height="52" fill="#fff" stroke="#bbb"/><text x="43" y="53" class="ui">03 / 把知识与一个例子连起来</text><text x="950" y="53" text-anchor="end" class="muted">学习 · 音名与唱名</text>
+<rect x="48" y="102" width="420" height="370" fill="#fff" stroke="#aaa"/>
+<text x="72" y="145" class="ui">听一听，再看它怎样被标记</text>
+<text x="72" y="200" class="label">① 装置播放本节示例的声音。</text>
+<text x="72" y="245" class="label">② 对应名称随声音一起突出显示。</text>
+<text x="72" y="290" class="label">③ 解释两种标记在本例中的关系。</text>
+<rect x="72" y="366" width="150" height="50" fill="#fff" stroke="#555"/>
+<text x="147" y="398" text-anchor="middle" class="label">再看一次</text>
+<rect x="241" y="366" width="194" height="50" fill="#eee" stroke="#555"/>
+<text x="338" y="398" text-anchor="middle" class="label">我来试试 →</text>
+<rect x="544" y="115" width="350" height="54" fill="#fff" stroke="#555"/>
+<text x="719" y="150" text-anchor="middle" class="label">音名［本节示例］</text>
+<rect x="544" y="191" width="350" height="54" fill="#fff" stroke="#555"/>
+<text x="719" y="226" text-anchor="middle" class="label">唱名［本节示例］</text>
+<path d="M719 245V289" stroke="#888" stroke-dasharray="5 5"/>
+<path d="M601 361L719 303L859 360L739 416Z" fill="#eee" stroke="#999"/>
+<ellipse cx="723" cy="341" rx="48" ry="23" fill="#ddd" stroke="#333" stroke-width="3"/>
+<path d="M682 303Q723 275 764 303M690 313Q723 290 756 313" fill="none" stroke="#555"/>
+<text x="733" y="458" text-anchor="middle" class="muted">名称、声音与部件同步示范</text></svg></div><p class="note"><strong>制作说明：</strong>这里由系统示范并解释知识关系，尚未要求玩家答题。具体名称与关系暂用占位，必须由后续教案填入正确的适用规则；无声时可看文字与高亮回放，不能据此认定听觉学习完成。静态画稿不播放声音。</p></section><section id="step-4" aria-labelledby="heading-4"><header class="step-head"><h2 id="heading-4"><span>04</span> 在帮助下应用刚学的知识</h2><p>回顾知识关系 → 玩家尝试 → 解释反馈</p></header><div class="frame"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 560" role="img" aria-labelledby="title4 desc4"><title id="title4">在帮助下应用刚学的知识</title><desc id="desc4">横屏固定镜头空间线框。角色在左侧入口，音乐材料在前景，操作装置位于中央，通行结果位于右侧。回顾知识关系 → 玩家尝试 → 解释反馈</desc>
+ <rect width="1000" height="560" fill="#fafafa"/>
+ <path d="M62 354L439 171L918 351L540 522Z" fill="#f0f0f0" stroke="#aaa" stroke-width="2"/>
+ <path d="M62 354V373L540 541L918 370V351M540 522V541" fill="#e2e2e2" stroke="#aaa" stroke-width="2"/>
+ <path d="M204 371L483 239L790 355L540 469" fill="none" stroke="#ddd" stroke-width="35"/>
+ <path d="M556 246L723 184L832 225L665 290Z" fill="#eee" stroke="#777" stroke-width="2"/>
+ <path d="M556 246V269L665 313L832 248V225M665 290V313" fill="#d7d7d7" stroke="#777" stroke-width="2"/>
+ <text x="762" y="166" class="muted" text-anchor="middle">下一段通路</text>
+ <path d="M461 306L562 267L623 290L522 330Z" fill="#ddd" stroke="#555" stroke-width="2"/>
+ <path d="M461 306V364L522 388L623 347V290M522 330V388" fill="#c9c9c9" stroke="#555" stroke-width="2"/>
+ <ellipse cx="540" cy="304" rx="36" ry="15" fill="#fafafa" stroke="#333" stroke-width="3"/>
+ <text x="544" y="428" class="label" text-anchor="middle">操作装置</text>
+ <path d="M543 389V407" fill="none" stroke="#888"/>
+ <g transform="translate(426 314)"><ellipse cy="28" rx="22" ry="9" fill="#c8c8c8"/><path d="M-11 3L-15 21L0 29L15 21L11 3Z" fill="#777" stroke="#333" stroke-width="2"/><circle cy="-9" r="13" fill="#eee" stroke="#333" stroke-width="2"/></g>
+ <text x="401" y="378" class="muted" text-anchor="start">角色</text>
+ <rect x="24" y="20" width="952" height="52" rx="2" fill="#fff" stroke="#bbb"/>
+ <text x="43" y="53" class="ui" text-anchor="start">04  /  在帮助下应用刚学的知识</text>
+ <text x="951" y="52" class="muted" text-anchor="end">音名与唱名 · 流程示意</text>
+ <path d="M641 269V195L686 178V252Z" fill="#e4e4e4" stroke="#555" stroke-width="2"/><path d="M648 229L679 217M648 244L679 232" stroke="#777" stroke-width="4"/><text x="730" y="216" class="muted" text-anchor="start">待响应</text><g transform="translate(540 304)"><path d="M-42 0L0 -20L42 0L0 20Z" fill="#fff" stroke="#555" stroke-width="2"/><path d="M-42 0V8L0 28L42 8V0M0 20V28" fill="#ddd" stroke="#555" stroke-width="2"/><text x="0" y="4" class="tiny" text-anchor="middle">材料</text></g><path d="M325 414Q381 345 486 323" fill="none" stroke="#555" stroke-width="2" stroke-dasharray="6 6"/><text x="373" y="405" class="muted" text-anchor="middle">选取 → 安装</text><path d="M129 433L291 364L389 402L226 472Z" fill="#eee" stroke="#999" stroke-width="2"/><g transform="translate(190 417)"><path d="M-42 0L0 -20L42 0L0 20Z" fill="#fff" stroke="#555" stroke-width="2"/><path d="M-42 0V8L0 28L42 8V0M0 20V28" fill="#ddd" stroke="#555" stroke-width="2"/><text x="0" y="4" class="tiny" text-anchor="middle">音符甲</text></g><g transform="translate(260 392)"><path d="M-42 0L0 -20L42 0L0 20Z" fill="#bdbdbd" stroke="#555" stroke-width="2"/><path d="M-42 0V8L0 28L42 8V0M0 20V28" fill="#ddd" stroke="#555" stroke-width="2"/><text x="0" y="4" class="tiny" text-anchor="middle">音符乙</text></g><g transform="translate(324 420)"><path d="M-42 0L0 -20L42 0L0 20Z" fill="#fff" stroke="#555" stroke-width="2"/><path d="M-42 0V8L0 28L42 8V0M0 20V28" fill="#ddd" stroke="#555" stroke-width="2"/><text x="0" y="4" class="tiny" text-anchor="middle">音符丙</text></g><text x="264" y="505" class="muted" text-anchor="middle">场景中的音乐材料</text><rect x="69" y="105" width="365" height="126" fill="#fff" stroke="#aaa"/><text x="88" y="137" class="label" text-anchor="start">用刚才学的关系试一次</text><text x="88" y="169" class="label" text-anchor="start">[名称标记]  ↔  [音符材料]</text><text x="88" y="201" class="muted" text-anchor="start">选取材料；需要时回看讲解。</text><path d="M471 236Q480 225 489 236M463 229Q480 208 497 229" fill="none" stroke="#777" stroke-width="2"/><text x="549" y="140" class="muted" text-anchor="middle">声音 + 名称同步提示</text></svg></div><p class="note"><strong>制作说明：</strong>说明贴近正在操作的装置；音乐材料在场景内。音频、名称高亮与装置局部变化同步。音符甲/乙/丙与名称标记均为占位，不代表真实课程映射。</p></section><section id="step-5" aria-labelledby="heading-5"><header class="step-head"><h2 id="heading-5"><span>05</span> 撤去提示，自己完成</h2><p>只保留目标 → 独立选取 → 可替换重试</p></header><div class="frame"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 560" role="img" aria-labelledby="title5 desc5"><title id="title5">撤去提示，自己完成</title><desc id="desc5">横屏固定镜头空间线框。角色在左侧入口，音乐材料在前景，操作装置位于中央，通行结果位于右侧。只保留目标 → 独立选取 → 可替换重试</desc>
+ <rect width="1000" height="560" fill="#fafafa"/>
+ <path d="M62 354L439 171L918 351L540 522Z" fill="#f0f0f0" stroke="#aaa" stroke-width="2"/>
+ <path d="M62 354V373L540 541L918 370V351M540 522V541" fill="#e2e2e2" stroke="#aaa" stroke-width="2"/>
+ <path d="M204 371L483 239L790 355L540 469" fill="none" stroke="#ddd" stroke-width="35"/>
+ <path d="M556 246L723 184L832 225L665 290Z" fill="#eee" stroke="#777" stroke-width="2"/>
+ <path d="M556 246V269L665 313L832 248V225M665 290V313" fill="#d7d7d7" stroke="#777" stroke-width="2"/>
+ <text x="762" y="166" class="muted" text-anchor="middle">下一段通路</text>
+ <path d="M461 306L562 267L623 290L522 330Z" fill="#ddd" stroke="#555" stroke-width="2"/>
+ <path d="M461 306V364L522 388L623 347V290M522 330V388" fill="#c9c9c9" stroke="#555" stroke-width="2"/>
+ <ellipse cx="540" cy="304" rx="36" ry="15" fill="#fafafa" stroke="#333" stroke-width="3"/>
+ <text x="544" y="428" class="label" text-anchor="middle">操作装置</text>
+ <path d="M543 389V407" fill="none" stroke="#888"/>
+ <g transform="translate(426 314)"><ellipse cy="28" rx="22" ry="9" fill="#c8c8c8"/><path d="M-11 3L-15 21L0 29L15 21L11 3Z" fill="#777" stroke="#333" stroke-width="2"/><circle cy="-9" r="13" fill="#eee" stroke="#333" stroke-width="2"/></g>
+ <text x="401" y="378" class="muted" text-anchor="start">角色</text>
+ <rect x="24" y="20" width="952" height="52" rx="2" fill="#fff" stroke="#bbb"/>
+ <text x="43" y="53" class="ui" text-anchor="start">05  /  撤去提示，自己完成</text>
+ <text x="951" y="52" class="muted" text-anchor="end">音名与唱名 · 流程示意</text>
+ <path d="M641 269V195L686 178V252Z" fill="#e4e4e4" stroke="#555" stroke-width="2"/><path d="M648 229L679 217M648 244L679 232" stroke="#777" stroke-width="4"/><text x="730" y="216" class="muted" text-anchor="start">待响应</text><text x="540" y="309" class="tiny" text-anchor="middle">可替换</text><path d="M129 433L291 364L389 402L226 472Z" fill="#eee" stroke="#999" stroke-width="2"/><g transform="translate(190 417)"><path d="M-42 0L0 -20L42 0L0 20Z" fill="#fff" stroke="#555" stroke-width="2"/><path d="M-42 0V8L0 28L42 8V0M0 20V28" fill="#ddd" stroke="#555" stroke-width="2"/><text x="0" y="4" class="tiny" text-anchor="middle">音符甲</text></g><g transform="translate(260 392)"><path d="M-42 0L0 -20L42 0L0 20Z" fill="#fff" stroke="#555" stroke-width="2"/><path d="M-42 0V8L0 28L42 8V0M0 20V28" fill="#ddd" stroke="#555" stroke-width="2"/><text x="0" y="4" class="tiny" text-anchor="middle">音符乙</text></g><g transform="translate(324 420)"><path d="M-42 0L0 -20L42 0L0 20Z" fill="#fff" stroke="#555" stroke-width="2"/><path d="M-42 0V8L0 28L42 8V0M0 20V28" fill="#ddd" stroke="#555" stroke-width="2"/><text x="0" y="4" class="tiny" text-anchor="middle">音符丙</text></g><text x="264" y="505" class="muted" text-anchor="middle">场景中的音乐材料</text><rect x="65" y="105" width="336" height="91" fill="#fff" stroke="#aaa"/><text x="84" y="137" class="label" text-anchor="start">让这座装置响应</text><text x="84" y="170" class="label" text-anchor="start">目标：[名称标记]</text><rect x="655" y="382" width="305" height="110" fill="#fff" stroke="#555" stroke-dasharray="5 4"/><text x="675" y="414" class="label" text-anchor="start">错误状态示意</text><text x="675" y="444" class="muted" text-anchor="start">装置未响应，换一块再试试。</text><text x="675" y="474" class="muted" text-anchor="start">[回看提示]</text></svg></div><p class="note"><strong>制作说明：</strong>下一处同类装置使用已学操作。撤去名称与材料的对应提示，材料位置可变化。错误后保留场景与已完成操作，给出局部反馈；可替换材料，也可主动回看教学，回看后的完成不能视为独立通过。</p></section><section id="step-6" aria-labelledby="heading-6"><header class="step-head"><h2 id="heading-6"><span>06</span> 让结果发生在场景里</h2><p>声音响应 → 装置改变 → 角色自动通行</p></header><div class="frame"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 560" role="img" aria-labelledby="title6 desc6"><title id="title6">让结果发生在场景里</title><desc id="desc6">横屏固定镜头空间线框。角色在左侧入口，音乐材料在前景，操作装置位于中央，通行结果位于右侧。声音响应 → 装置改变 → 角色自动通行</desc>
+ <rect width="1000" height="560" fill="#fafafa"/>
+ <path d="M62 354L439 171L918 351L540 522Z" fill="#f0f0f0" stroke="#aaa" stroke-width="2"/>
+ <path d="M62 354V373L540 541L918 370V351M540 522V541" fill="#e2e2e2" stroke="#aaa" stroke-width="2"/>
+ <path d="M204 371L483 239L790 355L540 469" fill="none" stroke="#ddd" stroke-width="35"/>
+ <path d="M556 246L723 184L832 225L665 290Z" fill="#eee" stroke="#777" stroke-width="2"/>
+ <path d="M556 246V269L665 313L832 248V225M665 290V313" fill="#d7d7d7" stroke="#777" stroke-width="2"/>
+ <text x="762" y="166" class="muted" text-anchor="middle">下一段通路</text>
+ <path d="M461 306L562 267L623 290L522 330Z" fill="#ddd" stroke="#555" stroke-width="2"/>
+ <path d="M461 306V364L522 388L623 347V290M522 330V388" fill="#c9c9c9" stroke="#555" stroke-width="2"/>
+ <ellipse cx="540" cy="304" rx="36" ry="15" fill="#fafafa" stroke="#333" stroke-width="3"/>
+ <text x="544" y="428" class="label" text-anchor="middle">操作装置</text>
+ <path d="M543 389V407" fill="none" stroke="#888"/>
+ <g transform="translate(735 260)"><ellipse cy="28" rx="22" ry="9" fill="#c8c8c8"/><path d="M-11 3L-15 21L0 29L15 21L11 3Z" fill="#777" stroke="#333" stroke-width="2"/><circle cy="-9" r="13" fill="#eee" stroke="#333" stroke-width="2"/></g>
+ <text x="710" y="324" class="muted" text-anchor="start">角色</text>
+ <rect x="24" y="20" width="952" height="52" rx="2" fill="#fff" stroke="#bbb"/>
+ <text x="43" y="53" class="ui" text-anchor="start">06  /  让结果发生在场景里</text>
+ <text x="951" y="52" class="muted" text-anchor="end">音名与唱名 · 流程示意</text>
+ <path d="M565 273L696 224L743 242L612 292Z" fill="#fff" stroke="#333" stroke-width="3"/><path d="M565 273V283L612 302L743 252V242M612 292V302" fill="#bbb" stroke="#333" stroke-width="2"/><path d="M543 300L611 271L709 238" fill="none" stroke="#333" stroke-width="3" stroke-dasharray="5 6"/><text x="541" y="309" class="tiny" text-anchor="middle">已安装</text><text x="769" y="342" class="label" text-anchor="middle">通路展开</text><path d="M665 301L721 284" fill="none" stroke="#333" stroke-width="3"/><path d="M713 280L721 284L716 292" fill="none" stroke="#333" stroke-width="3"/><rect x="67" y="110" width="335" height="117" fill="#fff" stroke="#555"/><text x="87" y="143" class="label" text-anchor="start">装置响应了</text><text x="87" y="177" class="muted" text-anchor="start">你放入的材料，让通路展开。</text><text x="87" y="208" class="muted" text-anchor="start">角色自动走过，完成这次挑战。</text><rect x="750" y="442" width="164" height="47" fill="#fff" stroke="#555"/><text x="832" y="472" class="label" text-anchor="middle">继续</text></svg></div><p class="note"><strong>制作说明：</strong>成功首先由声音和装置状态确认，再展开通路，角色自动通过。先展示改变，再出现“继续”，保持音乐操作与世界结果的因果关系。通路仅为当前示意机关，不代表所有课程都用开路玩法。</p></section><aside class="review"><h2>这轮画稿要检查什么</h2><p><strong>是否真正教过：</strong>玩家是否先看到了概念解释和完整示例，再被要求练习？引导练习能否连接到刚介绍的知识？</p><p><strong>场景能否读懂：</strong>第一眼能否找到角色、可操作装置、音乐材料以及受影响的通路？</p><p><strong>动作是否自然：</strong>点选目标、角色靠近、选取材料并安装的流程是否符合期待？精确的触控/鼠标手势尚未定稿。</p><p><strong>反馈是否足够：</strong>相较于答对后只出现文字，装置变化与角色通行是否更接近期望的“学到的东西真的有效”？</p><p>本文件不播放声音、不运行 3D、不判题，不能用于证明音视同步、教学有效性或设备性能。无声情况下仅能表达可视结构与操作；听觉学习须在后续可玩版本中验证。</p></aside></main></body></html>

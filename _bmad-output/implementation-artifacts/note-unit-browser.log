@@ -1,0 +1,370 @@
+
+> mg-ground-probe@0.1.0 test:browser
+> playwright test
+
+
+Running 13 tests using 1 worker
+
+(node:9814) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘   1 tests/browser.test.ts:88:1 › 介绍与双标记示范、三个练习、撤表挑战、错误修正和复玩 (17.5m)
+(node:10187) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘   2 tests/browser.test.ts:129:1 › 帮助、旋转与后台保留组合；减少动效不跳过播放 (15.5m)
+(node:10399) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘   3 tests/browser.test.ts:148:1 › 横屏命中区至少44px且不重叠，材料未被教学卡遮住 (15.3m)
+(node:10563) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘   4 tests/browser.test.ts:200:1 › 取消触摸不放入，键盘可继续；回看焦点返回且不穿透 (12.0m)
+(node:10730) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓   5 tests/browser.test.ts:216:1 › 音频不可用可无声通过；WebGL故障与脚本失败有恢复入口 (11.1s)
+  ✓   6 tests/browser.test.ts:242:1 › 真实Web Audio解锁与暂停：隐藏期间不产生新声，回来不补播旧音 (8.2s)
+  ✓   7 tests/browser.test.ts:292:1 › 资源脚本加载失败时提供独立于主模块的重试入口 (1.8s)
+  ✓   8 tests/browser.test.ts:300:1 › 仅开纸声也能解锁，后台回来保持纸声开且音符关 (7.1s)
+  ✓   9 tests/browser.test.ts:341:1 › 迟到的音频解锁不覆盖无声选择或跳过示范，迟到的恢复不取消新的暂停 (5.1s)
+  ✘  10 tests/browser.test.ts:371:1 › 真实输出信号包含 C D E 的独立音高，关闭声音后输出归零 (10.8s)
+(node:11617) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘  11 tests/browser.test.ts:407:1 › 错误序列可替换；播放中暂停后从头重播，不能提前开桥 (16.1m)
+(node:11802) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘  12 tests/browser.test.ts:435:1 › 结果区分重试与提示，回听不改记录；第二轮重复音和上一轮摘要 (17.2m)
+(node:11930) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✘  13 tests/browser.test.ts:528:1 › 三音提交实际输出与槽位一致，含错误组合与重复音回听 (11.6m)
+
+
+  1) tests/browser.test.ts:88:1 › 介绍与双标记示范、三个练习、撤表挑战、错误修正和复玩 ───────────────────────────────────────
+
+    Test timeout of 45000ms exceeded.
+
+    Error: locator.click: Test timeout of 45000ms exceeded.
+    Call log:
+      - waiting for getByRole('button', { name: '无声继续', exact: true })
+
+
+      3 |   if (navigate) await page.goto("/");
+      4 |   await page.getByRole("button", { name: "靠近机关", exact: true }).click();
+    > 5 |   await page.getByRole("button", { name: "无声继续", exact: true }).click();
+        |                                                                 ^
+      6 |   await page.getByRole("button", { name: "我来试试 →", exact: true }).click();
+      7 | }
+      8 | async function put(page: Page, name: string, index = 0) {
+        at start (/Users/yichen_yang/projects/mg_ground/app/tests/browser.test.ts:5:65)
+        at challenge (/Users/yichen_yang/projects/mg_ground/app/tests/browser.test.ts:21:3)
+        at /Users/yichen_yang/projects/mg_ground/app/tests/browser.test.ts:107:3
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/browser-介绍与双标记示范、三个练习、撤表挑战、错误修正和复玩/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/browser-介绍与双标记示范、三个练习、撤表挑战、错误修正和复玩/error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/browser-介绍与双标记示范、三个练习、撤表挑战、错误修正和复玩/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/browser-介绍与双标记示范、三个练习、撤表挑战、错误修正和复玩/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  2) tests/browser.test.ts:129:1 › 帮助、旋转与后台保留组合；减少动效不跳过播放 ──────────────────────────────────────────
+
+    Test timeout of 45000ms exceeded.
+
+    Error: expect(locator).toHaveAttribute(expected) failed
+
+    Locator:  locator('#world')
+    Expected: "false"
+    Received: "true"
+    Timeout:  7000ms
+
+    Call log:
+      - Expect "toHaveAttribute" locator('#world') with timeout 7000ms
+      - waiting for locator('#world')
+        5 × locator resolved to <main id="world" data-run="1" data-task="p2" data-paused="false" data-playing="true" data-phase="practice" data-label-mode="letter">…</main>
+          - unexpected value "true"
+
+
+      16 | async function submit(page: Page) {
+      17 |   await page.getByRole("button", { name: "试运行 ♪", exact: true }).click();
+    > 18 |   await expect(page.locator("#world")).toHaveAttribute("data-playing", "false");
+         |                                        ^
+      19 | }
+      20 | async function challenge(page: Page, navigate = true) {
+      21 |   await start(page, navigate);
+        at submit (/Users/yichen_yang/projects/mg_ground/app/tests/browser.test.ts:18:40)
+        at challenge (/Users/yichen_yang/projects/mg_ground/app/tests/browser.test.ts:24:5)
+        at /Users/yichen_yang/projects/mg_ground/app/tests/browser.test.ts:131:3
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/browser-帮助、旋转与后台保留组合；减少动效不跳过播放/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/browser-帮助、旋转与后台保留组合；减少动效不跳过播放/error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/browser-帮助、旋转与后台保留组合；减少动效不跳过播放/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/browser-帮助、旋转与后台保留组合；减少动效不跳过播放/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  3) tests/browser.test.ts:148:1 › 横屏命中区至少44px且不重叠，材料未被教学卡遮住 ───────────────────────────────────────
+
+    Test timeout of 120000ms exceeded.
+
+    Error: expect(locator).toHaveAttribute(expected) failed
+
+    Locator:  locator('#world')
+    Expected: "false"
+    Received: "true"
+
+    Call log:
+      - Expect "toHaveAttribute" locator('#world') with timeout 7000ms
+      - waiting for locator('#world')
+        4 × locator resolved to <main id="world" data-run="1" data-task="p1" data-paused="false" data-playing="true" data-phase="practice" data-label-mode="letter">…</main>
+          - unexpected value "true"
+      - Test timeout of 120000ms exceeded.
+
+
+      16 | async function submit(page: Page) {
+      17 |   await page.getByRole("button", { name: "试运行 ♪", exact: true }).click();
+    > 18 |   await expect(page.locator("#world")).toHaveAttribute("data-playing", "false");
+         |                                        ^
+      19 | }
+      20 | async function challenge(page: Page, navigate = true) {
+      21 |   await start(page, navigate);
+        at submit (/Users/yichen_yang/projects/mg_ground/app/tests/browser.test.ts:18:40)
+        at challenge (/Users/yichen_yang/projects/mg_ground/app/tests/browser.test.ts:24:5)
+        at /Users/yichen_yang/projects/mg_ground/app/tests/browser.test.ts:157:5
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/browser-横屏命中区至少44px且不重叠，材料未被教学卡遮住/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/browser-横屏命中区至少44px且不重叠，材料未被教学卡遮住/error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/browser-横屏命中区至少44px且不重叠，材料未被教学卡遮住/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/browser-横屏命中区至少44px且不重叠，材料未被教学卡遮住/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  4) tests/browser.test.ts:200:1 › 取消触摸不放入，键盘可继续；回看焦点返回且不穿透 ────────────────────────────────────────
+
+    Test timeout of 45000ms exceeded.
+
+    Error: expect(locator).toHaveAttribute(expected) failed
+
+    Locator:  locator('#world')
+    Expected: "false"
+    Received: "true"
+    Timeout:  7000ms
+
+    Call log:
+      - Expect "toHaveAttribute" locator('#world') with timeout 7000ms
+      - waiting for locator('#world')
+        5 × locator resolved to <main id="world" data-run="1" data-task="p1" data-paused="false" data-playing="true" data-phase="practice" data-label-mode="letter">…</main>
+          - unexpected value "true"
+
+
+      16 | async function submit(page: Page) {
+      17 |   await page.getByRole("button", { name: "试运行 ♪", exact: true }).click();
+    > 18 |   await expect(page.locator("#world")).toHaveAttribute("data-playing", "false");
+         |                                        ^
+      19 | }
+      20 | async function challenge(page: Page, navigate = true) {
+      21 |   await start(page, navigate);
+        at submit (/Users/yichen_yang/projects/mg_ground/app/tests/browser.test.ts:18:40)
+        at challenge (/Users/yichen_yang/projects/mg_ground/app/tests/browser.test.ts:24:5)
+        at /Users/yichen_yang/projects/mg_ground/app/tests/browser.test.ts:201:3
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/browser-取消触摸不放入，键盘可继续；回看焦点返回且不穿透/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/browser-取消触摸不放入，键盘可继续；回看焦点返回且不穿透/error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/browser-取消触摸不放入，键盘可继续；回看焦点返回且不穿透/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/browser-取消触摸不放入，键盘可继续；回看焦点返回且不穿透/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  5) tests/browser.test.ts:371:1 › 真实输出信号包含 C D E 的独立音高，关闭声音后输出归零 ──────────────────────────────────
+
+    Error: expect(received).toBeGreaterThan(expected)
+
+    Expected: > 0.005
+    Received:   0
+
+      393 |       ).sampleSound(),
+      394 |     );
+    > 395 |     expect(signal.rms).toBeGreaterThan(0.005);
+          |                        ^
+      396 |     expect(Math.abs(signal.frequency - hz)).toBeLessThan(3);
+      397 |   }
+      398 |   await page.getByRole("button", { name: "♪ 声音开", exact: true }).click();
+        at /Users/yichen_yang/projects/mg_ground/app/tests/browser.test.ts:395:24
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/browser-真实输出信号包含-C-D-E-的独立音高，关闭声音后输出归零/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/browser-真实输出信号包含-C-D-E-的独立音高，关闭声音后输出归零/error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/browser-真实输出信号包含-C-D-E-的独立音高，关闭声音后输出归零/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/browser-真实输出信号包含-C-D-E-的独立音高，关闭声音后输出归零/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  6) tests/browser.test.ts:407:1 › 错误序列可替换；播放中暂停后从头重播，不能提前开桥 ───────────────────────────────────────
+
+    Test timeout of 45000ms exceeded.
+
+    Error: expect(locator).toHaveAttribute(expected) failed
+
+    Locator:  locator('#world')
+    Expected: "false"
+    Received: "true"
+    Timeout:  7000ms
+
+    Call log:
+      - Expect "toHaveAttribute" locator('#world') with timeout 7000ms
+      - waiting for locator('#world')
+        5 × locator resolved to <main id="world" data-run="1" data-task="p3" data-paused="false" data-playing="true" data-phase="practice" data-label-mode="letter">…</main>
+          - unexpected value "true"
+
+
+      16 | async function submit(page: Page) {
+      17 |   await page.getByRole("button", { name: "试运行 ♪", exact: true }).click();
+    > 18 |   await expect(page.locator("#world")).toHaveAttribute("data-playing", "false");
+         |                                        ^
+      19 | }
+      20 | async function challenge(page: Page, navigate = true) {
+      21 |   await start(page, navigate);
+        at submit (/Users/yichen_yang/projects/mg_ground/app/tests/browser.test.ts:18:40)
+        at challenge (/Users/yichen_yang/projects/mg_ground/app/tests/browser.test.ts:24:5)
+        at /Users/yichen_yang/projects/mg_ground/app/tests/browser.test.ts:409:3
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/browser-错误序列可替换；播放中暂停后从头重播，不能提前开桥/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/browser-错误序列可替换；播放中暂停后从头重播，不能提前开桥/error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/browser-错误序列可替换；播放中暂停后从头重播，不能提前开桥/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/browser-错误序列可替换；播放中暂停后从头重播，不能提前开桥/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  7) tests/browser.test.ts:435:1 › 结果区分重试与提示，回听不改记录；第二轮重复音和上一轮摘要 ───────────────────────────────────
+
+    Test timeout of 60000ms exceeded.
+
+    Error: expect(locator).toHaveAttribute(expected) failed
+
+    Locator:  locator('#world')
+    Expected: "false"
+    Received: "true"
+    Timeout:  7000ms
+
+    Call log:
+      - Expect "toHaveAttribute" locator('#world') with timeout 7000ms
+      - waiting for locator('#world')
+        5 × locator resolved to <main id="world" data-run="1" data-task="p2" data-paused="false" data-playing="true" data-phase="practice" data-label-mode="letter">…</main>
+          - unexpected value "true"
+
+
+      16 | async function submit(page: Page) {
+      17 |   await page.getByRole("button", { name: "试运行 ♪", exact: true }).click();
+    > 18 |   await expect(page.locator("#world")).toHaveAttribute("data-playing", "false");
+         |                                        ^
+      19 | }
+      20 | async function challenge(page: Page, navigate = true) {
+      21 |   await start(page, navigate);
+        at submit (/Users/yichen_yang/projects/mg_ground/app/tests/browser.test.ts:18:40)
+        at challenge (/Users/yichen_yang/projects/mg_ground/app/tests/browser.test.ts:24:5)
+        at /Users/yichen_yang/projects/mg_ground/app/tests/browser.test.ts:440:3
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/browser-结果区分重试与提示，回听不改记录；第二轮重复音和上一轮摘要/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/browser-结果区分重试与提示，回听不改记录；第二轮重复音和上一轮摘要/error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/browser-结果区分重试与提示，回听不改记录；第二轮重复音和上一轮摘要/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/browser-结果区分重试与提示，回听不改记录；第二轮重复音和上一轮摘要/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  8) tests/browser.test.ts:528:1 › 三音提交实际输出与槽位一致，含错误组合与重复音回听 ───────────────────────────────────────
+
+    Test timeout of 90000ms exceeded.
+
+    Error: expect(locator).toHaveAttribute(expected) failed
+
+    Locator:  locator('#world')
+    Expected: "false"
+    Received: "true"
+    Timeout:  7000ms
+
+    Call log:
+      - Expect "toHaveAttribute" locator('#world') with timeout 7000ms
+      - waiting for locator('#world')
+        6 × locator resolved to <main id="world" data-run="1" data-task="p2" data-paused="false" data-playing="true" data-phase="practice" data-label-mode="letter">…</main>
+          - unexpected value "true"
+
+
+      16 | async function submit(page: Page) {
+      17 |   await page.getByRole("button", { name: "试运行 ♪", exact: true }).click();
+    > 18 |   await expect(page.locator("#world")).toHaveAttribute("data-playing", "false");
+         |                                        ^
+      19 | }
+      20 | async function challenge(page: Page, navigate = true) {
+      21 |   await start(page, navigate);
+        at submit (/Users/yichen_yang/projects/mg_ground/app/tests/browser.test.ts:18:40)
+        at challenge (/Users/yichen_yang/projects/mg_ground/app/tests/browser.test.ts:24:5)
+        at /Users/yichen_yang/projects/mg_ground/app/tests/browser.test.ts:530:53
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/browser-三音提交实际输出与槽位一致，含错误组合与重复音回听/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/browser-三音提交实际输出与槽位一致，含错误组合与重复音回听/error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/browser-三音提交实际输出与槽位一致，含错误组合与重复音回听/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/browser-三音提交实际输出与槽位一致，含错误组合与重复音回听/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  8 failed
+    tests/browser.test.ts:88:1 › 介绍与双标记示范、三个练习、撤表挑战、错误修正和复玩 ────────────────────────────────────────
+    tests/browser.test.ts:129:1 › 帮助、旋转与后台保留组合；减少动效不跳过播放 ───────────────────────────────────────────
+    tests/browser.test.ts:148:1 › 横屏命中区至少44px且不重叠，材料未被教学卡遮住 ────────────────────────────────────────
+    tests/browser.test.ts:200:1 › 取消触摸不放入，键盘可继续；回看焦点返回且不穿透 ─────────────────────────────────────────
+    tests/browser.test.ts:371:1 › 真实输出信号包含 C D E 的独立音高，关闭声音后输出归零 ───────────────────────────────────
+    tests/browser.test.ts:407:1 › 错误序列可替换；播放中暂停后从头重播，不能提前开桥 ────────────────────────────────────────
+    tests/browser.test.ts:435:1 › 结果区分重试与提示，回听不改记录；第二轮重复音和上一轮摘要 ────────────────────────────────────
+    tests/browser.test.ts:528:1 › 三音提交实际输出与槽位一致，含错误组合与重复音回听 ────────────────────────────────────────
+  5 passed (2.0h)

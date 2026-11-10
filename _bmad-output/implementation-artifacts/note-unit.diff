@@ -1,0 +1,3442 @@
+--- a/app/playwright.config.ts
++++ b/app/playwright.config.ts
+@@ -2,7 +2,7 @@
+ export default defineConfig({
+   testDir: './tests', testMatch: 'browser.test.ts', fullyParallel: false, workers: 1,
+   timeout: 45000, expect: { timeout: 7000 }, reporter: 'list',
+-  use: { baseURL: 'http://127.0.0.1:8877', viewport: { width: 932, height: 430 }, hasTouch: true,
++  use: { baseURL: 'http://127.0.0.1:8877', viewport: { width: 926, height: 428 }, hasTouch: true,
+     launchOptions: { executablePath: process.env.CHROME_PATH || '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome' },
+     screenshot: 'only-on-failure', trace: 'retain-on-failure' },
+   webServer: { command: 'npm run preview', url: 'http://127.0.0.1:8877', reuseExistingServer: true },
+--- a/app/src/art.ts
++++ b/app/src/art.ts
+@@ -1,30 +1,41 @@
+-import * as THREE from 'three';
++import * as THREE from "three";
+ 
+ /** Original editable paint textures, drawn here; no downloaded or generated image assets. */
+-export function paintTexture(base: string, kind: 'paper' | 'wood' | 'grass' | 'water' = 'paper') {
+-  const canvas = document.createElement('canvas');
++export function paintTexture(
++  base: string,
++  kind: "paper" | "wood" | "grass" | "water" = "paper",
++) {
++  const canvas = document.createElement("canvas");
+   canvas.width = canvas.height = 256;
+-  const ctx = canvas.getContext('2d')!;
++  const ctx = canvas.getContext("2d")!;
+   ctx.fillStyle = base;
+   ctx.fillRect(0, 0, 256, 256);
+   let seed = 2718;
+   const random = () => ((seed = (seed * 16807) % 2147483647) - 1) / 2147483646;
+   for (let i = 0; i < 2900; i++) {
+-    ctx.fillStyle = i % 2 ? 'rgba(255,245,210,.065)' : 'rgba(63,48,32,.045)';
+-    const x = random() * 256, y = random() * 256;
++    ctx.fillStyle = i % 2 ? "rgba(255,245,210,.065)" : "rgba(63,48,32,.045)";
++    const x = random() * 256,
++      y = random() * 256;
+     ctx.fillRect(x, y, 1 + random() * 4, 1 + random() * 2);
+   }
+   ctx.lineWidth = 1.2;
+   for (let i = 0; i < 45; i++) {
+-    const x = random() * 256, y = random() * 256;
++    const x = random() * 256,
++      y = random() * 256;
+     ctx.beginPath();
+-    ctx.strokeStyle = kind === 'water' ? 'rgba(248,233,191,.32)' : 'rgba(60,52,37,.17)';
+-    if (kind === 'wood') {
+-      ctx.moveTo(0, y); ctx.bezierCurveTo(80, y - 5, 140, y + 7, 256, y);
+-    } else if (kind === 'grass') {
+-      ctx.moveTo(x, y); ctx.lineTo(x - 3, y - 6); ctx.moveTo(x, y); ctx.lineTo(x + 3, y - 4);
+-    } else if (kind === 'water') {
+-      ctx.moveTo(x, y); ctx.bezierCurveTo(x + 6, y - 2, x + 13, y + 3, x + 22, y);
++    ctx.strokeStyle =
++      kind === "water" ? "rgba(248,233,191,.32)" : "rgba(60,52,37,.17)";
++    if (kind === "wood") {
++      ctx.moveTo(0, y);
++      ctx.bezierCurveTo(80, y - 5, 140, y + 7, 256, y);
++    } else if (kind === "grass") {
++      ctx.moveTo(x, y);
++      ctx.lineTo(x - 3, y - 6);
++      ctx.moveTo(x, y);
++      ctx.lineTo(x + 3, y - 4);
++    } else if (kind === "water") {
++      ctx.moveTo(x, y);
++      ctx.bezierCurveTo(x + 6, y - 2, x + 13, y + 3, x + 22, y);
+     } else continue;
+     ctx.stroke();
+   }
+@@ -34,29 +45,50 @@
+   return texture;
+ }
+ 
+-export function faceTexture(kind: 'character' | 'C' | 'D' | 'E') {
+-  const canvas = document.createElement('canvas');
++export function faceTexture(kind: string) {
++  const canvas = document.createElement("canvas");
+   canvas.width = canvas.height = 256;
+-  const ctx = canvas.getContext('2d')!;
+-  ctx.fillStyle = '#f3dfb1';
++  const ctx = canvas.getContext("2d")!;
++  ctx.fillStyle = "#f3dfb1";
+   ctx.fillRect(0, 0, 256, 256);
+-  ctx.strokeStyle = '#392d24';
+-  ctx.fillStyle = '#392d24';
++  ctx.strokeStyle = "#392d24";
++  ctx.fillStyle = "#392d24";
+   ctx.lineWidth = 6;
+-  if (kind === 'character') {
++  if (kind === "character") {
+     for (const x of [88, 171]) {
+-      ctx.beginPath(); ctx.ellipse(x, 112, 17, 33, -.06, 0, Math.PI * 2); ctx.fill();
+-      ctx.fillStyle = '#fff6dc'; ctx.beginPath(); ctx.ellipse(x - 4, 101, 5, 10, 0, 0, Math.PI * 2); ctx.fill();
+-      ctx.fillStyle = '#392d24';
++      ctx.beginPath();
++      ctx.ellipse(x, 112, 17, 33, -0.06, 0, Math.PI * 2);
++      ctx.fill();
++      ctx.fillStyle = "#fff6dc";
++      ctx.beginPath();
++      ctx.ellipse(x - 4, 101, 5, 10, 0, 0, Math.PI * 2);
++      ctx.fill();
++      ctx.fillStyle = "#392d24";
+     }
+-    ctx.beginPath(); ctx.moveTo(104, 165); ctx.quadraticCurveTo(130, 194, 158, 162); ctx.stroke();
+-    ctx.fillStyle = '#c58561';
+-    for (const x of [61, 193]) { ctx.beginPath(); ctx.ellipse(x, 155, 15, 8, 0, 0, Math.PI * 2); ctx.fill(); }
++    ctx.beginPath();
++    ctx.moveTo(104, 165);
++    ctx.quadraticCurveTo(130, 194, 158, 162);
++    ctx.stroke();
++    ctx.fillStyle = "#c58561";
++    for (const x of [61, 193]) {
++      ctx.beginPath();
++      ctx.ellipse(x, 155, 15, 8, 0, 0, Math.PI * 2);
++      ctx.fill();
++    }
+   } else {
+-    ctx.font = 'bold 154px Georgia, serif'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+-    ctx.fillText(kind, 128, 139);
++    ctx.textAlign = "center";
++    ctx.textBaseline = "middle";
++    const lines = kind.split(" / ");
++    ctx.font = `bold ${lines.length > 1 ? 96 : kind.length > 1 ? 106 : 154}px Georgia, serif`;
++    if (lines.length > 1) {
++      ctx.fillText(lines[0]!, 128, 90);
++      ctx.font = "bold 68px Georgia, serif";
++      ctx.fillText(lines[1]!, 128, 178);
++    } else ctx.fillText(kind, 128, 139);
+     ctx.lineWidth = 3;
+-    ctx.beginPath(); ctx.arc(128, 128, 114, 0, Math.PI * 2); ctx.stroke();
++    ctx.beginPath();
++    ctx.arc(128, 128, 114, 0, Math.PI * 2);
++    ctx.stroke();
+   }
+   const texture = new THREE.CanvasTexture(canvas);
+   texture.colorSpace = THREE.SRGBColorSpace;
+--- a/app/src/audio.ts
++++ b/app/src/audio.ts
+@@ -1,5 +1,5 @@
+-import type { MaterialId } from './game.ts';
+-const frequencies: Record<MaterialId, number> = { C: 261.6256, D: 293.6648, E: 329.6276 };
++import { notes } from "./lesson.ts";
++import type { MaterialId } from "./lesson.ts";
+ 
+ /** 只有短音和纸张声；不持有游戏状态或任何判题逻辑。 */
+ export class Sound {
+@@ -12,8 +12,10 @@
+     try {
+       this.context ??= new AudioContext();
+       await this.context.resume();
+-      return this.context.state === 'running';
+-    } catch { return false; }
++      return this.context.state === "running";
++    } catch {
++      return false;
++    }
+   }
+   stop(immediate = false): void {
+     const now = this.context?.currentTime || 0;
+@@ -22,16 +24,24 @@
+       if (immediate) gain.gain.setValueAtTime(0, now);
+       else gain.gain.linearRampToValueAtTime(0, now + 0.012);
+     }
+-    for (const source of this.active) { try { source.stop(now + (immediate ? 0 : 0.015)); } catch { /* 已结束。 */ } }
++    for (const source of this.active) {
++      try {
++        source.stop(now + (immediate ? 0 : 0.015));
++      } catch {
++        /* 已结束。 */
++      }
++    }
+     this.active.clear();
+   }
+   async suspend(): Promise<void> {
+     this.stop(true);
+-    if (this.context?.state === 'running') await this.context.suspend().catch(() => {});
++    if (this.context?.state === "running")
++      await this.context.suspend().catch(() => {});
+   }
+   note(id: MaterialId): number {
+     const ctx = this.context;
+-    if (!this.music || !ctx || ctx.state !== 'running') return performance.now();
++    if (!this.music || !ctx || ctx.state !== "running")
++      return performance.now();
+     this.stop();
+     const start = ctx.currentTime + 0.025;
+     const gain = ctx.createGain();
+@@ -41,36 +51,70 @@
+     gain.connect(ctx.destination);
+     this.envelopes.add(gain);
+     let remaining = 3;
+-    for (const [multiple, volume] of [[1, 1], [2, 0.22], [3, 0.08]]) {
++    for (const [multiple, volume] of [
++      [1, 1],
++      [2, 0.22],
++      [3, 0.08],
++    ]) {
+       const oscillator = ctx.createOscillator();
+       const partial = ctx.createGain();
+-      oscillator.type = 'sine'; oscillator.frequency.value = frequencies[id] * multiple;
+-      partial.gain.value = volume; oscillator.connect(partial); partial.connect(gain);
++      oscillator.type = "sine";
++      oscillator.frequency.value = notes[id].frequency * multiple;
++      partial.gain.value = volume;
++      oscillator.connect(partial);
++      partial.connect(gain);
+       this.active.add(oscillator);
+-      oscillator.onended = () => { this.active.delete(oscillator); oscillator.disconnect(); partial.disconnect();
+-        if (--remaining === 0) { gain.disconnect(); this.envelopes.delete(gain); }
++      oscillator.onended = () => {
++        this.active.delete(oscillator);
++        oscillator.disconnect();
++        partial.disconnect();
++        if (--remaining === 0) {
++          gain.disconnect();
++          this.envelopes.delete(gain);
++        }
+       };
+-      oscillator.start(start); oscillator.stop(start + 0.7);
++      oscillator.start(start);
++      oscillator.stop(start + 0.7);
+     }
+     const timestamp = ctx.getOutputTimestamp?.();
+     return timestamp?.contextTime && timestamp.performanceTime
+       ? timestamp.performanceTime + (start - timestamp.contextTime) * 1000
+-      : performance.now() + (start - ctx.currentTime + (ctx.outputLatency || 0)) * 1000;
++      : performance.now() +
++          (start - ctx.currentTime + (ctx.outputLatency || 0)) * 1000;
+   }
+   page(): void {
+     const ctx = this.context;
+-    if (!this.paper || !ctx || ctx.state !== 'running') return;
++    if (!this.paper || !ctx || ctx.state !== "running") return;
+     this.stop();
+     const duration = 0.17;
+-    const buffer = ctx.createBuffer(1, Math.ceil(ctx.sampleRate * duration), ctx.sampleRate);
++    const buffer = ctx.createBuffer(
++      1,
++      Math.ceil(ctx.sampleRate * duration),
++      ctx.sampleRate,
++    );
+     const data = buffer.getChannelData(0);
+-    for (let i = 0; i < data.length; i++) data[i] = (Math.random() * 2 - 1) * Math.sin(Math.PI * i / data.length);
+-    const source = ctx.createBufferSource(); source.buffer = buffer;
+-    const filter = ctx.createBiquadFilter(); filter.type = 'bandpass'; filter.frequency.value = 1600; filter.Q.value = 0.65;
+-    const gain = ctx.createGain(); gain.gain.value = 0.06;
+-    source.connect(filter); filter.connect(gain); gain.connect(ctx.destination);
+-    this.active.add(source); this.envelopes.add(gain);
+-    source.onended = () => { this.active.delete(source); source.disconnect(); filter.disconnect(); gain.disconnect(); this.envelopes.delete(gain); };
++    for (let i = 0; i < data.length; i++)
++      data[i] = (Math.random() * 2 - 1) * Math.sin((Math.PI * i) / data.length);
++    const source = ctx.createBufferSource();
++    source.buffer = buffer;
++    const filter = ctx.createBiquadFilter();
++    filter.type = "bandpass";
++    filter.frequency.value = 1600;
++    filter.Q.value = 0.65;
++    const gain = ctx.createGain();
++    gain.gain.value = 0.06;
++    source.connect(filter);
++    filter.connect(gain);
++    gain.connect(ctx.destination);
++    this.active.add(source);
++    this.envelopes.add(gain);
++    source.onended = () => {
++      this.active.delete(source);
++      source.disconnect();
++      filter.disconnect();
++      gain.disconnect();
++      this.envelopes.delete(gain);
++    };
+     source.start();
+   }
+ }
+--- a/app/src/game.ts
++++ b/app/src/game.ts
+@@ -1,52 +1,270 @@
+-export type MaterialId = 'C' | 'D' | 'E';
+-export type Phase = 'arrival' | 'approach' | 'intro' | 'demo' | 'practice' | 'challenge' | 'bridge' | 'crossing' | 'complete';
++import { challengeTasks, practiceTasks, noteIds } from "./lesson.ts";
++import type { MaterialId, Task } from "./lesson.ts";
++export type { MaterialId } from "./lesson.ts";
++export type Phase =
++  | "arrival"
++  | "approach"
++  | "intro"
++  | "demo"
++  | "practice"
++  | "challenge"
++  | "bridge"
++  | "crossing"
++  | "complete";
++export type Attempt = {
++  taskId: string;
++  firstSubmission: {
++    answer: MaterialId[];
++    correct: boolean;
++    helped: boolean;
++  } | null;
++  submissionCount: number;
++  wrongCount: number;
++  helpUsed: boolean;
++  completed: boolean;
++};
++export type Submission = {
++  id: number;
++  taskId: string;
++  answer: MaterialId[];
++  correct: boolean;
++  playing: boolean;
++};
++export type ResultSummary = {
++  run: number;
++  sequence: readonly MaterialId[];
++  attempts: readonly (Attempt & { kind: "first" | "retry" | "help" })[];
++};
+ export type Game = {
+-  phase: Phase; run: number; selected: MaterialId | null;
+-  help: boolean; helpUsed: boolean; portrait: boolean; suspended: boolean;
+-  result: 'wrong' | 'right' | 'empty' | null; practiceDone: boolean;
++  phase: Phase;
++  run: number;
++  selected: MaterialId | null;
++  taskIndex: number;
++  slots: (MaterialId | null)[];
++  submission: Submission | null;
++  nextSubmissionId: number;
++  records: Record<string, Attempt>;
++  lastResult: ResultSummary | null;
++  help: boolean;
++  portrait: boolean;
++  suspended: boolean;
++  result: "wrong" | "right" | "empty" | null;
+ };
+ export type Action =
+-  | { type: 'approach' | 'next' | 'submit' | 'enterChallenge' | 'suspend' | 'resume' | 'replay' }
+-  | { type: 'arrived' | 'bridgeReady' | 'exitReached'; run: number }
+-  | { type: 'select'; id: MaterialId }
+-  | { type: 'help'; open: boolean }
+-  | { type: 'portrait'; value: boolean };
++  | {
++      type:
++        | "approach"
++        | "next"
++        | "submit"
++        | "continue"
++        | "suspend"
++        | "resume"
++        | "replay";
++    }
++  | { type: "arrived" | "bridgeReady" | "exitReached"; run: number }
++  | {
++      type: "playbackFinished";
++      run: number;
++      taskId: string;
++      submissionId: number;
++    }
++  | { type: "select"; id: MaterialId }
++  | { type: "place"; index: number }
++  | { type: "help"; open: boolean }
++  | { type: "portrait"; value: boolean };
+ export function createGame(): Game {
+-  return { phase: 'arrival', run: 1, selected: null, result: null, practiceDone: false, help: false, helpUsed: false, portrait: false, suspended: false };
+-}
+-export function paused(g: Game): boolean { return g.help || g.portrait || g.suspended; }
+-export function act(game: Game, action: Action): Game {
+-  const g = { ...game };
+-  if (action.type === 'portrait') return { ...g, portrait: action.value };
+-  if (action.type === 'suspend') return { ...g, suspended: true };
+-  if (action.type === 'resume') return g.portrait ? g : { ...g, suspended: false };
+-  if (action.type === 'help' && !g.suspended && !g.portrait) {
+-    if (!['practice', 'challenge', 'bridge', 'crossing', 'complete'].includes(g.phase)) return g;
+-    return { ...g, help: action.open, helpUsed: g.helpUsed || (action.open && g.phase === 'challenge') };
++  return {
++    phase: "arrival",
++    run: 1,
++    selected: null,
++    taskIndex: 0,
++    slots: [null],
++    submission: null,
++    nextSubmissionId: 1,
++    records: {},
++    lastResult: null,
++    help: false,
++    portrait: false,
++    suspended: false,
++    result: null,
++  };
++}
++export function paused(g: Game): boolean {
++  return g.help || g.portrait || g.suspended;
++}
++export function currentTask(g: Game): Task {
++  return (g.phase === "practice" ? practiceTasks : challengeTasks(g.run))[
++    g.taskIndex
++  ]!;
++}
++export function editable(g: Game): boolean {
++  return (
++    !paused(g) &&
++    ["practice", "challenge"].includes(g.phase) &&
++    !g.submission?.playing &&
++    g.result !== "right"
++  );
++}
++function attempt(g: Game, id: string): Attempt {
++  return (
++    g.records[id] || {
++      taskId: id,
++      firstSubmission: null,
++      submissionCount: 0,
++      wrongCount: 0,
++      helpUsed: false,
++      completed: false,
++    }
++  );
++}
++function moveTo(g: Game, phase: Phase, index: number): Game {
++  const task = (phase === "practice" ? practiceTasks : challengeTasks(g.run))[
++    index
++  ]!;
++  return {
++    ...g,
++    phase,
++    taskIndex: index,
++    selected: null,
++    slots: task.target.map(() => null),
++    submission: null,
++    result: null,
++  };
++}
++export function act(g: Game, action: Action): Game {
++  if (action.type === "portrait") return { ...g, portrait: action.value };
++  if (action.type === "suspend") return { ...g, suspended: true };
++  if (action.type === "resume")
++    return g.portrait ? g : { ...g, suspended: false };
++  if (action.type === "help" && !g.suspended && !g.portrait) {
++    if (
++      !["practice", "challenge", "bridge", "crossing", "complete"].includes(
++        g.phase,
++      )
++    )
++      return g;
++    let records = g.records;
++    if (action.open && ["practice", "challenge"].includes(g.phase)) {
++      const t = currentTask(g),
++        a = attempt(g, t.id);
++      if (!a.completed)
++        records = { ...records, [t.id]: { ...a, helpUsed: true } };
++    }
++    return { ...g, help: action.open, records };
+   }
+   if (paused(g)) return g;
+-  if (action.type === 'replay' && g.phase === 'complete') return { ...createGame(), run: g.run + 1 };
+-  if (action.type === 'approach' && g.phase === 'arrival') g.phase = 'approach';
+-  if (action.type === 'arrived' && action.run === g.run && g.phase === 'approach') g.phase = 'intro';
+-  if (action.type === 'next') {
+-    if (g.phase === 'intro') g.phase = 'demo';
+-    else if (g.phase === 'demo') g.phase = 'practice';
+-  }
+-  if (action.type === 'select' && (g.phase === 'challenge' || (g.phase === 'practice' && !g.practiceDone))) {
+-    g.selected = g.selected === action.id ? null : action.id;
+-    g.result = null;
+-  }
+-  if (action.type === 'submit' && (g.phase === 'challenge' || (g.phase === 'practice' && !g.practiceDone))) {
+-    g.result = g.selected === null ? 'empty' : g.selected === 'C' ? 'right' : 'wrong';
+-    if (g.phase === 'practice') g.practiceDone = g.result === 'right';
+-    else if (g.result === 'right') g.phase = 'bridge';
+-  }
+-  if (action.type === 'enterChallenge' && g.phase === 'practice' && g.practiceDone) {
+-    g.phase = 'challenge'; g.selected = null; g.result = null;
+-  }
+-  if ('run' in action && action.run === g.run) {
+-    if (action.type === 'bridgeReady' && g.phase === 'bridge') g.phase = 'crossing';
+-    if (action.type === 'exitReached' && g.phase === 'crossing') g.phase = 'complete';
++  if (action.type === "replay" && g.phase === "complete")
++    return { ...createGame(), run: g.run + 1, lastResult: resultSummary(g) };
++  if (action.type === "approach" && g.phase === "arrival")
++    return { ...g, phase: "approach" };
++  if (
++    action.type === "arrived" &&
++    action.run === g.run &&
++    g.phase === "approach"
++  )
++    return { ...g, phase: "intro" };
++  if (action.type === "next") {
++    if (g.phase === "intro") return { ...g, phase: "demo" };
++    if (g.phase === "demo") return moveTo(g, "practice", 0);
++  }
++  if (action.type === "select" && editable(g) && noteIds.includes(action.id))
++    return { ...g, selected: action.id };
++  if (
++    action.type === "place" &&
++    editable(g) &&
++    Number.isInteger(action.index) &&
++    action.index >= 0 &&
++    action.index < g.slots.length
++  ) {
++    if (!g.selected) return { ...g, result: "empty" };
++    const slots = [...g.slots];
++    slots[action.index] = g.selected;
++    return { ...g, slots, result: null };
++  }
++  if (action.type === "submit" && editable(g)) {
++    if (g.slots.some((id) => id === null)) return { ...g, result: "empty" };
++    const t = currentTask(g),
++      answer = g.slots as MaterialId[],
++      correct = answer.every((id, i) => id === t.target[i]);
++    const a = attempt(g, t.id);
++    const record: Attempt = {
++      ...a,
++      firstSubmission: a.firstSubmission || {
++        answer: [...answer],
++        correct,
++        helped: a.helpUsed,
++      },
++      submissionCount: a.submissionCount + 1,
++      wrongCount: a.wrongCount + (correct ? 0 : 1),
++      completed: correct,
++    };
++    return {
++      ...g,
++      result: correct ? "right" : "wrong",
++      records: { ...g.records, [t.id]: record },
++      nextSubmissionId: g.nextSubmissionId + 1,
++      submission: {
++        id: g.nextSubmissionId,
++        taskId: t.id,
++        answer: [...answer],
++        correct,
++        playing: true,
++      },
++    };
++  }
++  if (
++    action.type === "playbackFinished" &&
++    action.run === g.run &&
++    g.submission?.playing &&
++    action.taskId === g.submission.taskId &&
++    action.submissionId === g.submission.id
++  ) {
++    const last =
++      g.phase === "challenge" &&
++      g.taskIndex === challengeTasks(g.run).length - 1;
++    return {
++      ...g,
++      submission: { ...g.submission, playing: false },
++      phase: last && g.submission.correct ? "bridge" : g.phase,
++    };
++  }
++  if (
++    action.type === "continue" &&
++    g.result === "right" &&
++    !g.submission?.playing
++  ) {
++    if (g.phase === "practice")
++      return g.taskIndex < practiceTasks.length - 1
++        ? moveTo(g, "practice", g.taskIndex + 1)
++        : moveTo(g, "challenge", 0);
++    if (
++      g.phase === "challenge" &&
++      g.taskIndex < challengeTasks(g.run).length - 1
++    )
++      return moveTo(g, "challenge", g.taskIndex + 1);
++  }
++  if ("run" in action && action.run === g.run) {
++    if (action.type === "bridgeReady" && g.phase === "bridge")
++      return { ...g, phase: "crossing" };
++    if (action.type === "exitReached" && g.phase === "crossing")
++      return { ...g, phase: "complete" };
+   }
+   return g;
+ }
++
++export function resultSummary(g: Game): ResultSummary {
++  return {
++    run: g.run,
++    sequence: [...(g.submission?.answer || [])],
++    attempts: challengeTasks(g.run)
++      .map((t) => g.records[t.id])
++      .filter((a): a is Attempt => !!a)
++      .map((a) => ({
++        ...a,
++        firstSubmission: a.firstSubmission
++          ? { ...a.firstSubmission, answer: [...a.firstSubmission.answer] }
++          : null,
++        kind: a.helpUsed ? "help" : a.wrongCount ? "retry" : "first",
++      })),
++  };
++}
+--- a/app/src/lesson.ts
++++ b/app/src/lesson.ts
+@@ -0,0 +1,94 @@
++export type MaterialId = "C" | "D" | "E";
++export type LabelMode = "letter" | "solfege" | "both";
++export const notes = {
++  C: { solfege: "do", frequency: 261.6256 },
++  D: { solfege: "re", frequency: 293.6648 },
++  E: { solfege: "mi", frequency: 329.6276 },
++} as const;
++export const noteIds: readonly MaterialId[] = ["C", "D", "E"];
++export function label(id: MaterialId, mode: LabelMode): string {
++  return mode === "letter"
++    ? id
++    : mode === "solfege"
++      ? notes[id].solfege
++      : `${id} / ${notes[id].solfege}`;
++}
++export type Task = {
++  id: string;
++  promptMode: LabelMode;
++  materialMode: LabelMode;
++  target: readonly MaterialId[];
++  order: readonly MaterialId[];
++};
++export const practiceTasks: readonly Task[] = [
++  {
++    id: "p1",
++    promptMode: "solfege",
++    materialMode: "letter",
++    target: ["C"],
++    order: ["C", "D", "E"],
++  },
++  {
++    id: "p2",
++    promptMode: "solfege",
++    materialMode: "letter",
++    target: ["D"],
++    order: ["E", "C", "D"],
++  },
++  {
++    id: "p3",
++    promptMode: "solfege",
++    materialMode: "letter",
++    target: ["E"],
++    order: ["D", "E", "C"],
++  },
++];
++const firstChallenge: readonly Task[] = [
++  {
++    id: "c1",
++    promptMode: "solfege",
++    materialMode: "letter",
++    target: ["D"],
++    order: ["C", "D", "E"],
++  },
++  {
++    id: "c2",
++    promptMode: "letter",
++    materialMode: "solfege",
++    target: ["E"],
++    order: ["C", "E", "D"],
++  },
++  {
++    id: "c3",
++    promptMode: "solfege",
++    materialMode: "letter",
++    target: ["E", "D", "C"],
++    order: ["D", "E", "C"],
++  },
++];
++const replayChallenge: readonly Task[] = [
++  {
++    id: "c1",
++    promptMode: "solfege",
++    materialMode: "letter",
++    target: ["E"],
++    order: ["C", "D", "E"],
++  },
++  {
++    id: "c2",
++    promptMode: "letter",
++    materialMode: "solfege",
++    target: ["D"],
++    order: ["E", "D", "C"],
++  },
++  {
++    id: "c3",
++    promptMode: "solfege",
++    materialMode: "letter",
++    target: ["C", "E", "C"],
++    order: ["E", "C", "D"],
++  },
++];
++export function challengeTasks(run: number): readonly Task[] {
++  return run % 2 === 1 ? firstChallenge : replayChallenge;
++}
+--- a/app/src/main.ts
++++ b/app/src/main.ts
+@@ -1,90 +1,177 @@
+-import './style.css';
+-import { act, createGame, paused } from './game.ts';
+-import type { Action, MaterialId, Phase } from './game.ts';
+-import { createScene } from './scene.ts';
+-import { Sound } from './audio.ts';
++import "./style.css";
++import {
++  act,
++  createGame,
++  currentTask,
++  editable,
++  paused,
++  resultSummary,
++} from "./game.ts";
++import type { Action, Phase, ResultSummary } from "./game.ts";
++import {
++  label,
++  noteIds,
++  notes,
++  practiceTasks,
++  challengeTasks,
++} from "./lesson.ts";
++import type { MaterialId } from "./lesson.ts";
++import { createScene } from "./scene.ts";
++import { Sound } from "./audio.ts";
+ 
+-const app = document.querySelector<HTMLDivElement>('#app')!;
+-app.innerHTML = `
+-  <main id="world">
+-    <canvas id="scene" aria-label="花园里的节拍器、三枚音符材料和一座吊桥"></canvas>
+-    <div class="paper-grain" aria-hidden="true"></div>
+-    <header class="topbar">
+-      <div class="brand"><span class="brand-note">♪</span><div>调音花园<small>声音之桥</small></div></div>
+-      <div class="chapter"><span id="chapter-label">初见 · 声音之桥</span><div class="steps" aria-hidden="true"><i></i><i></i><i></i><i></i></div></div>
+-      <nav aria-label="体验设置"><button id="music" class="quiet" aria-pressed="false">♪ 声音关</button><button id="paper" class="quiet" aria-pressed="true">纸声开</button><button id="help" class="quiet" hidden>回看</button></nav>
+-    </header>
+-    <section id="lesson" class="lesson" aria-labelledby="lesson-title"></section>
+-    <div id="objects" aria-label="音乐材料">
+-      <button class="hotspot material" data-material="C" aria-label="选择材料 C"><span>C</span></button>
+-      <button class="hotspot material" data-material="D" aria-label="选择材料 D"><span>D</span></button>
+-      <button class="hotspot material" data-material="E" aria-label="选择材料 E"><span>E</span></button>
+-      <button class="hotspot slot" id="slot" aria-label="靠近机关"><span class="slot-hint">点一下机关 <b>↗</b></span></button>
+-    </div>
+-    <footer class="bottom"><p id="feedback" role="status" aria-live="polite"></p><span class="edition">一段小小的声音冒险</span></footer>
+-    <div id="audio-notice" role="status" hidden></div>
+-  </main>
+-  <section id="overlay" role="dialog" aria-modal="true" aria-labelledby="overlay-title" hidden><div class="modal-paper"></div></section>
+-`;
+-const $ = <T extends HTMLElement>(selector: string) => document.querySelector<T>(selector)!;
+-const world = $('#world'), lesson = $('#lesson'), overlay = $('#overlay');
+-const canvas = $<HTMLCanvasElement>('#scene');
+-const musicButton = $<HTMLButtonElement>('#music'), paperButton = $<HTMLButtonElement>('#paper');
+-const helpButton = $<HTMLButtonElement>('#help'), slot = $<HTMLButtonElement>('#slot');
+-const materials = Array.from(document.querySelectorAll<HTMLButtonElement>('[data-material]'));
+-const reduced = matchMedia('(prefers-reduced-motion: reduce)');
++const app = document.querySelector<HTMLDivElement>("#app")!;
++app.innerHTML = `<main id="world">
++  <canvas id="scene" aria-label="固定花园中的三枚音乐材料与声音之桥"></canvas><div class="paper-grain" aria-hidden="true"></div>
++  <header class="topbar"><div class="brand"><span class="brand-note">♪</span><div>调音花园<small>声音的两种名字</small></div></div>
++  <div class="chapter"><span id="chapter-label"></span><div class="steps" aria-hidden="true"><i></i><i></i><i></i><i></i></div></div>
++  <nav aria-label="体验设置"><button id="music" class="quiet">♪ 声音关</button><button id="paper" class="quiet">纸声开</button><button id="help" class="quiet" hidden>回看</button></nav></header>
++  <section id="lesson" class="lesson" aria-labelledby="lesson-title"></section>
++  <div id="objects" aria-label="音乐材料">${noteIds.map((id) => `<button class="hotspot material" data-material="${id}"><span></span></button>`).join("")}
++  ${[0, 1, 2].map((i) => `<button class="hotspot slot" data-slot="${i}"><span class="slot-hint">点一下机关 ↗</span><span class="slot-index">${i + 1}</span></button>`).join("")}</div>
++  <footer class="bottom"><p id="feedback" role="status" aria-live="polite"></p><span class="edition">声音，让花园动起来</span></footer>
++  <div id="audio-notice" role="status" hidden></div>
++</main><section id="overlay" role="dialog" aria-modal="true" aria-labelledby="overlay-title" hidden><div class="modal-paper"></div></section>`;
++const $ = <T extends HTMLElement>(selector: string) =>
++  document.querySelector<T>(selector)!;
++const world = $("#world"),
++  lesson = $("#lesson"),
++  overlay = $("#overlay"),
++  canvas = $<HTMLCanvasElement>("#scene");
++const musicButton = $<HTMLButtonElement>("#music"),
++  paperButton = $<HTMLButtonElement>("#paper"),
++  helpButton = $<HTMLButtonElement>("#help");
++const materials = Array.from(
++  document.querySelectorAll<HTMLButtonElement>("[data-material]"),
++);
++const slots = Array.from(
++  document.querySelectorAll<HTMLButtonElement>("[data-slot]"),
++);
++const reduced = matchMedia("(prefers-reduced-motion: reduce)");
+ let game = createGame();
+ const sound = new Sound();
+ let scene: ReturnType<typeof createScene> | undefined;
+-let failure = '';
+-let phaseTime = 0, totalTime = 0, lastTime = 0;
+-let demoTime = 0, demoIndex = -1, playingDemo = false;
+-let pulse: MaterialId | null = null, pulseStart = 0;
+-let noticeUntil = 0;
+-let audioRequest = 0, lifecycleEpoch = 0;
+-let previousPanel = '', previousOverlay = '', returnFocus: HTMLElement | null = null;
+-const duration: Partial<Record<Phase, number>> = { approach: 0.9, bridge: 1.25, crossing: 2.2 };
+-const isInteractive = () => !paused(game) && !failure && (game.phase === 'challenge' || (game.phase === 'practice' && !game.practiceDone));
+-const button = (action: string, text: string, secondary = false) => `<button class="${secondary ? 'secondary' : 'primary'}" data-action="${action}">${text}</button>`;
+-const explanation = `<p>C、D、E 是三个音的<b>音名</b>，像名字一样，帮我们认出不同的声音。</p><p>点一下材料可以听它的声音。这里的机关需要 <b>C</b>：先选 C，再点机关的圆槽。</p>`;
+-
++let failure = "",
++  phaseTime = 0,
++  totalTime = 0,
++  lastTime = 0,
++  noticeUntil = 0;
++let audioRequest = 0,
++  lifecycleEpoch = 0,
++  playEpoch = 0;
++let pulse: MaterialId | null = null,
++  pulseStart = 0,
++  pulseSlot = -1;
++let previousPanel = "",
++  previousOverlay = "",
++  returnFocus: HTMLElement | null = null;
++const duration: Partial<Record<Phase, number>> = {
++  approach: 0.9,
++  bridge: 1.25,
++  crossing: 2.2,
++};
++const button = (action: string, text: string, secondary = false) =>
++  `<button class="${secondary ? "secondary" : "primary"}" data-action="${action}">${text}</button>`;
++const explanation = `<p><b>C、D、E</b> 是音名。<b>do、re、mi</b> 是唱名，可以用来唱这些声音。</p><p>这一节在 C 大调中练习：<br><b>C ↔ do　D ↔ re　E ↔ mi</b><br>两种标记，说的是同一个音。</p>`;
++type Playback = {
++  kind: "demo" | "submission" | "result";
++  notes: readonly MaterialId[];
++  index: number;
++  next: number;
++  epoch: number;
++  run: number;
++  taskId: string;
++  submissionId: number;
++};
++let playback: Playback | null = null;
++const inTask = () => game.phase === "practice" || game.phase === "challenge";
++const canEdit = () => editable(game) && !failure;
+ function notify(text: string) {
+-  const notice = $('#audio-notice'); notice.textContent = text; notice.hidden = false; noticeUntil = performance.now() + 3500;
++  const n = $("#audio-notice");
++  n.textContent = text;
++  n.hidden = false;
++  noticeUntil = performance.now() + 3500;
+ }
+ function syncSoundButtons() {
+-  musicButton.textContent = sound.music ? '♪ 声音开' : '♪ 声音关';
+-  musicButton.setAttribute('aria-pressed', String(sound.music));
+-  paperButton.textContent = sound.paper ? '纸声开' : '纸声关';
+-  paperButton.setAttribute('aria-pressed', String(sound.paper));
+-}
+-function playNote(id: MaterialId) { pulse = id; pulseStart = sound.note(id); }
++  musicButton.textContent = sound.music ? "♪ 声音开" : "♪ 声音关";
++  musicButton.setAttribute("aria-pressed", String(sound.music));
++  paperButton.textContent = sound.paper ? "纸声开" : "纸声关";
++  paperButton.setAttribute("aria-pressed", String(sound.paper));
++}
++function stopPlayback() {
++  playEpoch++;
++  playback = null;
++  sound.stop();
++  pulse = null;
++  pulseSlot = -1;
++}
++function startPlayback(kind: Playback["kind"], ids: readonly MaterialId[]) {
++  stopPlayback();
++  playback = {
++    kind,
++    notes: [...ids],
++    index: -1,
++    next: 0,
++    epoch: playEpoch,
++    run: game.run,
++    taskId: game.submission?.taskId || "",
++    submissionId: game.submission?.id || 0,
++  };
++}
++function playNote(id: MaterialId, index = -1) {
++  pulse = id;
++  pulseSlot = index;
++  pulseStart = sound.note(id);
++}
+ async function unlockSound() {
+   const epoch = lifecycleEpoch;
+   const enabled = await sound.unlock();
+-  if (epoch !== lifecycleEpoch || document.hidden || failure) { void sound.suspend(); return false; }
++  if (epoch !== lifecycleEpoch || document.hidden || failure) {
++    void sound.suspend();
++    return false;
++  }
+   return enabled;
+ }
+ async function enableSound() {
+   const request = ++audioRequest;
+   const enabled = await unlockSound();
+   if (request !== audioRequest) return false;
+-  sound.music = enabled; syncSoundButtons();
+-  if (!enabled) notify('声音暂时无法开启，你仍可以无声体验。');
++  sound.music = enabled;
++  syncSoundButtons();
++  if (!enabled) notify("声音暂时无法开启，你仍可以无声体验。");
+   return enabled;
+ }
+-function startDemo() { sound.stop(); demoTime = 0; demoIndex = -1; playingDemo = true; }
+ function dispatch(action: Action) {
+   const before = game;
+   game = act(game, action);
+-  if (game.phase !== before.phase || game.run !== before.run) {
+-    phaseTime = 0; pulse = null; playingDemo = false; sound.stop();
+-    if (game.phase === 'demo') startDemo();
+-    if (game.phase === 'challenge' || game.phase === 'intro') sound.page();
+-  }
+-  if (paused(game) && !paused(before)) { sound.stop(); pulse = null; }
+-  if (game.help !== before.help && !game.suspended && !game.portrait) sound.page();
+-  if (action.type === 'select' && isInteractive() && game.selected) playNote(game.selected);
+-  if (action.type === 'submit' && game.result !== 'empty' && game.selected && !paused(game)) playNote(game.selected);
++  const changed =
++    game.phase !== before.phase ||
++    game.run !== before.run ||
++    game.taskIndex !== before.taskIndex;
++  if (changed) {
++    phaseTime = 0;
++    stopPlayback();
++    if (
++      game.phase === "intro" ||
++      (game.phase === "challenge" && before.phase === "practice")
++    )
++      sound.page();
++  }
++  if (paused(game) && !paused(before)) stopPlayback();
++  if (
++    game.help !== before.help &&
++    !game.suspended &&
++    !game.portrait &&
++    !game.submission?.playing
++  )
++    sound.page();
++  if (!paused(game) && !failure) {
++    if (game.submission?.playing && !playback)
++      startPlayback("submission", game.submission.answer);
++    else if (game.phase === "demo" && (changed || paused(before)))
++      startPlayback("demo", noteIds);
++    if (action.type === "select" && canEdit() && game.selected)
++      playNote(game.selected);
++  }
+   updateUI();
+ }
+ function showOverlay(key: string, html: string) {
+@@ -92,127 +179,372 @@
+   previousOverlay = key;
+   if (key) {
+     if (overlay.hidden) returnFocus = document.activeElement as HTMLElement;
+-    world.inert = true; overlay.hidden = false;
+-    overlay.querySelector('.modal-paper')!.innerHTML = html;
+-    overlay.querySelector<HTMLElement>('button:not(:disabled)')?.focus();
++    world.inert = true;
++    overlay.hidden = false;
++    overlay.querySelector(".modal-paper")!.innerHTML = html;
++    overlay.querySelector<HTMLElement>("button:not(:disabled)")?.focus();
+   } else {
+-    overlay.hidden = true; world.inert = false;
+-    if (returnFocus?.isConnected && !(returnFocus as HTMLButtonElement).disabled) returnFocus.focus();
+-  }
++    overlay.hidden = true;
++    world.inert = false;
++    if (
++      returnFocus?.isConnected &&
++      !(returnFocus as HTMLButtonElement).disabled
++    )
++      returnFocus.focus();
++  }
++}
++function summaryHTML(summary: ResultSummary): string {
++  return `<ol class="attempt-list">${summary.attempts.map((a, i) => `<li><strong>第 ${i + 1} 题 · ${{ first: "首次独立完成", retry: "重试后完成", help: "借助提示完成" }[a.kind]}</strong><small>首答 ${a.firstSubmission?.answer.map((id) => label(id, challengeTasks(summary.run)[i]!.materialMode)).join(" · ")} · 错误 ${a.wrongCount} 次 · ${a.helpUsed ? "用过提示" : "未用提示"}</small></li>`).join("")}</ol>`;
++}
++function previousHTML(): string {
++  return game.lastResult
++    ? `<details class="previous"><summary>上一轮记录</summary>${summaryHTML(game.lastResult)}</details>`
++    : "";
+ }
+ function updateUI() {
+-  world.dataset.phase = game.phase; world.dataset.run = String(game.run);
+-  world.dataset.assisted = String(game.helpUsed);
++  const phase = game.phase,
++    t = currentTask(game),
++    mode = phase === "demo" ? "both" : t.materialMode;
++  world.dataset.phase = phase;
++  world.dataset.run = String(game.run);
++  world.dataset.task = t.id;
+   world.dataset.paused = String(paused(game));
+-  const phase = game.phase;
+-  const stage = ['arrival', 'approach', 'intro'].includes(phase) ? 0 : ['demo', 'practice'].includes(phase) ? 1 : phase === 'complete' ? 3 : 2;
+-  $('#chapter-label').textContent = ['初见 · 声音之桥', '试试 · 音符有名字', '出发 · 让机关响起来', '抵达 · 桥的另一边'][stage];
+-  document.querySelectorAll('.steps i').forEach((dot, i) => dot.classList.toggle('active', i <= stage));
+-  helpButton.hidden = !['practice', 'challenge', 'bridge', 'crossing', 'complete'].includes(phase);
+-  const panelKey = `${phase}:${game.practiceDone}`;
+-  if (panelKey !== previousPanel) {
+-    previousPanel = panelKey;
+-    let html = '';
+-    if (phase === 'arrival' || phase === 'approach') html = `<span class="eyebrow">声音之桥 / 01</span><h1 id="lesson-title">给花园<br>一个声音。</h1><p>小拍的路，被一座安静的桥挡住了。<br>走近机关，看看它需要什么。</p><div class="sketch-divider">· · ♪ · ·</div><p class="hint">${phase === 'approach' ? '小拍正在靠近…' : '轻点右边的机关，开始这段冒险。'}</p>`;
+-    if (phase === 'intro') html = `<span class="eyebrow">认识一个小秘密</span><h1 id="lesson-title">声音，也有名字。</h1>${explanation}<div class="actions">${button('listen', '听听看 →')}${button('silent', '无声继续', true)}</div>`;
+-    if (phase === 'demo') html = `<span class="eyebrow">看看，也听听</span><h1 id="lesson-title">三个名字，三个音。</h1><p>发声时，对应的材料会亮起来。<br>你也可以单独点一个音，再听一次。</p><div class="note-row"><button data-note="C">C</button><button data-note="D">D</button><button data-note="E">E</button></div><div class="actions">${button('practice', '我来试试 →')}${button('demo', '再听一遍', true)}</div>`;
+-    if (phase === 'practice') html = `<span class="eyebrow">一起试一次</span><h1 id="lesson-title">${game.practiceDone ? '就是这个声音！' : '把 C 交给机关。'}</h1><p>${game.practiceDone ? '你找到了 C。收起说明，试着自己唤醒这座桥。' : '先点标着 C 的材料，再点机关的圆槽。<br>选错也没关系，换一枚再试试。'}</p>${game.practiceDone ? button('challenge', '收起说明，开始挑战 →') : '<div class="mini-rule"><span>C</span><b>→</b><span class="slot-symbol">○</span></div>'}`;
+-    if (phase === 'challenge') html = `<span class="eyebrow">轮到你了</span><h1 id="lesson-title">唤醒声音之桥</h1><div class="target"><small>机关需要</small><strong>C</strong></div>`;
+-    if (phase === 'complete') html = `<span class="eyebrow">声音，真的起作用了</span><h1 id="lesson-title">路，打开了。</h1><p>一个 C，让安静的机关转了起来。<br>小拍已经抵达桥的另一边。</p><p class="completion">${game.helpUsed ? '借助回看，完成了这次尝试。' : '你独立完成了这次尝试。'}</p>${button('replay', '再玩一次 ↻')}`;
+-    lesson.classList.toggle('task-card', phase === 'challenge');
+-    lesson.innerHTML = html; lesson.hidden = !html;
+-    lesson.getAnimations().forEach(animation => animation.cancel());
+-    if (html && !reduced.matches) lesson.animate(
+-      [{ opacity: 0, translate: '-10px 0', scale: '.97 1' }, { opacity: 1, translate: '0 0', scale: '1 1' }],
+-      { duration: 220, easing: 'ease-out' },
+-    );
+-  }
+-  const resultMessage = game.result === 'wrong' ? `这枚是 ${game.selected}。机关需要 C，可以换一枚再试。` : game.result === 'empty' ? '先选一枚材料，再点机关的圆槽。' : '';
+-  $('#feedback').textContent = resultMessage || ({ arrival: '轻点机关，小拍会自己走过去。', approach: '哒、哒、哒…', intro: '先认识声音，再让声音改变花园。', demo: sound.music ? '听声音，也看材料上的名字。' : '无声模式 · 跟着亮起的材料认识它的名字。', practice: game.practiceDone ? '练习完成 · 准备独立试一次' : game.selected ? `已选 ${game.selected} · 再点机关的圆槽` : '点选材料 → 点圆槽放入', challenge: game.selected ? `已选 ${game.selected} · 点机关的圆槽试一试` : '三枚材料，一个声音。你来决定。', bridge: '咔嗒——机关听见了。', crossing: '桥已经稳稳落下，小拍出发了。', complete: '下次再见，声音探险家。' } as Record<Phase, string>)[phase];
+-  $('#feedback').classList.toggle('retry', game.result === 'wrong');
+-  materials.forEach(b => {
+-    b.disabled = !isInteractive(); b.hidden = !['practice', 'challenge'].includes(phase) || game.practiceDone && phase === 'practice';
+-    b.setAttribute('aria-pressed', String(game.selected === b.dataset.material));
++  world.dataset.playing = String(!!game.submission?.playing);
++  world.dataset.labelMode = mode;
++  const stage = ["arrival", "approach", "intro"].includes(phase)
++    ? 0
++    : ["demo", "practice"].includes(phase)
++      ? 1
++      : phase === "complete"
++        ? 3
++        : 2;
++  $("#chapter-label").textContent = [
++    "初见 · 声音之桥",
++    "认识 · 两种名字",
++    "应用 · 让机关响起来",
++    "抵达 · 桥的另一边",
++  ][stage]!;
++  document
++    .querySelectorAll(".steps i")
++    .forEach((dot, i) => dot.classList.toggle("active", i <= stage));
++  helpButton.hidden = ![
++    "practice",
++    "challenge",
++    "bridge",
++    "crossing",
++    "complete",
++  ].includes(phase);
++  const key = `${phase}:${game.run}:${game.taskIndex}:${game.result}:${game.submission?.playing}`;
++  if (key !== previousPanel) {
++    previousPanel = key;
++    let html = "";
++    if (phase === "arrival" || phase === "approach")
++      html = `<span class="eyebrow">声音之桥 / 01</span><h1 id="lesson-title">给花园<br>一个声音。</h1><p>小拍的路，被一座安静的桥挡住了。<br>轻点机关，看看它需要什么。</p><p class="hint">${phase === "approach" ? "小拍正在靠近…" : "本次进度留在当前页面；刷新会重新开始。"}</p>${phase === "arrival" ? previousHTML() : ""}`;
++    if (phase === "intro")
++      html = `<span class="eyebrow">认识一个小秘密</span><h1 id="lesson-title">一个音，两种名字。</h1>${explanation}<div class="actions">${button("listen", "听听看 →")}${button("silent", "无声继续", true)}</div>`;
++    if (phase === "demo")
++      html = `<span class="eyebrow">看看，也听听</span><h1 id="lesson-title">名字变了，声音没变。</h1><p>每枚材料上的两种标记，指向同一个音。点一下，再听听。</p><div class="note-row">${noteIds.map((id) => `<button data-note="${id}" aria-label="听 ${label(id, "both")}"><b>${id}</b><small>${notes[id].solfege}</small></button>`).join("")}</div><div class="actions">${button("practice", "我来试试 →")}${button("demo", "再听一遍", true)}</div>`;
++    if (inTask()) {
++      const isPractice = phase === "practice",
++        playing = game.submission?.playing,
++        right = game.result === "right" && !playing;
++      const count = isPractice
++        ? practiceTasks.length
++        : challengeTasks(game.run).length;
++      html = `<span class="eyebrow">${isPractice ? "一起练习" : "轮到你了"} · ${game.taskIndex + 1} / ${count}</span><h1 id="lesson-title">${isPractice ? "把名字连起来。" : t.materialMode === "solfege" ? "换一种名字。" : t.target.length > 1 ? "让声音排成一条路。" : "唤醒第一道锁。"}</h1><div class="target"><small>机关需要</small><strong>${t.target.map((id) => label(id, t.promptMode)).join(" · ")}</strong></div>`;
++      if (isPractice)
++        html += '<p class="mapping">C ↔ do　D ↔ re　E ↔ mi</p>';
++      else if (t.materialMode === "solfege")
++        html +=
++          '<p class="hint">这次材料写着唱名。找到与音名对应的那一枚。</p>';
++      else html += '<p class="hint">选材料 → 放入圆槽 → 试运行</p>';
++      html += `<div class="actions">${playing ? '<p class="playing-note">听听你的选择…</p>' : right ? button("continue", isPractice && game.taskIndex === 2 ? "收起说明，开始挑战 →" : "继续 →") : button("submit", "试运行 ♪")}</div>`;
++    }
++    if (phase === "complete") {
++      const summary = resultSummary(game);
++      html = `<span class="eyebrow">声音，真的起作用了</span><h1 id="lesson-title">路，打开了。</h1><p>你的声音组合，让小拍走到了桥的另一边。</p>
++        <div class="result-sequence" aria-label="这次的声音组合">${summary.sequence.map((id, i) => `<span data-result-slot="${i}"><b>${id}</b><small>${notes[id].solfege}</small></span>`).join("")}</div>
++        <div class="actions">${button("result-listen", "回听我的组合 ♪", true)}${button("replay", "再玩一次 ↻")}</div>
++        ${summaryHTML(summary)}${previousHTML()}<p class="hint">这是本轮应用记录。你能说说为什么选这些音吗？</p>`;
++    }
++    lesson.classList.toggle("result-card", phase === "complete");
++    lesson.classList.toggle("task-card", phase === "challenge");
++    lesson.innerHTML = html;
++    lesson.hidden = !html;
++    lesson.getAnimations().forEach((a) => a.cancel());
++    if (html && !reduced.matches)
++      lesson.animate(
++        [
++          { opacity: 0, translate: "-8px 0" },
++          { opacity: 1, translate: "0 0" },
++        ],
++        { duration: 180, easing: "ease-out" },
++      );
++  }
++  const wrong = game.result === "wrong" && !game.submission?.playing;
++  const wrongIndex = game.slots.findIndex((id, i) => id !== t.target[i]);
++  const wrongHint =
++    wrongIndex >= 0
++      ? `第 ${wrongIndex + 1} 格还没对上「${label(t.target[wrongIndex]!, t.promptMode)}」。检查这格的名字，或点「回看」对照。`
++      : "";
++  const feedback = game.submission?.playing
++    ? "声音正按你的选择响起…"
++    : wrong
++      ? wrongHint
++      : game.result === "empty"
++        ? "先选一枚材料，填好圆槽，再试运行。"
++        : game.result === "right" && inTask()
++          ? "对上了！这一道机关回应了你。"
++          : inTask()
++            ? game.selected
++              ? `已选 ${label(game.selected, mode)} · 点圆槽放入`
++              : "点选材料 → 点圆槽放入 → 试运行"
++            : (
++                {
++                  arrival: "轻点机关，小拍会自己走过去。",
++                  approach: "哒、哒、哒…",
++                  intro: "先认识声音，再让声音改变花园。",
++                  demo: sound.music
++                    ? "同一个声音，两种名字。"
++                    : "无声模式 · 跟着亮起的材料认识两个名字。",
++                  bridge: "咔嗒——声音让桥动了起来。",
++                  crossing: "桥已经稳稳落下，小拍出发了。",
++                  complete: "你的声音，已经留在这座花园。",
++                } as Partial<Record<Phase, string>>
++              )[phase] || "";
++  $("#feedback").textContent = feedback;
++  $("#feedback").classList.toggle("retry", wrong);
++  materials.forEach((b) => {
++    const id = b.dataset.material as MaterialId;
++    b.hidden = !inTask();
++    b.disabled = !canEdit();
++    b.setAttribute("aria-label", `选择材料 ${label(id, mode)}`);
++    b.setAttribute("aria-pressed", String(game.selected === id));
++    b.querySelector("span")!.textContent = label(id, mode);
+   });
+-  slot.disabled = !(phase === 'arrival' || isInteractive()) || paused(game) || !!failure;
+-  slot.hidden = !['arrival', 'practice', 'challenge'].includes(phase) || (phase === 'practice' && game.practiceDone);
+-  slot.setAttribute('aria-label', phase === 'arrival' ? '靠近机关' : '将选中材料放入机关');
+-  slot.classList.toggle('arrival', phase === 'arrival');
+-  if (failure) showOverlay('error', `<span class="eyebrow">花园暂时停下了</span><h2 id="overlay-title">画面需要重新开启</h2><p>${failure}</p><p>重新加载会从头开始这次体验。</p>${button('reload', '重新加载')}`);
+-  else if (game.suspended) showOverlay(`suspend:${game.portrait}`, `<span class="eyebrow">小拍在等你</span><h2 id="overlay-title">准备好，就继续吧。</h2><p>${game.portrait ? '请先把手机转成横屏。' : '花园停在你离开的位置，声音也暂停了。'}</p><button class="primary" data-action="resume" ${game.portrait ? 'disabled' : ''}>继续这次冒险 →</button>`);
+-  else if (game.portrait) showOverlay('portrait', `<span class="eyebrow">给花园多一点空间</span><h2 id="overlay-title">横过来，去冒险。</h2><div class="rotate" aria-hidden="true">▯ ↻ ▭</div><p>转动手机，就能看到完整的声音之桥。<br>当前进度会保留。</p>`);
+-  else if (game.help) showOverlay('help', `<span class="eyebrow">回看 · 音符的名字</span><h2 id="overlay-title">机关在等哪个声音？</h2>${explanation}<p class="hint">关掉说明后，刚才的选择还在。</p>${button('close', '回到花园 →')}`);
+-  else showOverlay('', '');
+-}
+-
+-app.addEventListener('click', async event => {
+-  const target = (event.target as HTMLElement).closest<HTMLButtonElement>('button');
++  slots.forEach((b, i) => {
++    b.hidden = !(
++      (phase === "arrival" && i === 0) ||
++      (inTask() && i < game.slots.length)
++    );
++    b.disabled =
++      paused(game) || !!failure || !(phase === "arrival" || canEdit());
++    b.classList.toggle("arrival", phase === "arrival");
++    b.classList.toggle("sequence-slot", game.slots.length === 3);
++    b.setAttribute(
++      "aria-label",
++      phase === "arrival"
++        ? "靠近机关"
++        : `槽位 ${i + 1}：${game.slots[i] ? label(game.slots[i]!, mode) : "空"}，放入所选材料`,
++    );
++  });
++  if (failure)
++    showOverlay(
++      "error",
++      `<h2 id="overlay-title">画面需要重新开启</h2><p>${failure}</p><p>重新加载会从头开始这次体验。</p>${button("reload", "重新加载")}`,
++    );
++  else if (game.suspended)
++    showOverlay(
++      `suspend:${game.portrait}`,
++      `<h2 id="overlay-title">准备好，就继续吧。</h2><p>${game.portrait ? "请先把手机转成横屏。" : "花园停在你离开的位置，声音也暂停了。"}</p><button class="primary" data-action="resume" ${game.portrait ? "disabled" : ""}>继续这次冒险 →</button>`,
++    );
++  else if (game.portrait)
++    showOverlay(
++      "portrait",
++      `<h2 id="overlay-title">横过来，去冒险。</h2><div class="rotate" aria-hidden="true">▯ ↻ ▭</div><p>当前进度会保留。</p>`,
++    );
++  else if (game.help)
++    showOverlay(
++      "help",
++      `<span class="eyebrow">回看 · 声音的两种名字</span><h2 id="overlay-title">让名字找到同一个音。</h2>${explanation}<p class="hint">关掉说明后，刚才的组合还在。</p>${button("close", "回到花园 →")}`,
++    );
++  else showOverlay("", "");
++}
++app.addEventListener("click", async (event) => {
++  const target = (event.target as HTMLElement).closest<HTMLButtonElement>(
++    "button",
++  );
+   if (!target || target.disabled) return;
+   if (target === musicButton) {
+-    if (sound.music) { audioRequest++; sound.music = false; sound.stop(); } else await enableSound();
+-    syncSoundButtons(); updateUI(); return;
+-  }
+-  if (target === paperButton) { sound.paper = !sound.paper; if (sound.paper) void unlockSound(); syncSoundButtons(); return; }
+-  if (target === helpButton) { dispatch({ type: 'help', open: true }); return; }
+-  if (target.dataset.material) { dispatch({ type: 'select', id: target.dataset.material as MaterialId }); return; }
+-  if (target === slot) { if (game.phase === 'arrival' && sound.paper) void unlockSound(); dispatch({ type: game.phase === 'arrival' ? 'approach' : 'submit' }); return; }
+-  if (target.dataset.note) { playingDemo = false; playNote(target.dataset.note as MaterialId); return; }
++    if (sound.music) {
++      audioRequest++;
++      sound.music = false;
++      sound.stop();
++    } else await enableSound();
++    syncSoundButtons();
++    updateUI();
++    return;
++  }
++  if (target === paperButton) {
++    sound.paper = !sound.paper;
++    if (sound.paper) void unlockSound();
++    syncSoundButtons();
++    return;
++  }
++  if (target === helpButton) {
++    dispatch({ type: "help", open: true });
++    return;
++  }
++  if (target.dataset.material) {
++    dispatch({ type: "select", id: target.dataset.material as MaterialId });
++    return;
++  }
++  if (target.dataset.slot !== undefined) {
++    if (game.phase === "arrival") {
++      if (sound.paper) void unlockSound();
++      dispatch({ type: "approach" });
++    } else dispatch({ type: "place", index: Number(target.dataset.slot) });
++    return;
++  }
++  if (target.dataset.note) {
++    stopPlayback();
++    playNote(target.dataset.note as MaterialId);
++    return;
++  }
+   switch (target.dataset.action) {
+-    case 'listen': {
++    case "listen": {
+       const run = game.run;
+       await enableSound();
+-      if (game.run === run && game.phase === 'intro' && !paused(game)) dispatch({ type: 'next' });
+-      break;
+-    }
+-    case 'silent': audioRequest++; sound.music = false; sound.paper = false; sound.stop(); syncSoundButtons(); dispatch({ type: 'next' }); break;
+-    case 'practice': dispatch({ type: 'next' }); break;
+-    case 'demo': startDemo(); break;
+-    case 'challenge': dispatch({ type: 'enterChallenge' }); break;
+-    case 'close': dispatch({ type: 'help', open: false }); break;
+-    case 'resume': {
++      if (game.run === run && game.phase === "intro" && !paused(game))
++        dispatch({ type: "next" });
++      break;
++    }
++    case "silent":
++      audioRequest++;
++      sound.music = false;
++      sound.paper = false;
++      stopPlayback();
++      syncSoundButtons();
++      dispatch({ type: "next" });
++      break;
++    case "practice":
++      dispatch({ type: "next" });
++      break;
++    case "demo":
++      startPlayback("demo", noteIds);
++      break;
++    case "submit":
++      dispatch({ type: "submit" });
++      break;
++    case "continue":
++      dispatch({ type: "continue" });
++      break;
++    case "close":
++      dispatch({ type: "help", open: false });
++      break;
++    case "resume": {
+       if (document.hidden || game.portrait) return;
+       const epoch = lifecycleEpoch;
+-      if (sound.music || sound.paper) await unlockSound();
+-      if (epoch === lifecycleEpoch && !document.hidden && !game.portrait) dispatch({ type: 'resume' });
+-      break;
+-    }
+-    case 'replay': dispatch({ type: 'replay' }); break;
+-    case 'reload': window.location.reload(); break;
++      if (sound.music || sound.paper) {
++        const ok = await unlockSound();
++        if (!ok) {
++          sound.music = false;
++          sound.paper = false;
++          syncSoundButtons();
++          notify("声音暂时不可用，先无声继续。");
++        }
++      }
++      if (epoch === lifecycleEpoch && !document.hidden && !game.portrait)
++        dispatch({ type: "resume" });
++      break;
++    }
++    case "result-listen":
++      if (game.phase === "complete" && !paused(game))
++        startPlayback("result", resultSummary(game).sequence);
++      break;
++    case "replay":
++      dispatch({ type: "replay" });
++      break;
++    case "reload":
++      window.location.reload();
++      break;
+   }
+ });
+-// Native buttons provide keyboard activation. Cancelled touch gestures must never synthesize a submission.
+ let cancelledPointer = false;
+-app.addEventListener('pointerdown', () => { cancelledPointer = false; }, true);
+-app.addEventListener('pointercancel', () => { cancelledPointer = true; }, true);
+-app.addEventListener('click', event => { if (cancelledPointer) { event.preventDefault(); event.stopImmediatePropagation(); cancelledPointer = false; } }, true);
+-app.addEventListener('keydown', event => {
++app.addEventListener(
++  "pointerdown",
++  () => {
++    cancelledPointer = false;
++  },
++  true,
++);
++app.addEventListener(
++  "pointercancel",
++  () => {
++    cancelledPointer = true;
++  },
++  true,
++);
++app.addEventListener(
++  "click",
++  (event) => {
++    if (cancelledPointer) {
++      event.preventDefault();
++      event.stopImmediatePropagation();
++      cancelledPointer = false;
++    }
++  },
++  true,
++);
++app.addEventListener("keydown", (event) => {
+   cancelledPointer = false;
+   if (overlay.hidden) return;
+-  if (event.key === 'Escape' && game.help && !game.suspended && !game.portrait) dispatch({ type: 'help', open: false });
+-  if (event.key === 'Tab') {
+-    const buttons = Array.from(overlay.querySelectorAll<HTMLButtonElement>('button:not(:disabled)'));
+-    if (!buttons.length) { event.preventDefault(); return; }
++  if (event.key === "Escape" && game.help && !game.suspended && !game.portrait)
++    dispatch({ type: "help", open: false });
++  if (event.key === "Tab") {
++    const buttons = Array.from(
++      overlay.querySelectorAll<HTMLButtonElement>("button:not(:disabled)"),
++    );
++    if (!buttons.length) {
++      event.preventDefault();
++      return;
++    }
+     const index = buttons.indexOf(document.activeElement as HTMLButtonElement);
+-    if (event.shiftKey && index <= 0) { buttons.at(-1)!.focus(); event.preventDefault(); }
+-    else if (!event.shiftKey && index === buttons.length - 1) { buttons[0].focus(); event.preventDefault(); }
++    if (event.shiftKey && index <= 0) {
++      buttons.at(-1)!.focus();
++      event.preventDefault();
++    } else if (!event.shiftKey && index === buttons.length - 1) {
++      buttons[0]!.focus();
++      event.preventDefault();
++    }
+   }
+ });
+-document.addEventListener('visibilitychange', () => {
+-  if (document.hidden) { lifecycleEpoch++; audioRequest++; dispatch({ type: 'suspend' }); void sound.suspend(); }
++function suspend() {
++  lifecycleEpoch++;
++  audioRequest++;
++  dispatch({ type: "suspend" });
++  void sound.suspend();
++}
++document.addEventListener("visibilitychange", () => {
++  if (document.hidden) suspend();
+ });
+-window.addEventListener('pagehide', () => { lifecycleEpoch++; audioRequest++; dispatch({ type: 'suspend' }); void sound.suspend(); });
+-canvas.addEventListener('webglcontextlost', event => { event.preventDefault(); fail('画面连接中断了。请重新加载花园。'); });
+-function fail(message: string) { failure = message; void sound.suspend(); updateUI(); }
++window.addEventListener("pagehide", suspend);
++canvas.addEventListener("webglcontextlost", (event) => {
++  event.preventDefault();
++  fail("画面连接中断了。请重新加载花园。");
++});
++function fail(message: string) {
++  failure = message;
++  stopPlayback();
++  void sound.suspend();
++  updateUI();
++}
+ function resize() {
+   const { width, height } = world.getBoundingClientRect();
+   scene?.resize(width, height);
+-  dispatch({ type: 'portrait', value: height > width });
+-}
+-try { scene = createScene(canvas); } catch (error) { console.error(error); fail('当前浏览器无法绘制这座花园。请检查浏览器是否支持 WebGL 2。'); }
++  dispatch({ type: "portrait", value: height > width });
++}
++try {
++  scene = createScene(canvas);
++} catch (error) {
++  console.error(error);
++  fail("当前浏览器无法绘制这座花园，请使用支持 WebGL 2 的浏览器。");
++}
+ new ResizeObserver(resize).observe(world);
+-window.visualViewport?.addEventListener('resize', resize);
+-resize(); syncSoundButtons(); updateUI();
+-
++window.visualViewport?.addEventListener("resize", resize);
++resize();
++syncSoundButtons();
++updateUI();
+ function frame(now: number) {
+   requestAnimationFrame(frame);
+   const dt = lastTime ? Math.min((now - lastTime) / 1000, 0.05) : 0;
+@@ -220,35 +552,102 @@
+   if (failure || !scene) return;
+   const running = !paused(game);
+   if (running) {
+-    phaseTime += dt; totalTime += dt;
+-    if (playingDemo) {
+-      demoTime += dt;
+-      const index = Math.floor(demoTime / 0.95);
+-      if (index < 3 && index !== demoIndex) { demoIndex = index; playNote((['C', 'D', 'E'] as MaterialId[])[index]); }
+-      if (index >= 3) playingDemo = false;
+-    }
+-  }
+-  const progress = reduced.matches ? 1 : Math.min(phaseTime / (duration[game.phase] || 1), 1);
+-  const activePulse = pulse && running && now >= pulseStart && now < pulseStart + 600 ? pulse : null;
++    phaseTime += dt;
++    totalTime += dt;
++    const p = playback;
++    if (p && p.epoch === playEpoch && now >= p.next) {
++      const index = p.index + 1;
++      if (index < p.notes.length) {
++        p.index = index;
++        playNote(p.notes[index]!, p.kind !== "demo" ? index : -1);
++        p.next = pulseStart + 850;
++      } else {
++        playback = null;
++        if (p.kind === "submission")
++          dispatch({
++            type: "playbackFinished",
++            run: p.run,
++            taskId: p.taskId,
++            submissionId: p.submissionId,
++          });
++      }
++    }
++  }
++  const progress = reduced.matches
++    ? 1
++    : Math.min(phaseTime / (duration[game.phase] || 1), 1);
++  const active =
++    pulse && running && now >= pulseStart && now < pulseStart + 650
++      ? pulse
++      : null;
++  const t = currentTask(game),
++    mode = game.phase === "demo" ? "both" : t.materialMode;
+   scene.render({
+-    approach: game.phase === 'arrival' ? 0 : game.phase === 'approach' ? progress : 1,
+-    bridge: game.phase === 'bridge' ? progress : ['crossing', 'complete'].includes(game.phase) ? 1 : 0,
+-    travel: game.phase === 'crossing' ? progress : game.phase === 'complete' ? 1 : 0,
+-    selected: game.selected, installed: ['bridge', 'crossing', 'complete'].includes(game.phase),
+-    order: ['challenge', 'bridge', 'crossing', 'complete'].includes(game.phase) ? ['E', 'C', 'D'] : ['C', 'D', 'E'],
+-    pulse: activePulse, time: totalTime,
++    approach:
++      game.phase === "arrival" ? 0 : game.phase === "approach" ? progress : 1,
++    bridge:
++      game.phase === "bridge"
++        ? progress
++        : ["crossing", "complete"].includes(game.phase)
++          ? 1
++          : 0,
++    travel:
++      game.phase === "crossing" ? progress : game.phase === "complete" ? 1 : 0,
++    selected: game.selected,
++    slots: game.slots,
++    activeSlot: active ? pulseSlot : -1,
++    labelMode: mode,
++    locks: Object.values(game.records).filter(
++      (r) => r.taskId.startsWith("c") && r.completed,
++    ).length,
++    order: inTask() ? t.order : noteIds,
++    pulse: active,
++    time: totalTime,
+   });
+   const anchors = scene.anchors();
+-  for (const target of [...materials, slot]) {
+-    const position = anchors[target === slot ? 'slot' : target.dataset.material as MaterialId];
+-    target.style.left = `${position.x * 100}%`; target.style.top = `${position.y * 100}%`;
+-  }
+-  document.querySelectorAll<HTMLButtonElement>('[data-note]').forEach(b => b.classList.toggle('sounding', b.dataset.note === activePulse));
++  for (const b of materials) {
++    const a = anchors[b.dataset.material as MaterialId];
++    b.style.left = `${a.x * 100}%`;
++    b.style.top = `${a.y * 100}%`;
++  }
++  slots.forEach((b, i) => {
++    const a = game.phase === "arrival" ? anchors.slot : anchors.slots[i]!;
++    b.style.left = `${a.x * 100}%`;
++    b.style.top = `${a.y * 100}%`;
++    b.classList.toggle("sounding", !!active && pulseSlot === i);
++  });
++  document
++    .querySelectorAll<HTMLButtonElement>("[data-note]")
++    .forEach((b) => b.classList.toggle("sounding", b.dataset.note === active));
++  document
++    .querySelectorAll<HTMLElement>("[data-result-slot]")
++    .forEach((el) =>
++      el.classList.toggle(
++        "sounding",
++        !!active && pulseSlot === Number(el.dataset.resultSlot),
++      ),
++    );
+   if (running && progress === 1) {
+-    const finished = { approach: 'arrived', bridge: 'bridgeReady', crossing: 'exitReached' } as const;
+-    if (game.phase in finished) dispatch({ type: finished[game.phase as keyof typeof finished], run: game.run });
+-  }
+-  if (noticeUntil && now > noticeUntil) { $('#audio-notice').hidden = true; noticeUntil = 0; }
++    const finished = {
++      approach: "arrived",
++      bridge: "bridgeReady",
++      crossing: "exitReached",
++    } as const;
++    if (game.phase in finished)
++      dispatch({
++        type: finished[game.phase as keyof typeof finished],
++        run: game.run,
++      });
++  }
++  if (noticeUntil && now > noticeUntil) {
++    $("#audio-notice").hidden = true;
++    noticeUntil = 0;
++  }
+ }
+ requestAnimationFrame(frame);
+-if (import.meta.hot) import.meta.hot.dispose(() => { scene?.dispose(); void sound.suspend(); });
++if (import.meta.hot)
++  import.meta.hot.dispose(() => {
++    scene?.dispose();
++    stopPlayback();
++    void sound.suspend();
++  });
+--- a/app/src/scene.ts
++++ b/app/src/scene.ts
+@@ -1,237 +1,648 @@
+-import * as THREE from 'three';
+-import { faceTexture, paintTexture } from './art';
++import * as THREE from "three";
++import { faceTexture, paintTexture } from "./art";
+ 
+-export type MaterialId = 'C' | 'D' | 'E';
+-export type SceneView = { approach: number; bridge: number; travel: number; selected: MaterialId | null; installed: boolean; order: MaterialId[]; pulse: MaterialId | null; time: number };
++import { label, noteIds } from "./lesson";
++import type { MaterialId, LabelMode } from "./lesson";
++export type SceneView = {
++  approach: number;
++  bridge: number;
++  travel: number;
++  selected: MaterialId | null;
++  slots: (MaterialId | null)[];
++  activeSlot: number;
++  labelMode: LabelMode;
++  locks: number;
++  order: readonly MaterialId[];
++  pulse: MaterialId | null;
++  time: number;
++};
+ 
+ /** One fixed set of authored objects. The caller owns time, input, and every game rule. */
+ export function createScene(canvas: HTMLCanvasElement) {
+-  const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: false });
++  const renderer = new THREE.WebGLRenderer({
++    canvas,
++    antialias: true,
++    alpha: false,
++  });
+   renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
+-  renderer.setClearColor('#d0e0df');
++  renderer.setClearColor("#d0e0df");
+   renderer.outputColorSpace = THREE.SRGBColorSpace;
+   const scene = new THREE.Scene();
+-  const camera = new THREE.OrthographicCamera(-13, 13, 6.2, -6.2, .1, 100);
+-  const world = new THREE.Group(); scene.add(world);
+-  scene.add(new THREE.HemisphereLight('#ffffff', '#638373', 2.0));
+-  const sunlight = new THREE.DirectionalLight('#ffffff', 1.6); sunlight.position.set(-8, 16, 10); scene.add(sunlight);
+-  const ink = new THREE.MeshBasicMaterial({ color: '#302f27', side: THREE.BackSide });
+-  const crease = new THREE.LineBasicMaterial({ color: '#403629', transparent: true, opacity: .92 });
++  const camera = new THREE.OrthographicCamera(-13, 13, 6.2, -6.2, 0.1, 100);
++  const world = new THREE.Group();
++  scene.add(world);
++  scene.add(new THREE.HemisphereLight("#ffffff", "#638373", 2.0));
++  const sunlight = new THREE.DirectionalLight("#ffffff", 1.6);
++  sunlight.position.set(-8, 16, 10);
++  scene.add(sunlight);
++  const ink = new THREE.MeshBasicMaterial({
++    color: "#302f27",
++    side: THREE.BackSide,
++  });
++  const crease = new THREE.LineBasicMaterial({
++    color: "#403629",
++    transparent: true,
++    opacity: 0.92,
++  });
+   const materials: THREE.Material[] = [ink, crease];
+   const textures: THREE.Texture[] = [];
+-  const palette = { grass: '#91ac86', stone: '#c9c5ad', wood: '#ba8256', darkwood: '#795039', gold: '#d6ab55', cream: '#eddbac', green: '#648c77', blue: '#67949b', leaf: '#738759' };
+-  function paint(color: string, kind: 'paper' | 'wood' | 'grass' | 'water' = 'paper') {
+-    const map = paintTexture(color, kind); textures.push(map);
+-    const material = new THREE.MeshToonMaterial({ map, color: '#ffffff' }); materials.push(material); return material;
+-  }
+-  const grass = paint(palette.grass, 'grass'), stone = paint(palette.stone), wood = paint(palette.wood, 'wood');
+-  const darkwood = paint(palette.darkwood, 'wood'), gold = paint(palette.gold), cream = paint(palette.cream);
+-  const leaves = [paint('#608568', 'grass'), paint('#91a975', 'grass'), paint('#48736a', 'grass')];
+-  const water = paint('#599cae', 'water'); water.map!.repeat.set(2, 5);
+-  function mesh(geometry: THREE.BufferGeometry, material: THREE.Material, parent: THREE.Object3D = world, outline = true) {
+-    const obj = new THREE.Mesh(geometry, material); parent.add(obj);
++  const palette = {
++    grass: "#91ac86",
++    stone: "#c9c5ad",
++    wood: "#ba8256",
++    darkwood: "#795039",
++    gold: "#d6ab55",
++    cream: "#eddbac",
++    green: "#648c77",
++    blue: "#67949b",
++    leaf: "#738759",
++  };
++  function paint(
++    color: string,
++    kind: "paper" | "wood" | "grass" | "water" = "paper",
++  ) {
++    const map = paintTexture(color, kind);
++    textures.push(map);
++    const material = new THREE.MeshToonMaterial({ map, color: "#ffffff" });
++    materials.push(material);
++    return material;
++  }
++  const grass = paint(palette.grass, "grass"),
++    stone = paint(palette.stone),
++    wood = paint(palette.wood, "wood");
++  const darkwood = paint(palette.darkwood, "wood"),
++    gold = paint(palette.gold),
++    cream = paint(palette.cream);
++  const leaves = [
++    paint("#608568", "grass"),
++    paint("#91a975", "grass"),
++    paint("#48736a", "grass"),
++  ];
++  const water = paint("#599cae", "water");
++  water.map!.repeat.set(2, 5);
++  function mesh(
++    geometry: THREE.BufferGeometry,
++    material: THREE.Material,
++    parent: THREE.Object3D = world,
++    outline = true,
++  ) {
++    const obj = new THREE.Mesh(geometry, material);
++    parent.add(obj);
+     if (outline) {
+-      const edge = new THREE.Mesh(geometry, ink); geometry.computeBoundingSphere(); edge.scale.setScalar(geometry.boundingSphere!.radius > 3 ? 1.006 : 1.045); obj.add(edge);
+-      if (geometry instanceof THREE.BoxGeometry || geometry instanceof THREE.ExtrudeGeometry) {
+-        obj.add(new THREE.LineSegments(new THREE.EdgesGeometry(geometry, 35), crease));
++      const edge = new THREE.Mesh(geometry, ink);
++      geometry.computeBoundingSphere();
++      edge.scale.setScalar(geometry.boundingSphere!.radius > 3 ? 1.006 : 1.045);
++      obj.add(edge);
++      if (
++        geometry instanceof THREE.BoxGeometry ||
++        geometry instanceof THREE.ExtrudeGeometry
++      ) {
++        obj.add(
++          new THREE.LineSegments(new THREE.EdgesGeometry(geometry, 35), crease),
++        );
+       }
+     }
+     return obj;
+   }
+-  function box(w: number, h: number, d: number, material: THREE.Material, x: number, y: number, z: number, parent: THREE.Object3D = world) {
+-    const obj = mesh(new THREE.BoxGeometry(w, h, d), material, parent); obj.position.set(x, y, z); return obj;
+-  }
+-  function ball(r: number, material: THREE.Material, x: number, y: number, z: number, parent: THREE.Object3D = world) {
++  function box(
++    w: number,
++    h: number,
++    d: number,
++    material: THREE.Material,
++    x: number,
++    y: number,
++    z: number,
++    parent: THREE.Object3D = world,
++  ) {
++    const obj = mesh(new THREE.BoxGeometry(w, h, d), material, parent);
++    obj.position.set(x, y, z);
++    return obj;
++  }
++  function ball(
++    r: number,
++    material: THREE.Material,
++    x: number,
++    y: number,
++    z: number,
++    parent: THREE.Object3D = world,
++  ) {
+     const geometry = new THREE.SphereGeometry(r, 12, 8);
+     if (leaves.includes(material as THREE.MeshToonMaterial)) {
+       const points = geometry.attributes.position!;
+       for (let i = 0; i < points.count; i++) {
+-        const px = points.getX(i), py = points.getY(i), pz = points.getZ(i);
+-        const wobble = 1 + .08 * Math.sin(px * 9 + py * 6) * Math.cos(pz * 7);
++        const px = points.getX(i),
++          py = points.getY(i),
++          pz = points.getZ(i);
++        const wobble = 1 + 0.08 * Math.sin(px * 9 + py * 6) * Math.cos(pz * 7);
+         points.setXYZ(i, px * wobble, py * wobble, pz * wobble);
+       }
+       geometry.computeVertexNormals();
+     }
+-    const obj = mesh(geometry, material, parent); obj.position.set(x, y, z); return obj;
+-  }
+-  function rod(a: THREE.Vector3, b: THREE.Vector3, radius: number, material: THREE.Material, parent: THREE.Object3D = world) {
++    const obj = mesh(geometry, material, parent);
++    obj.position.set(x, y, z);
++    return obj;
++  }
++  function rod(
++    a: THREE.Vector3,
++    b: THREE.Vector3,
++    radius: number,
++    material: THREE.Material,
++    parent: THREE.Object3D = world,
++  ) {
+     const delta = b.clone().sub(a);
+-    const obj = mesh(new THREE.CylinderGeometry(radius, radius * 1.08, delta.length(), 7), material, parent);
+-    obj.position.copy(a).add(b).multiplyScalar(.5); obj.quaternion.setFromUnitVectors(new THREE.Vector3(0, 1, 0), delta.normalize()); return obj;
++    const obj = mesh(
++      new THREE.CylinderGeometry(radius, radius * 1.08, delta.length(), 7),
++      material,
++      parent,
++    );
++    obj.position.copy(a).add(b).multiplyScalar(0.5);
++    obj.quaternion.setFromUnitVectors(
++      new THREE.Vector3(0, 1, 0),
++      delta.normalize(),
++    );
++    return obj;
+   }
+   // 固定立体花园：教学和挑战共享真实地形与机关。
+   [
+-    box(18.1, .8, 15, grass, -3.65, -.48, -1.5),
+-    box(5.4, .8, 15, grass, 11.4, -.48, -1.5),
+-    box(3.6, .12, 15, water, 7.2, -.42, -1.5),
++    box(18.1, 0.8, 15, grass, -3.65, -0.48, -1.5),
++    box(5.4, 0.8, 15, grass, 11.4, -0.48, -1.5),
++    box(3.6, 0.12, 15, water, 7.2, -0.42, -1.5),
+   ];
+-  const path = paint('#d8cbb0');
+-  box(17.6, .035, 2.6, path, -3.65, -.045, 1); box(4.8, .035, 2.6, path, 11.4, -.045, 1);
++  const path = paint("#d8cbb0");
++  box(17.6, 0.035, 2.6, path, -3.65, -0.045, 1);
++  box(4.8, 0.035, 2.6, path, 11.4, -0.045, 1);
+   // Warm irregular stepping stones and bank rocks ground the machinery.
+   for (let i = 0; i < 13; i++) {
+-    const p = mesh(new THREE.CylinderGeometry(.35 + (i % 3) * .08, .42, .09, 7), stone);
+-    p.scale.z = .65; p.position.set(-9 + i * 1.08, .01, 1.2 + Math.sin(i * 3) * .58); p.rotation.y = i * .8;
+-  }
+-  for (const bank of [5.35, 9.0]) for (let i = 0; i < 11; i++) {
+-    const rock = mesh(new THREE.DodecahedronGeometry(.38 + (i % 3) * .08), stone);
+-    rock.position.set(bank + Math.sin(i * 7) * .13, -.06, -6 + i * 1.18); rock.scale.set(1, .55, 1.3); rock.rotation.y = i;
+-  }
++    const p = mesh(
++      new THREE.CylinderGeometry(0.35 + (i % 3) * 0.08, 0.42, 0.09, 7),
++      stone,
++    );
++    p.scale.z = 0.65;
++    p.position.set(-9 + i * 1.08, 0.01, 1.2 + Math.sin(i * 3) * 0.58);
++    p.rotation.y = i * 0.8;
++  }
++  for (const bank of [5.35, 9.0])
++    for (let i = 0; i < 11; i++) {
++      const rock = mesh(
++        new THREE.DodecahedronGeometry(0.38 + (i % 3) * 0.08),
++        stone,
++      );
++      rock.position.set(bank + Math.sin(i * 7) * 0.13, -0.06, -6 + i * 1.18);
++      rock.scale.set(1, 0.55, 1.3);
++      rock.rotation.y = i;
++    }
+   // Soft distant hills are small independent forms, never a full-screen background image.
+   for (let i = 0; i < 8; i++) {
+-    const hill = ball(2.4 + (i % 3) * .4, leaves[2]!, -13 + i * 4, .4, -10.8);
+-    hill.scale.set(1.3, .65, .6);
++    const hill = ball(2.4 + (i % 3) * 0.4, leaves[2]!, -13 + i * 4, 0.4, -10.8);
++    hill.scale.set(1.3, 0.65, 0.6);
+   }
+   function tree(x: number, z: number, size: number) {
+-    const treeGroup = new THREE.Group(); world.add(treeGroup); treeGroup.position.set(x, 0, z); treeGroup.scale.setScalar(size);
+-    rod(new THREE.Vector3(0, 0, 0), new THREE.Vector3(.12, 3.8, 0), .2, darkwood, treeGroup);
++    const treeGroup = new THREE.Group();
++    world.add(treeGroup);
++    treeGroup.position.set(x, 0, z);
++    treeGroup.scale.setScalar(size);
++    rod(
++      new THREE.Vector3(0, 0, 0),
++      new THREE.Vector3(0.12, 3.8, 0),
++      0.2,
++      darkwood,
++      treeGroup,
++    );
+     for (let i = 0; i < 5; i++) {
+       const angle = i * 2.4;
+-      const px = Math.cos(angle) * .85, pz = Math.sin(angle) * .6, py = 3.3 + i * .2;
+-      rod(new THREE.Vector3(0, 2.1, 0), new THREE.Vector3(px, py, pz), .1, darkwood, treeGroup);
+-      const canopy = ball(1.05, leaves[i % 3]!, px, py, pz, treeGroup); canopy.scale.set(1.2, .8, 1);
+-    }
+-  }
+-  tree(-10, -4, 1.4); tree(-4.7, -6.4, 1.05); tree(2.4, -6.0, 1.15); tree(11.7, -5.7, 1.3);
++      const px = Math.cos(angle) * 0.85,
++        pz = Math.sin(angle) * 0.6,
++        py = 3.3 + i * 0.2;
++      rod(
++        new THREE.Vector3(0, 2.1, 0),
++        new THREE.Vector3(px, py, pz),
++        0.1,
++        darkwood,
++        treeGroup,
++      );
++      const canopy = ball(1.05, leaves[i % 3]!, px, py, pz, treeGroup);
++      canopy.scale.set(1.2, 0.8, 1);
++    }
++  }
++  tree(-10, -4, 1.4);
++  tree(-4.7, -6.4, 1.05);
++  tree(2.4, -6.0, 1.15);
++  tree(11.7, -5.7, 1.3);
+   function shrub(x: number, z: number, size: number, flower = false) {
+     for (let j = 0; j < 3; j++) {
+-      const leaf = ball(size, leaves[j]!, x + (j - 1) * size * .55, size * .45, z + Math.sin(j * 3) * .12);
+-      leaf.scale.set(.8, 1.25, .65);
++      const leaf = ball(
++        size,
++        leaves[j]!,
++        x + (j - 1) * size * 0.55,
++        size * 0.45,
++        z + Math.sin(j * 3) * 0.12,
++      );
++      leaf.scale.set(0.8, 1.25, 0.65);
+     }
+     if (flower) {
+-      rod(new THREE.Vector3(x, .1, z + .2), new THREE.Vector3(x, size * 1.9, z + .2), .025, leaves[2]!);
+-      for (let i = 0; i < 5; i++) ball(.09, cream, x + Math.cos(i * 1.256) * .12, size * 1.9 + Math.sin(i * 1.256) * .12, z + .2);
+-      ball(.07, gold, x, size * 1.9, z + .28);
+-    }
+-  }
+-  for (let i = 0; i < 13; i++) shrub(-11.7 + i * 1.9, -4.1 + Math.sin(i) * .6, .25 + (i % 3) * .09, i % 2 === 0);
+-  for (const [x, z] of [[-11, 4.7], [-7.5, 5.1], [-4, 5.4], [3.3, 5], [9.5, 5.2], [12, 4]]) {
+-    shrub(x!, z!, .42, true);
++      rod(
++        new THREE.Vector3(x, 0.1, z + 0.2),
++        new THREE.Vector3(x, size * 1.9, z + 0.2),
++        0.025,
++        leaves[2]!,
++      );
++      for (let i = 0; i < 5; i++)
++        ball(
++          0.09,
++          cream,
++          x + Math.cos(i * 1.256) * 0.12,
++          size * 1.9 + Math.sin(i * 1.256) * 0.12,
++          z + 0.2,
++        );
++      ball(0.07, gold, x, size * 1.9, z + 0.28);
++    }
++  }
++  for (let i = 0; i < 13; i++)
++    shrub(
++      -11.7 + i * 1.9,
++      -4.1 + Math.sin(i) * 0.6,
++      0.25 + (i % 3) * 0.09,
++      i % 2 === 0,
++    );
++  for (const [x, z] of [
++    [-11, 4.7],
++    [-7.5, 5.1],
++    [-4, 5.4],
++    [1.0, 6.3],
++    [9.5, 5.2],
++    [12, 4],
++  ]) {
++    shrub(x!, z!, 0.42, true);
+   }
+ 
+   // Exit arch: authored masonry with a curved lintel.
+-  for (const x of [10.4, 12.1]) for (let i = 0; i < 4; i++) {
+-    const block = box(.48, .55, .65, stone, x, .28 + i * .57, -1.3); block.rotation.y = .04 * Math.sin(i);
+-  }
+-  const arch = mesh(new THREE.TorusGeometry(.85, .25, 5, 12, Math.PI), stone); arch.position.set(11.25, 2, -1.3);
+-  box(.7, .18, .85, stone, 10.4, .1, -1.3); box(.7, .18, .85, stone, 12.1, .1, -1.3);
++  for (const x of [10.4, 12.1])
++    for (let i = 0; i < 4; i++) {
++      const block = box(0.48, 0.55, 0.65, stone, x, 0.28 + i * 0.57, -1.3);
++      block.rotation.y = 0.04 * Math.sin(i);
++    }
++  const arch = mesh(new THREE.TorusGeometry(0.85, 0.25, 5, 12, Math.PI), stone);
++  arch.position.set(11.25, 2, -1.3);
++  box(0.7, 0.18, 0.85, stone, 10.4, 0.1, -1.3);
++  box(0.7, 0.18, 0.85, stone, 12.1, 0.1, -1.3);
+ 
+-  const machine = new THREE.Group(); world.add(machine); machine.position.set(3.2, 0, .4);
+-  box(1.9, 1.8, 1.3, wood, 0, .94, 0, machine);
+-  box(1.66, .13, 1.4, darkwood, 0, 1.9, 0, machine);
+-  for (const x of [-.86, .86]) for (const y of [.16, 1.73]) {
+-    box(.28, .3, 1.38, gold, x, y, .02, machine);
+-    ball(.055, darkwood, x, y, .75, machine);
+-  }
+-  const slot = mesh(new THREE.CylinderGeometry(.56, .56, .11, 40), gold, machine); slot.rotation.x = Math.PI / 2; slot.position.set(0, 1.01, .73);
+-  const recess = mesh(new THREE.CylinderGeometry(.43, .43, .13, 40), darkwood, machine); recess.rotation.x = Math.PI / 2; recess.position.set(0, 1.01, .8);
+-  const slotPoint = new THREE.Object3D(); slotPoint.position.set(0, 1.01, .93); machine.add(slotPoint);
+-  rod(new THREE.Vector3(4.16, .75, .6), new THREE.Vector3(5.7, .75, .6), .10, gold);
+-  box(.34, 1.1, .45, darkwood, 5.5, .48, .55);
+-  const gear = mesh(new THREE.CylinderGeometry(.29, .29, .22, 12), gold); gear.rotation.x = Math.PI / 2; gear.position.set(5.5, .75, .84);
+-  const bridge = new THREE.Group(); world.add(bridge); bridge.position.set(5.55, .13, .65);
+-  for (let i = 0; i < 8; i++) box(.42, .15, 1.75, wood, .22 + i * .43, 0, 0, bridge);
+-  for (const z of [-.68, .68]) {
+-    box(3.5, .11, .14, darkwood, 1.72, .13, z, bridge);
+-    for (const x of [.2, 1.7, 3.2]) ball(.055, gold, x, .23, z, bridge);
++  const machine = new THREE.Group();
++  world.add(machine);
++  machine.position.set(3.2, 0, 0.4);
++  box(1.9, 1.8, 1.3, wood, 0, 0.94, 0, machine);
++  box(1.66, 0.13, 1.4, darkwood, 0, 1.9, 0, machine);
++  for (const x of [-0.86, 0.86])
++    for (const y of [0.16, 1.73]) {
++      box(0.28, 0.3, 1.38, gold, x, y, 0.02, machine);
++      ball(0.055, darkwood, x, y, 0.75, machine);
++    }
++  const slot = mesh(
++    new THREE.CylinderGeometry(0.56, 0.56, 0.11, 40),
++    gold,
++    machine,
++  );
++  slot.rotation.x = Math.PI / 2;
++  slot.position.set(0, 1.01, 0.73);
++  const recess = mesh(
++    new THREE.CylinderGeometry(0.43, 0.43, 0.13, 40),
++    darkwood,
++    machine,
++  );
++  recess.rotation.x = Math.PI / 2;
++  recess.position.set(0, 1.01, 0.8);
++  const slotPoint = new THREE.Object3D();
++  slotPoint.position.set(0, 1.01, 0.93);
++  machine.add(slotPoint);
++  rod(
++    new THREE.Vector3(4.16, 0.75, 0.6),
++    new THREE.Vector3(5.7, 0.75, 0.6),
++    0.1,
++    gold,
++  );
++  box(0.34, 1.1, 0.45, darkwood, 5.5, 0.48, 0.55);
++  const gear = mesh(new THREE.CylinderGeometry(0.29, 0.29, 0.22, 12), gold);
++  gear.rotation.x = Math.PI / 2;
++  gear.position.set(5.5, 0.75, 0.84);
++  const bridge = new THREE.Group();
++  world.add(bridge);
++  bridge.position.set(5.55, 0.13, 0.65);
++  for (let i = 0; i < 8; i++)
++    box(0.42, 0.15, 1.75, wood, 0.22 + i * 0.43, 0, 0, bridge);
++  for (const z of [-0.68, 0.68]) {
++    box(3.5, 0.11, 0.14, darkwood, 1.72, 0.13, z, bridge);
++    for (const x of [0.2, 1.7, 3.2]) ball(0.055, gold, x, 0.23, z, bridge);
+   }
+ 
+-  const tray = new THREE.Group(); world.add(tray); tray.position.set(.25, 0, 2.65);
+-  box(4.4, .22, .68, darkwood, 0, .15, 0, tray);
+-  box(4.55, .13, .18, wood, 0, .32, .38, tray);
++  const tray = new THREE.Group();
++  world.add(tray);
++  tray.position.set(0.25, 0, 2.65);
++  box(4.4, 0.22, 0.68, darkwood, 0, 0.15, 0, tray);
++  box(4.55, 0.13, 0.18, wood, 0, 0.32, 0.38, tray);
+   const tokens = {} as Record<MaterialId, THREE.Group>;
+-  const colors = { C: cream, D: paint(palette.green), E: gold };
+-  for (const id of ['C', 'D', 'E'] as const) {
+-    const token = new THREE.Group(); world.add(token); tokens[id] = token;
+-    const disc = mesh(new THREE.CylinderGeometry(.45, .45, .15, 40), colors[id], token); disc.rotation.x = Math.PI / 2;
+-    const texture = faceTexture(id); textures.push(texture);
+-    const labelMaterial = new THREE.MeshBasicMaterial({ map: texture }); materials.push(labelMaterial);
+-    const label = mesh(new THREE.CircleGeometry(.355, 40), labelMaterial, token, false); label.position.z = .087;
+-    const rim = mesh(new THREE.TorusGeometry(.405, .025, 5, 40), darkwood, token, false); rim.position.z = .087;
+-  }
++  const labelMaterials = {} as Record<MaterialId, THREE.MeshBasicMaterial>;
++  const labels = new Map<string, THREE.Texture>();
++  for (const id of noteIds)
++    for (const mode of ["letter", "solfege", "both"] as const) {
++      const texture = faceTexture(label(id, mode));
++      textures.push(texture);
++      labels.set(`${id}:${mode}`, texture);
++    }
++  for (const id of ["C", "D", "E"] as const) {
++    const token = new THREE.Group();
++    world.add(token);
++    tokens[id] = token;
++    const disc = mesh(
++      new THREE.CylinderGeometry(0.45, 0.45, 0.15, 40),
++      cream,
++      token,
++    );
++    disc.rotation.x = Math.PI / 2;
++    const texture = labels.get(`${id}:letter`)!;
++    const labelMaterial = new THREE.MeshBasicMaterial({ map: texture });
++    materials.push(labelMaterial);
++    labelMaterials[id] = labelMaterial;
++    const label = mesh(
++      new THREE.CircleGeometry(0.355, 40),
++      labelMaterial,
++      token,
++      false,
++    );
++    label.position.z = 0.087;
++    const rim = mesh(
++      new THREE.TorusGeometry(0.405, 0.025, 5, 40),
++      darkwood,
++      token,
++      false,
++    );
++    rim.position.z = 0.087;
++  }
++
++  const slotGroups: THREE.Group[] = [];
++  const placedDiscs: THREE.Mesh[] = [];
++  const placedMaterials: THREE.MeshBasicMaterial[] = [];
++  for (let i = 0; i < 3; i++) {
++    const group = new THREE.Group();
++    world.add(group);
++    slotGroups.push(group);
++    const ring = mesh(
++      new THREE.CylinderGeometry(0.52, 0.52, 0.15, 40),
++      gold,
++      group,
++    );
++    ring.rotation.x = Math.PI / 2;
++    const inner = mesh(
++      new THREE.CircleGeometry(0.42, 40),
++      darkwood,
++      group,
++      false,
++    );
++    inner.position.z = 0.09;
++    const material = new THREE.MeshBasicMaterial({
++      map: labels.get("C:letter")!,
++    });
++    materials.push(material);
++    placedMaterials.push(material);
++    const disc = mesh(
++      new THREE.CircleGeometry(0.36, 40),
++      material,
++      group,
++      false,
++    );
++    disc.position.z = 0.11;
++    placedDiscs.push(disc);
++  }
++  const sequenceTray = box(4.8, 0.2, 0.9, darkwood, 3.5, 0.2, 4.8);
++  slot.visible = false;
++  recess.visible = false;
+ 
+   // A metronome friend, built from an extruded trapezoid with expressive editable face art.
+-  const character = new THREE.Group(); world.add(character);
+-  const shape = new THREE.Shape(); shape.moveTo(-.45, 0); shape.lineTo(.45, 0); shape.lineTo(.23, 1.55); shape.lineTo(-.23, 1.55); shape.closePath();
+-  const body = mesh(new THREE.ExtrudeGeometry(shape, { depth: .43, bevelEnabled: true, bevelSegments: 1, steps: 1, bevelSize: .06, bevelThickness: .04 }), wood, character); body.position.set(0, .4, -.2);
+-  const faceMap = faceTexture('character'); textures.push(faceMap);
+-  const faceMat = new THREE.MeshBasicMaterial({ map: faceMap }); materials.push(faceMat);
+-  const face = mesh(new THREE.PlaneGeometry(.59, .61), faceMat, character, false); face.position.set(0, .83, .29);
+-  box(.19, .66, .07, cream, 0, 1.47, .29, character);
+-  for (let i = 0; i < 7; i++) box(.12, .015, .015, darkwood, 0, 1.21 + i * .077, .334, character);
+-  const pendulum = rod(new THREE.Vector3(0, 1.12, .38), new THREE.Vector3(.23, 1.76, .38), .025, gold, character);
+-  ball(.10, gold, .23, 1.76, .38, character); ball(.12, gold, 0, 2.02, 0, character);
++  const character = new THREE.Group();
++  world.add(character);
++  const shape = new THREE.Shape();
++  shape.moveTo(-0.45, 0);
++  shape.lineTo(0.45, 0);
++  shape.lineTo(0.23, 1.55);
++  shape.lineTo(-0.23, 1.55);
++  shape.closePath();
++  const body = mesh(
++    new THREE.ExtrudeGeometry(shape, {
++      depth: 0.43,
++      bevelEnabled: true,
++      bevelSegments: 1,
++      steps: 1,
++      bevelSize: 0.06,
++      bevelThickness: 0.04,
++    }),
++    wood,
++    character,
++  );
++  body.position.set(0, 0.4, -0.2);
++  const faceMap = faceTexture("character");
++  textures.push(faceMap);
++  const faceMat = new THREE.MeshBasicMaterial({ map: faceMap });
++  materials.push(faceMat);
++  const face = mesh(
++    new THREE.PlaneGeometry(0.59, 0.61),
++    faceMat,
++    character,
++    false,
++  );
++  face.position.set(0, 0.83, 0.29);
++  box(0.19, 0.66, 0.07, cream, 0, 1.47, 0.29, character);
++  for (let i = 0; i < 7; i++)
++    box(0.12, 0.015, 0.015, darkwood, 0, 1.21 + i * 0.077, 0.334, character);
++  const pendulum = rod(
++    new THREE.Vector3(0, 1.12, 0.38),
++    new THREE.Vector3(0.23, 1.76, 0.38),
++    0.025,
++    gold,
++    character,
++  );
++  ball(0.1, gold, 0.23, 1.76, 0.38, character);
++  ball(0.12, gold, 0, 2.02, 0, character);
+   const feet: THREE.Mesh[] = [];
+   for (const side of [-1, 1]) {
+-    rod(new THREE.Vector3(side * .24, .51, 0), new THREE.Vector3(side * .28, .19, .04), .055, darkwood, character);
+-    const foot = ball(.2, cream, side * .3, .16, .14, character); foot.scale.set(1, .55, 1.45); feet.push(foot);
+-    rod(new THREE.Vector3(side * .37, .96, 0), new THREE.Vector3(side * .59, .72, .1), .045, darkwood, character);
+-    const glove = ball(.14, cream, side * .61, .70, .12, character); glove.scale.set(1, .85, .65);
+-  }
+-  const shadowMat = new THREE.MeshBasicMaterial({ color: '#52492d', opacity: .19, transparent: true, depthWrite: false }); materials.push(shadowMat);
+-  const shadow = mesh(new THREE.CircleGeometry(.64, 28), shadowMat, world, false); shadow.rotation.x = -Math.PI / 2;
+-  shadow.position.y = .025; shadow.scale.y = .7;
++    rod(
++      new THREE.Vector3(side * 0.24, 0.51, 0),
++      new THREE.Vector3(side * 0.28, 0.19, 0.04),
++      0.055,
++      darkwood,
++      character,
++    );
++    const foot = ball(0.2, cream, side * 0.3, 0.16, 0.14, character);
++    foot.scale.set(1, 0.55, 1.45);
++    feet.push(foot);
++    rod(
++      new THREE.Vector3(side * 0.37, 0.96, 0),
++      new THREE.Vector3(side * 0.59, 0.72, 0.1),
++      0.045,
++      darkwood,
++      character,
++    );
++    const glove = ball(0.14, cream, side * 0.61, 0.7, 0.12, character);
++    glove.scale.set(1, 0.85, 0.65);
++  }
++  const shadowMat = new THREE.MeshBasicMaterial({
++    color: "#52492d",
++    opacity: 0.19,
++    transparent: true,
++    depthWrite: false,
++  });
++  materials.push(shadowMat);
++  const shadow = mesh(
++    new THREE.CircleGeometry(0.64, 28),
++    shadowMat,
++    world,
++    false,
++  );
++  shadow.rotation.x = -Math.PI / 2;
++  shadow.position.y = 0.025;
++  shadow.scale.y = 0.7;
+   camera.position.set(7, 12, 24);
+-  camera.lookAt(0, 1, 0); camera.updateMatrixWorld();
+-  let width = 1, height = 1;
+-  const current: SceneView = { approach: 0, bridge: 0, travel: 0, selected: null, installed: false, order: ['C', 'D', 'E'], pulse: null, time: 0 };
++  camera.lookAt(0, 1, 0);
++  camera.updateMatrixWorld();
++  let width = 1,
++    height = 1;
++  const current: SceneView = {
++    approach: 0,
++    bridge: 0,
++    travel: 0,
++    selected: null,
++    slots: [null],
++    activeSlot: -1,
++    labelMode: "letter",
++    locks: 0,
++    order: ["C", "D", "E"],
++    pulse: null,
++    time: 0,
++  };
+   function update(view: SceneView) {
+     Object.assign(current, view);
+-    bridge.rotation.z = (1 - view.bridge) * Math.PI / 2;
+-    gear.rotation.y = view.bridge * Math.PI * 1.3;
++    bridge.rotation.z = ((1 - view.bridge) * Math.PI) / 2;
++    gear.rotation.y = view.bridge * Math.PI * 1.3 + (view.locks * Math.PI) / 3;
++    const sequence = view.slots.length === 3;
++    const slotSpacing = Math.max(
++      1.55,
++      (48 * (camera.right - camera.left)) / (width * (24 / Math.hypot(7, 24))),
++    );
++    sequenceTray.visible = sequence;
++    sequenceTray.scale.x = (slotSpacing * 2 + 1.3) / 4.8;
++    slotGroups.forEach((group, i) => {
++      group.visible = i < view.slots.length;
++      group.position.set(
++        sequence ? 3.5 + (i - 1) * slotSpacing : 3.2,
++        sequence ? 0.85 : 1.01,
++        sequence ? 4.8 : 1.35,
++      );
++      group.scale.setScalar(view.activeSlot === i ? 1.08 : 1);
++      const id = view.slots[i];
++      placedDiscs[i]!.visible = !!id;
++      if (id) placedMaterials[i]!.map = labels.get(`${id}:${view.labelMode}`)!;
++    });
+     // Work in screen pixels: narrow landscape screens retain disjoint 44px hit targets.
+     const cosYaw = 24 / Math.hypot(7, 24);
+-    const spacing = Math.max(1.5, 48 * (camera.right - camera.left) / (width * cosYaw));
++    const spacing = Math.max(
++      1.5,
++      (48 * (camera.right - camera.left)) / (width * cosYaw),
++    );
+     const materialZ = 2.65;
+-    const slotZ = .4 + .93 * machine.scale.z;
+-    const rightmostX = Math.min(1.75, 3.2 - spacing + (materialZ - slotZ) * 7 / 24);
++    const slotZ = 0.4 + 0.93 * machine.scale.z;
++    const rightmostX =
++      Math.min(1.75, 3.2 - spacing + ((materialZ - slotZ) * 7) / 24) -
++      (sequence ? spacing * 1.4 : 0);
+     const trayX = rightmostX - spacing;
+-    tray.position.x = trayX; tray.scale.x = (2 * spacing + 1.4) / 4.4;
+-    for (const id of ['C', 'D', 'E'] as const) {
++    tray.position.x = trayX;
++    tray.scale.x = (2 * spacing + 1.4) / 4.4;
++    for (const id of ["C", "D", "E"] as const) {
+       const token = tokens[id];
+       const index = view.order.indexOf(id);
+-      token.position.set(trayX + (index - 1) * spacing, .79, materialZ);
++      token.position.set(trayX + (index - 1) * spacing, 0.79, materialZ);
+       token.scale.setScalar(view.pulse === id ? 1.12 : 1);
+-      if (view.selected === id) token.position.y += .28;
++      if (view.selected === id) token.position.y += 0.28;
+       token.rotation.y = 0;
+-      if (id === 'C' && view.installed) { token.position.set(3.2, 1.01, 1.38); token.scale.setScalar(.88); }
++      labelMaterials[id].map = labels.get(`${id}:${view.labelMode}`)!;
+     }
+     const startX = -3.6 + view.approach * 1.0;
+     // The authored path passes in front of the machine before lining up with the bridge.
+-    const route = [[startX, 1.25], [4.55, 2.3], [5.55, .65], [9.1, .65], [11.2, -1.25]];
+-    const stops = [0, .49, .63, .84, 1];
++    const route = [
++      [startX, 1.25],
++      [4.55, 2.3],
++      [5.55, 0.65],
++      [9.1, 0.65],
++      [11.2, -1.25],
++    ];
++    const stops = [0, 0.49, 0.63, 0.84, 1];
+     const travel = THREE.MathUtils.clamp(view.travel, 0, 1);
+-    const segment = Math.min(3, Math.max(0, stops.findIndex(stop => stop > travel) - 1));
++    const segment = Math.min(
++      3,
++      Math.max(0, stops.findIndex((stop) => stop > travel) - 1),
++    );
+     const index = travel === 1 ? 3 : segment;
+     const part = (travel - stops[index]!) / (stops[index + 1]! - stops[index]!);
+-    character.position.set(THREE.MathUtils.lerp(route[index]![0]!, route[index + 1]![0]!, part), 0, THREE.MathUtils.lerp(route[index]![1]!, route[index + 1]![1]!, part));
+-    const walking = (view.travel > 0 && view.travel < 1) || (view.approach > 0 && view.approach < 1);
+-    character.position.y = walking ? Math.abs(Math.sin(view.time * 11)) * .045 : 0;
+-    feet.forEach((foot, i) => { foot.position.z = .14 + (walking ? Math.sin(view.time * 11 + i * Math.PI) * .09 : 0); });
+-    pendulum.rotation.z = Math.sin(view.time * 1.5) * .018;
+-    shadow.position.x = character.position.x; shadow.position.z = character.position.z;
++    character.position.set(
++      THREE.MathUtils.lerp(route[index]![0]!, route[index + 1]![0]!, part),
++      0,
++      THREE.MathUtils.lerp(route[index]![1]!, route[index + 1]![1]!, part),
++    );
++    const walking =
++      (view.travel > 0 && view.travel < 1) ||
++      (view.approach > 0 && view.approach < 1);
++    character.position.y = walking
++      ? Math.abs(Math.sin(view.time * 11)) * 0.045
++      : 0;
++    feet.forEach((foot, i) => {
++      foot.position.z =
++        0.14 + (walking ? Math.sin(view.time * 11 + i * Math.PI) * 0.09 : 0);
++    });
++    pendulum.rotation.z = Math.sin(view.time * 1.5) * 0.018;
++    shadow.position.x = character.position.x;
++    shadow.position.z = character.position.z;
+     world.updateMatrixWorld(true);
+   }
+   function resize(w: number, h: number) {
+-    width = Math.max(w, 1); height = Math.max(h, 1);
+-    const halfW = Math.max(13, 6.15 * width / height), halfH = halfW * height / width;
+-    camera.left = -halfW; camera.right = halfW; camera.top = halfH; camera.bottom = -halfH;
+-    camera.updateProjectionMatrix(); renderer.setSize(width, height, false); update(current);
++    width = Math.max(w, 1);
++    height = Math.max(h, 1);
++    const halfW = Math.max(13, (6.15 * width) / height),
++      halfH = (halfW * height) / width;
++    camera.left = -halfW;
++    camera.right = halfW;
++    camera.top = halfH;
++    camera.bottom = -halfH;
++    camera.updateProjectionMatrix();
++    renderer.setSize(width, height, false);
++    update(current);
+   }
+   function anchors() {
+     const project = (obj: THREE.Object3D) => {
+       const point = obj.getWorldPosition(new THREE.Vector3()).project(camera);
+       return { x: (point.x + 1) / 2, y: (1 - point.y) / 2 };
+     };
+-    return { C: project(tokens.C), D: project(tokens.D), E: project(tokens.E), slot: project(slotPoint) };
++    return {
++      C: project(tokens.C),
++      D: project(tokens.D),
++      E: project(tokens.E),
++      slot: project(slotPoint),
++      slots: slotGroups.map(project),
++    };
+   }
+   update(current);
+   return {
+-    render(view: SceneView) { update(view); renderer.render(scene, camera); },
+-    resize, anchors,
++    render(view: SceneView) {
++      update(view);
++      renderer.render(scene, camera);
++    },
++    resize,
++    anchors,
+     dispose() {
+       const geometries = new Set<THREE.BufferGeometry>();
+-      scene.traverse(obj => { if (obj instanceof THREE.Mesh || obj instanceof THREE.LineSegments) geometries.add(obj.geometry); });
+-      geometries.forEach(g => g.dispose()); materials.forEach(m => m.dispose()); textures.forEach(t => t.dispose()); renderer.dispose();
++      scene.traverse((obj) => {
++        if (obj instanceof THREE.Mesh || obj instanceof THREE.LineSegments)
++          geometries.add(obj.geometry);
++      });
++      geometries.forEach((g) => g.dispose());
++      materials.forEach((m) => m.dispose());
++      textures.forEach((t) => t.dispose());
++      renderer.dispose();
+     },
+   };
+ }
+--- a/app/src/style.css
++++ b/app/src/style.css
+@@ -13,3 +13,11 @@
+ .lesson.task-card h1{font-size:22px;margin:10px 0}.lesson.task-card .target{margin-top:12px}
+ @media(max-height:500px){.lesson.task-card{bottom:66px;width:210px;padding:12px 16px}.lesson.task-card h1{font-size:20px}}
+ @media(max-width:740px){.lesson.task-card{max-width:31%}.lesson.task-card h1{font-size:18px}}
++/* 同一材料的两种标记：颜色只表达选中/发声状态。 */
++.note-row button:nth-child(n){background:#eed8a5;display:flex;flex-direction:column;justify-content:center;align-items:center;gap:2px}
++.note-row b{font-size:22px;line-height:1;color:inherit}.note-row small{font-size:13px;line-height:1}.target{flex-wrap:wrap;gap:8px}.target strong{width:auto;min-width:62px;padding:0 12px;white-space:nowrap;font-size:27px}.mapping{font-family:Georgia,serif;white-space:nowrap;font-size:14px!important}.playing-note{color:#365f51}.slot.sounding{outline:3px solid #f2dd9e;box-shadow:0 0 0 5px #4c7564}.lesson.task-card{max-height:calc(100% - 145px)}
++@media(max-height:500px){.note-row b{font-size:19px}.note-row small{font-size:12px}.target strong{font-size:22px;min-width:44px}.mapping{font-size:11px!important}.lesson.task-card{max-height:calc(100% - 125px)}}
++.slot-index{display:none}.sequence-slot .slot-index{display:block;position:absolute;left:50%;bottom:-17px;transform:translateX(-50%);font:12px Georgia;background:#f3e9d0;border:1px solid #706447;border-radius:50%;width:18px;line-height:17px;pointer-events:none}
++@media(max-width:740px){#world[data-task="c3"] .lesson.task-card{max-width:23%;padding:12px 10px}#world[data-task="c3"] .task-card h1{font-size:16px}#world[data-task="c3"] .task-card .target strong{font-size:18px;padding:0 6px}#world[data-task="c3"] .task-card .hint{font-size:10px}}
++.lesson.result-card{width:40%;max-width:450px;padding:18px 22px}.result-card h1{font-size:28px;margin:8px 0}.result-card p{font-size:12px;margin:7px 0}.result-sequence{display:flex;gap:10px;margin:8px 0}.result-sequence span{display:flex;flex-direction:column;align-items:center;justify-content:center;border:2px solid #615439;border-radius:50% 45%;width:44px;height:44px;background:#eed8a5}.result-sequence b{font-size:18px;color:inherit;line-height:1}.result-sequence small{font:12px Georgia}.result-sequence .sounding{outline:3px solid #557863;outline-offset:2px}.attempt-list{list-style:none;padding:0;margin:12px 0 0}.attempt-list li{padding:6px 0;border-bottom:1px dashed #ab9d79}.attempt-list strong{display:block;font-size:12px;font-weight:600;color:#3d5c4d}.attempt-list small{font-size:10px;display:block;line-height:1.5;margin-top:3px}.previous{margin-top:10px;font-size:12px}.previous summary{cursor:pointer;min-height:44px;display:flex;align-items:center;text-decoration:underline}.result-card .actions{margin-top:10px}.result-card .hint{font-size:10px}.result-card .secondary{background:#f4e9cf}
++@media(max-width:740px){.lesson.result-card{width:45%;max-width:45%;padding:12px 16px}.result-card h1{font-size:23px}.result-card .actions{gap:8px}}
+--- a/app/tests/browser.test.ts
++++ b/app/tests/browser.test.ts
+@@ -1,294 +1,560 @@
+-import { test, expect, type Page } from '@playwright/test';
+-async function start(page: Page) {
+-  await page.goto('/');
+-  await page.getByRole('button', { name: '靠近机关', exact: true }).click();
+-  await page.getByRole('button', { name: '无声继续', exact: true }).click();
+-  await page.getByRole('button', { name: '我来试试 →', exact: true }).click();
+-}
+-async function challenge(page: Page) {
+-  await start(page);
+-  await page.getByRole('button', { name: '选择材料 C', exact: true }).click();
+-  await page.getByRole('button', { name: '将选中材料放入机关', exact: true }).click();
+-  await page.getByRole('button', { name: '收起说明，开始挑战 →', exact: true }).click();
+-  await expect(page.locator('#world')).toHaveAttribute('data-phase', 'challenge');
+-}
+-async function complete(page: Page) {
+-  await page.getByRole('button', { name: '选择材料 C', exact: true }).click();
+-  await page.getByRole('button', { name: '将选中材料放入机关', exact: true }).click();
+-  await expect(page.locator('#world')).toHaveAttribute('data-phase', 'complete');
+-}
+-
+-test('完整可玩流程、失败替换、回看不穿透、复玩及运行无错误', async ({ page }) => {
++import { test, expect, type Page } from "@playwright/test";
++async function start(page: Page, navigate = true) {
++  if (navigate) await page.goto("/");
++  await page.getByRole("button", { name: "靠近机关", exact: true }).click();
++  await page.getByRole("button", { name: "无声继续", exact: true }).click();
++  await page.getByRole("button", { name: "我来试试 →", exact: true }).click();
++}
++async function put(page: Page, name: string, index = 0) {
++  await page
++    .getByRole("button", { name: `选择材料 ${name}`, exact: true })
++    .click();
++  await page
++    .getByRole("button", { name: new RegExp(`^槽位 ${index + 1}：`) })
++    .click();
++}
++async function submit(page: Page) {
++  await page.getByRole("button", { name: "试运行 ♪", exact: true }).click();
++  await expect(page.locator("#world")).toHaveAttribute("data-playing", "false");
++}
++async function challenge(page: Page, navigate = true) {
++  await start(page, navigate);
++  for (const id of ["C", "D", "E"]) {
++    await put(page, id);
++    await submit(page);
++    await page
++      .getByRole("button", {
++        name: id === "E" ? "收起说明，开始挑战 →" : "继续 →",
++        exact: true,
++      })
++      .click();
++  }
++  await expect(page.locator("#world")).toHaveAttribute(
++    "data-phase",
++    "challenge",
++  );
++}
++async function sequence(page: Page, capture = false) {
++  const first = (await page.locator("#world").getAttribute("data-run")) === "1";
++  if (
++    !(await page
++      .getByRole("button", { name: "继续 →", exact: true })
++      .isVisible())
++  ) {
++    await put(page, first ? "D" : "E");
++    await submit(page);
++  }
++  await expect(page.locator("#world")).toHaveAttribute(
++    "data-phase",
++    "challenge",
++  );
++  await page.getByRole("button", { name: "继续 →", exact: true }).click();
++  await expect(
++    page.getByRole("button", {
++      name: first ? "选择材料 mi" : "选择材料 re",
++      exact: true,
++    }),
++  ).toBeVisible();
++  await expect(
++    page.getByRole("button", { name: "选择材料 E", exact: true }),
++  ).toHaveCount(0);
++  await page.locator("#lesson").evaluate(async (el) => {
++    await Promise.all(el.getAnimations().map((a) => a.finished));
++  });
++  if (capture)
++    await page.screenshot({
++      path: "../_bmad-output/implementation-artifacts/note-unit-reverse.png",
++    });
++  await put(page, first ? "mi" : "re");
++  await submit(page);
++  await page.getByRole("button", { name: "继续 →", exact: true }).click();
++}
++async function complete(page: Page, capture = false) {
++  await sequence(page, capture);
++  const first = (await page.locator("#world").getAttribute("data-run")) === "1";
++  for (const [i, id] of (first ? ["E", "D", "C"] : ["C", "E", "C"]).entries())
++    await put(page, id, i);
++  if (capture)
++    await page.screenshot({
++      path: "../_bmad-output/implementation-artifacts/note-unit-sequence.png",
++    });
++  await submit(page);
++  await expect(page.locator("#world")).toHaveAttribute(
++    "data-phase",
++    "complete",
++  );
++}
++
++test("介绍与双标记示范、三个练习、撤表挑战、错误修正和复玩", async ({
++  page,
++}) => {
+   const errors: string[] = [];
+-  page.on('pageerror', e => errors.push(e.message));
+-  page.on('console', m => { if (m.type() === 'error') errors.push(m.text()); });
+-  await challenge(page);
+-  await page.screenshot({ path: '../_bmad-output/implementation-artifacts/probe-v2-challenge.png' });
+-  await page.getByRole('button', { name: '选择材料 D', exact: true }).click();
+-  await page.getByRole('button', { name: '将选中材料放入机关', exact: true }).click();
+-  await expect(page.locator('#feedback')).toContainText('这枚是 D');
+-  await page.getByRole('button', { name: '回看', exact: true }).click();
+-  await expect(page.getByRole('dialog')).toBeVisible();
+-  await page.getByRole('button', { name: '回到花园 →', exact: true }).click();
+-  await expect(page.getByRole('button', { name: '选择材料 D', exact: true })).toHaveAttribute('aria-pressed', 'true');
++  page.on("pageerror", (e) => errors.push(e.message));
++  page.on("console", (m) => {
++    if (m.type() === "error") errors.push(m.text());
++  });
++  await page.goto("/");
++  await page.getByRole("button", { name: "靠近机关" }).click();
++  await expect(page.getByText("一个音，两种名字。")).toBeVisible();
++  await page.getByRole("button", { name: "无声继续" }).click();
++  await expect(page.getByRole("button", { name: "听 C / do" })).toBeVisible();
++  await page.locator("#lesson").evaluate(async (el) => {
++    await Promise.all(el.getAnimations().map((a) => a.finished));
++  });
++  await page.screenshot({
++    path: "../_bmad-output/implementation-artifacts/note-unit-demo.png",
++  });
++  await challenge(page);
++  await expect(page.locator(".mapping")).toHaveCount(0);
++  await put(page, "C");
++  await submit(page);
++  await expect(page.locator("#feedback")).toContainText("还没对上");
++  await page.getByRole("button", { name: "回看", exact: true }).click();
++  await page.getByRole("button", { name: "回到花园 →" }).click();
++  await expect(
++    page.getByRole("button", { name: "选择材料 C", exact: true }),
++  ).toHaveAttribute("aria-pressed", "true");
++  await complete(page, true);
++  await page.locator("#lesson").evaluate(async (el) => {
++    await Promise.all(el.getAnimations().map((a) => a.finished));
++  });
++  await page.screenshot({
++    path: "../_bmad-output/implementation-artifacts/note-unit-complete.png",
++  });
++  await page.getByRole("button", { name: "再玩一次 ↻" }).click();
++  await expect(page.locator("#world")).toHaveAttribute("data-run", "2");
++  expect(errors).toEqual([]);
++});
++
++test("帮助、旋转与后台保留组合；减少动效不跳过播放", async ({ page }) => {
++  await page.emulateMedia({ reducedMotion: "reduce" });
++  await challenge(page);
++  await put(page, "D");
++  await page.getByRole("button", { name: "回看", exact: true }).click();
++  await page.setViewportSize({ width: 428, height: 926 });
++  await expect(page.getByText("横过来，去冒险。")).toBeVisible();
++  await page.evaluate(() => window.dispatchEvent(new Event("pagehide")));
++  await page.setViewportSize({ width: 926, height: 428 });
++  await page.getByRole("button", { name: "继续这次冒险 →" }).click();
++  await expect(page.getByRole("dialog")).toContainText("让名字找到同一个音");
++  await page.getByRole("button", { name: "回到花园 →" }).click();
++  await expect(page.getByRole("button", { name: /^槽位 1：D/ })).toBeVisible();
++  await page.getByRole("button", { name: "试运行 ♪" }).click();
++  await expect(page.locator("#world")).toHaveAttribute("data-playing", "true");
++  await expect(page.locator("#world")).toHaveAttribute("data-playing", "false");
+   await complete(page);
+-  await expect(page.locator('.completion')).toContainText('借助回看');
+-  await page.screenshot({ path: '../_bmad-output/implementation-artifacts/probe-v2-complete.png' });
+-  await page.getByRole('button', { name: '再玩一次 ↻', exact: true }).click();
+-  await expect(page.locator('#world')).toHaveAttribute('data-phase', 'arrival');
+-  await expect(page.locator('#world')).toHaveAttribute('data-assisted', 'false');
+-  expect(errors).toEqual([]);
+-});
+-
+-test('横竖屏与后台覆盖保留原尝试；减少动效完成相同结果', async ({ page }) => {
+-  await page.emulateMedia({ reducedMotion: 'reduce' });
+-  await challenge(page);
+-  await page.getByRole('button', { name: '选择材料 E', exact: true }).click();
+-  await page.getByRole('button', { name: '回看', exact: true }).click();
+-  await page.setViewportSize({ width: 430, height: 932 });
+-  await expect(page.getByText('横过来，去冒险。')).toBeVisible();
+-  await page.evaluate(() => window.dispatchEvent(new Event('pagehide')));
+-  await page.setViewportSize({ width: 932, height: 430 });
+-  await page.getByRole('button', { name: '继续这次冒险 →' }).click();
+-  await expect(page.getByText('机关在等哪个声音？')).toBeVisible();
+-  await page.getByRole('button', { name: '回到花园 →' }).click();
+-  await expect(page.getByRole('button', { name: '选择材料 E', exact: true })).toHaveAttribute('aria-pressed', 'true');
+-  await complete(page);
+-});
+-
+-test('触控命中区不重叠且不少于44px，教程/材料在实际视口中可达', async ({ page }) => {
+-  for (const size of [{width:932,height:430},{width:844,height:390},{width:667,height:375},{width:1366,height:768}]) {
++});
++
++test("横屏命中区至少44px且不重叠，材料未被教学卡遮住", async ({ page }) => {
++  test.setTimeout(120000);
++  for (const size of [
++    { width: 926, height: 428 },
++    { width: 844, height: 390 },
++    { width: 667, height: 375 },
++    { width: 1366, height: 768 },
++  ]) {
+     await page.setViewportSize(size);
+     await challenge(page);
+-    const boxes = await page.locator('button.hotspot:visible').evaluateAll(els => els.map(e => {
+-      const r = e.getBoundingClientRect(); return {x:r.x,y:r.y,w:r.width,h:r.height};
+-    }));
++    await sequence(page);
++    await page.evaluate(
++      () =>
++        new Promise<void>((resolve) =>
++          requestAnimationFrame(() => requestAnimationFrame(() => resolve())),
++        ),
++    );
++    const boxes = await page.locator(".hotspot:visible").evaluateAll((els) =>
++      els.map((e) => {
++        const r = e.getBoundingClientRect();
++        const top = document.elementFromPoint(
++          r.x + r.width / 2,
++          r.y + r.height / 2,
++        );
++        return {
++          x: r.x,
++          y: r.y,
++          w: r.width,
++          h: r.height,
++          reachable: !!top && (e === top || e.contains(top)),
++        };
++      }),
++    );
+     for (let i = 0; i < boxes.length; i++) {
+-      const a = boxes[i];
+-      expect(a.w).toBeGreaterThanOrEqual(44); expect(a.h).toBeGreaterThanOrEqual(44);
+-      expect(a.x).toBeGreaterThanOrEqual(0); expect(a.x+a.w).toBeLessThanOrEqual(size.width);
+-      for (const b of boxes.slice(i+1)) expect(a.x+a.w <= b.x || b.x+b.w <= a.x || a.y+a.h <= b.y || b.y+b.h <= a.y, JSON.stringify({size,a,b})).toBeTruthy();
++      const a = boxes[i]!;
++      expect(a.w).toBeGreaterThanOrEqual(44);
++      expect(a.h).toBeGreaterThanOrEqual(44);
++      expect(a.reachable, JSON.stringify({ size, a, boxes })).toBe(true);
++      expect(a.x).toBeGreaterThanOrEqual(0);
++      expect(a.x + a.w).toBeLessThanOrEqual(size.width);
++      for (const b of boxes.slice(i + 1))
++        expect(
++          a.x + a.w <= b.x ||
++            b.x + b.w <= a.x ||
++            a.y + a.h <= b.y ||
++            b.y + b.h <= a.y,
++          JSON.stringify({ size, a, b }),
++        ).toBeTruthy();
+     }
+   }
+ });
+ 
+-test('声音可开启关闭；WebGL context丢失有重载入口', async ({ page }) => {
+-  await page.goto('/');
+-  await page.getByRole('button', {name:'♪ 声音关',exact:true}).click();
+-  await expect(page.locator('#music')).toHaveAttribute('aria-pressed','true');
+-  await page.getByRole('button', {name:'♪ 声音开',exact:true}).click();
+-  await expect(page.locator('#music')).toHaveAttribute('aria-pressed','false');
+-  await page.locator('#scene').evaluate(canvas => canvas.dispatchEvent(new Event('webglcontextlost', {cancelable:true})));
+-  await expect(page.getByRole('button', {name:'重新加载',exact:true})).toBeVisible();
+-});
+-
+-test('无音频设备时仍能无声完成；初始化渲染失败可重试', async ({ page }) => {
++test("取消触摸不放入，键盘可继续；回看焦点返回且不穿透", async ({ page }) => {
++  await challenge(page);
++  await page.getByRole("button", { name: "选择材料 D", exact: true }).click();
++  const slot = page.getByRole("button", { name: /^槽位 1：/ });
++  await slot.dispatchEvent("pointercancel");
++  await slot.dispatchEvent("click");
++  await expect(slot).toHaveAttribute("aria-label", /空/);
++  await slot.focus();
++  await slot.press("Enter");
++  await expect(slot).toHaveAttribute("aria-label", /D/);
++  const help = page.getByRole("button", { name: "回看", exact: true });
++  await help.click();
++  await page.keyboard.press("Escape");
++  await expect(help).toBeFocused();
++});
++
++test("音频不可用可无声通过；WebGL故障与脚本失败有恢复入口", async ({
++  page,
++}) => {
+   await page.addInitScript(() => {
+-    window.AudioContext = class { constructor() { throw new Error('test: audio unavailable'); } } as unknown as typeof AudioContext;
+-  });
+-  await page.goto('/');
+-  await page.getByRole('button', {name:'♪ 声音关',exact:true}).click();
+-  await expect(page.getByText('声音暂时无法开启，你仍可以无声体验。')).toBeVisible();
+-  await page.emulateMedia({ reducedMotion: 'reduce' });
+-  await challenge(page); await complete(page);
+-  await page.addInitScript(() => {
+-    const original = HTMLCanvasElement.prototype.getContext;
+-    HTMLCanvasElement.prototype.getContext = function (this: HTMLCanvasElement, ...args: Parameters<typeof original>) {
+-      if (String(args[0]).startsWith('webgl')) return null;
+-      return original.apply(this,args);
+-    } as typeof original;
+-  });
+-  await page.goto('/');
+-  await expect(page.getByRole('button', {name:'重新加载',exact:true})).toBeVisible();
+-  await expect(page.getByText('当前浏览器无法绘制这座花园。请检查浏览器是否支持 WebGL 2。')).toBeVisible();
+-});
+-
+-test('连续20轮错误重试和复玩，5次恢复，无重复通行或串状态', async ({ page }) => {
+-  test.setTimeout(120000);
+-  await page.emulateMedia({ reducedMotion: 'reduce' });
+-  await page.goto('/');
+-  for (let i=1; i<=20; i++) {
+-    await page.getByRole('button', {name:'靠近机关',exact:true}).click();
+-    await page.getByRole('button', {name:'无声继续',exact:true}).click();
+-    await page.getByRole('button', {name:'我来试试 →',exact:true}).click();
+-    await page.getByRole('button', {name:'选择材料 C',exact:true}).click();
+-    await page.getByRole('button', {name:'将选中材料放入机关',exact:true}).click();
+-    await page.getByRole('button', {name:'收起说明，开始挑战 →',exact:true}).click();
+-    await expect(page.locator('#world')).toHaveAttribute('data-phase','challenge');
+-    await page.getByRole('button', {name:'选择材料 D',exact:true}).click();
+-    await page.getByRole('button', {name:'将选中材料放入机关',exact:true}).click();
+-    await expect(page.locator('#feedback')).toContainText('这枚是 D');
+-    if (i<=5) {
+-      await page.evaluate(() => window.dispatchEvent(new Event('pagehide')));
+-      await page.getByRole('button', {name:'继续这次冒险 →'}).click();
+-      await expect(page.getByRole('button', {name:'选择材料 D',exact:true})).toHaveAttribute('aria-pressed','true');
+-    }
+-    await complete(page);
+-    await expect(page.locator('#world')).toHaveAttribute('data-run',String(i));
+-    await page.getByRole('button', {name:'再玩一次 ↻',exact:true}).click();
+-  }
+-});
+-
+-test('触摸取消不提交；收起说明后直接可操作，暂停桥动作后可继续且不抢跑', async ({ page }) => {
+-  await start(page);
+-  await page.getByRole('button', {name:'选择材料 C',exact:true}).click();
+-  const slot=page.getByRole('button', {name:'将选中材料放入机关',exact:true});
+-  await slot.dispatchEvent('pointercancel');
+-  await slot.dispatchEvent('click');
+-  await expect(page.locator('#world')).toHaveAttribute('data-phase','practice');
+-  await expect(page.getByRole('button', {name:'收起说明，开始挑战 →',exact:true})).toHaveCount(0);
+-  await slot.click();
+-  await page.getByRole('button', {name:'收起说明，开始挑战 →',exact:true}).click();
+-  await page.evaluate(() => window.dispatchEvent(new Event('pagehide')));
+-  await expect(page.locator('#world')).toHaveAttribute('data-phase','challenge');
+-  await expect(page.locator('#world')).toHaveAttribute('data-paused','true');
+-  await page.getByRole('button', {name:'继续这次冒险 →'}).click();
+-  await expect(page.locator('#world')).toHaveAttribute('data-phase','challenge');
+-  await page.getByRole('button', {name:'选择材料 C',exact:true}).click();
+-  await slot.click();
+-  await page.evaluate(() => window.dispatchEvent(new Event('pagehide')));
+-  await page.waitForTimeout(1500);
+-  await expect(page.locator('#world')).toHaveAttribute('data-phase','bridge');
+-  await page.getByRole('button', {name:'继续这次冒险 →'}).click();
+-  await expect(page.locator('#world')).toHaveAttribute('data-phase','complete');
+-});
+-
+-test('真实Web Audio解锁与暂停：隐藏期间不产生新声，回来不补播旧音', async ({ page }) => {
++    window.AudioContext = class {
++      constructor() {
++        throw new Error("test unavailable");
++      }
++    } as unknown as typeof AudioContext;
++  });
++  await page.goto("/");
++  await page.getByRole("button", { name: "♪ 声音关" }).click();
++  await expect(
++    page.getByText("声音暂时无法开启，你仍可以无声体验。"),
++  ).toBeVisible();
++  await page.emulateMedia({ reducedMotion: "reduce" });
++  await challenge(page);
++  await complete(page);
++  await page
++    .locator("#scene")
++    .evaluate((c) =>
++      c.dispatchEvent(new Event("webglcontextlost", { cancelable: true })),
++    );
++  await expect(page.getByRole("button", { name: "重新加载" })).toBeVisible();
++});
++
++test("真实Web Audio解锁与暂停：隐藏期间不产生新声，回来不补播旧音", async ({
++  page,
++}) => {
+   await page.addInitScript(() => {
+     const Native = window.AudioContext;
+     const observed = { contexts: [] as AudioContext[], starts: 0 };
+-    (window as unknown as { audioObserved: typeof observed }).audioObserved = observed;
++    (window as unknown as { audioObserved: typeof observed }).audioObserved =
++      observed;
+     window.AudioContext = class extends Native {
+       constructor(...args: ConstructorParameters<typeof Native>) {
+-        super(...args); observed.contexts.push(this);
++        super(...args);
++        observed.contexts.push(this);
+       }
+       createOscillator() {
+-        const oscillator = super.createOscillator(); const start = oscillator.start.bind(oscillator);
+-        oscillator.start = (...args: Parameters<typeof start>) => { observed.starts++; start(...args); };
++        const oscillator = super.createOscillator();
++        const start = oscillator.start.bind(oscillator);
++        oscillator.start = (...args: Parameters<typeof start>) => {
++          observed.starts++;
++          start(...args);
++        };
+         return oscillator;
+       }
+     };
+   });
+-  const audioState = () => page.evaluate(() => {
+-    const o=(window as unknown as {audioObserved:{contexts:AudioContext[];starts:number}}).audioObserved;
+-    return { state:o.contexts[0]?.state, starts:o.starts };
+-  });
+-  await challenge(page);
+-  await page.getByRole('button',{name:'♪ 声音关',exact:true}).click();
+-  await page.getByRole('button',{name:'选择材料 D',exact:true}).click();
+-  const before=await audioState(); expect(before.state).toBe('running'); expect(before.starts).toBeGreaterThan(0);
+-  await page.evaluate(() => window.dispatchEvent(new Event('pagehide')));
+-  await expect.poll(async()=> (await audioState()).state).toBe('suspended');
++  const audioState = () =>
++    page.evaluate(() => {
++      const o = (
++        window as unknown as {
++          audioObserved: { contexts: AudioContext[]; starts: number };
++        }
++      ).audioObserved;
++      return { state: o.contexts[0]?.state, starts: o.starts };
++    });
++  await challenge(page);
++  await page.getByRole("button", { name: "♪ 声音关", exact: true }).click();
++  await page.getByRole("button", { name: "选择材料 D", exact: true }).click();
++  const before = await audioState();
++  expect(before.state).toBe("running");
++  expect(before.starts).toBeGreaterThan(0);
++  await page.evaluate(() => window.dispatchEvent(new Event("pagehide")));
++  await expect.poll(async () => (await audioState()).state).toBe("suspended");
+   await page.waitForTimeout(250);
+   expect((await audioState()).starts).toBe(before.starts);
+-  await page.getByRole('button',{name:'继续这次冒险 →'}).click();
+-  await expect.poll(async()=> (await audioState()).state).toBe('running');
++  await page.getByRole("button", { name: "继续这次冒险 →" }).click();
++  await expect.poll(async () => (await audioState()).state).toBe("running");
+   expect((await audioState()).starts).toBe(before.starts);
+-  await page.getByRole('button',{name:'选择材料 E',exact:true}).click();
++  await page.getByRole("button", { name: "选择材料 E", exact: true }).click();
+   expect((await audioState()).starts).toBeGreaterThan(before.starts);
+ });
+ 
+-test('资源脚本加载失败时提供独立于主模块的重试入口', async ({ page }) => {
+-  await page.route('**/assets/*.js', route => route.abort('failed')); await page.goto('/');
+-  await expect(page.getByRole('button',{name:'重新加载',exact:true})).toBeVisible();
+-});
+-
+-test('仅开纸声也能解锁，后台回来保持纸声开且音符关', async ({ page }) => {
++test("资源脚本加载失败时提供独立于主模块的重试入口", async ({ page }) => {
++  await page.route("**/assets/*.js", (route) => route.abort("failed"));
++  await page.goto("/");
++  await expect(
++    page.getByRole("button", { name: "重新加载", exact: true }),
++  ).toBeVisible();
++});
++
++test("仅开纸声也能解锁，后台回来保持纸声开且音符关", async ({ page }) => {
+   await page.addInitScript(() => {
+-    const Native = window.AudioContext; const o = { contexts:[] as AudioContext[], pages:0 };
+-    (window as unknown as {paperObserved:typeof o}).paperObserved=o;
+-    window.AudioContext=class extends Native {
+-      constructor(...args:ConstructorParameters<typeof Native>){super(...args);o.contexts.push(this);}
+-      createBufferSource(){ const source=super.createBufferSource(); const start=source.start.bind(source);
+-        source.start=(...args:Parameters<typeof start>)=>{o.pages++;start(...args);};return source; }
++    const Native = window.AudioContext;
++    const o = { contexts: [] as AudioContext[], pages: 0 };
++    (window as unknown as { paperObserved: typeof o }).paperObserved = o;
++    window.AudioContext = class extends Native {
++      constructor(...args: ConstructorParameters<typeof Native>) {
++        super(...args);
++        o.contexts.push(this);
++      }
++      createBufferSource() {
++        const source = super.createBufferSource();
++        const start = source.start.bind(source);
++        source.start = (...args: Parameters<typeof start>) => {
++          o.pages++;
++          start(...args);
++        };
++        return source;
++      }
+     };
+   });
+-  await page.goto('/'); await page.getByRole('button',{name:'靠近机关',exact:true}).click();
+-  await page.getByRole('button',{name:'听听看 →',exact:true}).waitFor();
+-  await page.evaluate(()=>window.dispatchEvent(new Event('pagehide')));
+-  await page.getByRole('button',{name:'继续这次冒险 →'}).click();
+-  await expect(page.locator('#world')).toHaveAttribute('data-paused','false');
+-  const output=await page.evaluate(()=>{const o=(window as unknown as {paperObserved:{contexts:AudioContext[];pages:number}}).paperObserved;return{state:o.contexts[0]?.state,pages:o.pages};});
+-  expect(output.state).toBe('running');expect(output.pages).toBeGreaterThan(0);
+-  await expect(page.locator('#music')).toHaveAttribute('aria-pressed','false');
+-  await expect(page.locator('#paper')).toHaveAttribute('aria-pressed','true');
+-});
+-
+-test('迟到的音频解锁不覆盖无声选择或跳过示范，迟到的恢复不取消新的暂停', async ({ page }) => {
+-  await page.addInitScript(()=>{
+-    const resume=AudioContext.prototype.resume;
+-    AudioContext.prototype.resume=function(){return resume.call(this).then(()=>new Promise<void>(resolve=>setTimeout(resolve,500)));};
+-  });
+-  await page.goto('/'); await page.getByRole('button',{name:'靠近机关',exact:true}).click();
+-  await page.getByRole('button',{name:'听听看 →',exact:true}).click();
+-  await page.getByRole('button',{name:'无声继续',exact:true}).click();
++  await page.goto("/");
++  await page.getByRole("button", { name: "靠近机关", exact: true }).click();
++  await page.getByRole("button", { name: "听听看 →", exact: true }).waitFor();
++  await page.evaluate(() => window.dispatchEvent(new Event("pagehide")));
++  await page.getByRole("button", { name: "继续这次冒险 →" }).click();
++  await expect(page.locator("#world")).toHaveAttribute("data-paused", "false");
++  const output = await page.evaluate(() => {
++    const o = (
++      window as unknown as {
++        paperObserved: { contexts: AudioContext[]; pages: number };
++      }
++    ).paperObserved;
++    return { state: o.contexts[0]?.state, pages: o.pages };
++  });
++  expect(output.state).toBe("running");
++  expect(output.pages).toBeGreaterThan(0);
++  await expect(page.locator("#music")).toHaveAttribute("aria-pressed", "false");
++  await expect(page.locator("#paper")).toHaveAttribute("aria-pressed", "true");
++});
++
++test("迟到的音频解锁不覆盖无声选择或跳过示范，迟到的恢复不取消新的暂停", async ({
++  page,
++}) => {
++  await page.addInitScript(() => {
++    const resume = AudioContext.prototype.resume;
++    AudioContext.prototype.resume = function () {
++      return resume
++        .call(this)
++        .then(() => new Promise<void>((resolve) => setTimeout(resolve, 500)));
++    };
++  });
++  await page.goto("/");
++  await page.getByRole("button", { name: "靠近机关", exact: true }).click();
++  await page.getByRole("button", { name: "听听看 →", exact: true }).click();
++  await page.getByRole("button", { name: "无声继续", exact: true }).click();
+   await page.waitForTimeout(650);
+-  await expect(page.locator('#world')).toHaveAttribute('data-phase','demo');
+-  await expect(page.locator('#music')).toHaveAttribute('aria-pressed','false');
+-  await page.getByRole('button',{name:'♪ 声音关',exact:true}).click();
+-  await expect(page.locator('#music')).toHaveAttribute('aria-pressed','true');
+-  await page.evaluate(()=>window.dispatchEvent(new Event('pagehide')));
+-  await page.getByRole('button',{name:'继续这次冒险 →'}).click();
+-  await page.evaluate(()=>window.dispatchEvent(new Event('pagehide')));
++  await expect(page.locator("#world")).toHaveAttribute("data-phase", "demo");
++  await expect(page.locator("#music")).toHaveAttribute("aria-pressed", "false");
++  await page.getByRole("button", { name: "♪ 声音关", exact: true }).click();
++  await expect(page.locator("#music")).toHaveAttribute("aria-pressed", "true");
++  await page.evaluate(() => window.dispatchEvent(new Event("pagehide")));
++  await page.getByRole("button", { name: "继续这次冒险 →" }).click();
++  await page.evaluate(() => window.dispatchEvent(new Event("pagehide")));
+   await page.waitForTimeout(650);
+-  await expect(page.locator('#world')).toHaveAttribute('data-paused','true');
+-  await expect(page.getByRole('button',{name:'继续这次冒险 →'})).toBeVisible();
+-});
+-
+-test('触摸取消后键盘仍可操作，通关后回看不改变完成记录', async ({ page }) => {
+-  await page.emulateMedia({reducedMotion:'reduce'}); await challenge(page);
+-  const c=page.getByRole('button',{name:'选择材料 C',exact:true});
+-  await c.dispatchEvent('pointercancel'); await c.focus(); await c.press('Enter');
+-  await expect(c).toHaveAttribute('aria-pressed','true');
+-  await page.getByRole('button',{name:'将选中材料放入机关',exact:true}).click();
+-  await expect(page.locator('#world')).toHaveAttribute('data-phase','complete');
+-  await page.getByRole('button',{name:'回看',exact:true}).click();
+-  await page.getByRole('button',{name:'回到花园 →',exact:true}).click();
+-  await expect(page.locator('#world')).toHaveAttribute('data-assisted','false');
+-  await expect(page.locator('.completion')).toContainText('独立完成');
+-});
+-
+-test('真实输出信号包含 C D E 的独立音高，关闭声音后输出归零', async ({ page }) => {
++  await expect(page.locator("#world")).toHaveAttribute("data-paused", "true");
++  await expect(
++    page.getByRole("button", { name: "继续这次冒险 →" }),
++  ).toBeVisible();
++});
++
++test("真实输出信号包含 C D E 的独立音高，关闭声音后输出归零", async ({
++  page,
++}) => {
++  await installSoundMeter(page);
++  await page.emulateMedia({ reducedMotion: "reduce" });
++  await challenge(page);
++  await page.getByRole("button", { name: "♪ 声音关", exact: true }).click();
++  for (const [note, hz] of [
++    ["C", 261.63],
++    ["D", 293.66],
++    ["E", 329.63],
++  ] as const) {
++    await page.waitForTimeout(800);
++    await page
++      .getByRole("button", { name: `选择材料 ${note}`, exact: true })
++      .click();
++    await page.waitForTimeout(250);
++    const signal = await page.evaluate(() =>
++      (
++        window as unknown as {
++          sampleSound: () => { frequency: number; rms: number };
++        }
++      ).sampleSound(),
++    );
++    expect(signal.rms).toBeGreaterThan(0.005);
++    expect(Math.abs(signal.frequency - hz)).toBeLessThan(3);
++  }
++  await page.getByRole("button", { name: "♪ 声音开", exact: true }).click();
++  await page.getByRole("button", { name: "选择材料 C", exact: true }).click();
++  await page.waitForTimeout(900);
++  const silent = await page.evaluate(() =>
++    (window as unknown as { sampleSound: () => { rms: number } }).sampleSound(),
++  );
++  expect(silent.rms).toBeLessThan(0.00001);
++});
++
++test("错误序列可替换；播放中暂停后从头重播，不能提前开桥", async ({ page }) => {
++  await page.emulateMedia({ reducedMotion: "reduce" });
++  await challenge(page);
++  await sequence(page);
++  await page.getByRole("button", { name: "试运行 ♪" }).click();
++  await expect(page.locator("#feedback")).toContainText("填好圆槽");
++  for (const [i, id] of ["C", "D", "E"].entries()) await put(page, id, i);
++  await submit(page);
++  await expect(page.locator("#feedback")).toContainText("还没对上");
++  await expect(page.locator("#world")).toHaveAttribute("data-task", "c3");
++  await put(page, "E", 0);
++  await put(page, "C", 2);
++  await page.getByRole("button", { name: "试运行 ♪" }).click();
++  await expect(page.locator("#world")).toHaveAttribute("data-playing", "true");
++  await page.getByRole("button", { name: "回看", exact: true }).click();
++  await page.waitForTimeout(1000);
++  await expect(page.locator("#world")).toHaveAttribute(
++    "data-phase",
++    "challenge",
++  );
++  await page.getByRole("button", { name: "回到花园 →" }).click();
++  await expect(page.locator('[data-slot="0"]')).toHaveClass(/sounding/);
++  await expect(page.locator("#world")).toHaveAttribute(
++    "data-phase",
++    "complete",
++  );
++});
++
++test("结果区分重试与提示，回听不改记录；第二轮重复音和上一轮摘要", async ({
++  page,
++}) => {
++  test.setTimeout(60000);
++  await page.emulateMedia({ reducedMotion: "reduce" });
++  await challenge(page);
++  await put(page, "C");
++  await submit(page);
++  await complete(page);
++  await expect(page.locator(".attempt-list")).toContainText("重试后完成");
++  const original = await page.locator(".attempt-list").innerText();
++  await page.getByRole("button", { name: "回听我的组合 ♪" }).click();
++  await expect(page.locator('[data-result-slot="0"]')).toHaveClass(/sounding/);
++  await page.getByRole("button", { name: "回看", exact: true }).click();
++  await page.getByRole("button", { name: "回到花园 →" }).click();
++  await expect(page.locator(".attempt-list")).toHaveText(original, { useInnerText: true });
++  await page.getByRole("button", { name: "再玩一次 ↻" }).click();
++  await page.getByText("上一轮记录", { exact: true }).click();
++  await expect(page.locator(".previous")).toContainText("重试后完成");
++  await challenge(page, false);
++  await page.getByRole("button", { name: "回看", exact: true }).click();
++  await page.getByRole("button", { name: "回到花园 →" }).click();
++  await complete(page);
++  await expect(page.locator(".result-sequence")).toHaveText("CdoEmiCdo");
++  await expect(page.locator(".attempt-list").first()).toContainText(
++    "借助提示完成",
++  );
++  await expect(page.locator(".attempt-list").first()).not.toContainText(
++    "重试后完成",
++  );
++  await page.getByRole("button", { name: "回听我的组合 ♪" }).click();
++  await expect(page.locator('[data-result-slot="0"]')).toHaveClass(/sounding/);
++  await expect(page.locator('[data-result-slot="1"]')).toHaveClass(/sounding/);
++  await expect(page.locator('[data-result-slot="2"]')).toHaveClass(/sounding/);
++  await expect(page.locator("#world")).toHaveAttribute(
++    "data-phase",
++    "complete",
++  );
++});
++
++async function installSoundMeter(page:Page) {
+   await page.addInitScript(() => {
+     const Native = window.AudioContext;
+     const meters = new Map<AudioContext, AnalyserNode>();
+     const connect = AudioNode.prototype.connect;
+-    AudioNode.prototype.connect = function(this:AudioNode, ...args: unknown[]) {
++    AudioNode.prototype.connect = function (
++      this: AudioNode,
++      ...args: unknown[]
++    ) {
+       const meter = meters.get(this.context as AudioContext);
+-      if (meter && this !== meter && args[0] === this.context.destination) args[0] = meter;
++      if (meter && this !== meter && args[0] === this.context.destination)
++        args[0] = meter;
+       return Reflect.apply(connect, this, args);
+     } as typeof connect;
+     window.AudioContext = class extends Native {
+-      constructor(...args:ConstructorParameters<typeof Native>) {
++      constructor(...args: ConstructorParameters<typeof Native>) {
+         super(...args);
+-        const meter=this.createAnalyser(); meter.fftSize=32768; meter.smoothingTimeConstant=0;
+-        meter.connect(this.destination); meters.set(this,meter);
+-        (window as unknown as { sampleSound:()=>{frequency:number;rms:number} }).sampleSound=()=>{
+-          const spectrum=new Float32Array(meter.frequencyBinCount); meter.getFloatFrequencyData(spectrum);
+-          const wave=new Float32Array(meter.fftSize); meter.getFloatTimeDomainData(wave);
+-          let peak=0,level=-Infinity;
+-          for(let i=1;i<spectrum.length;i++) {
+-            const hz=i*this.sampleRate/meter.fftSize;
+-            if(hz>=200 && hz<=400 && spectrum[i]>level){peak=hz;level=spectrum[i];}
++        const meter = this.createAnalyser();
++        meter.fftSize = 32768;
++        meter.smoothingTimeConstant = 0;
++        meter.connect(this.destination);
++        meters.set(this, meter);
++        (
++          window as unknown as {
++            sampleSound: () => { frequency: number; rms: number };
+           }
+-          return {frequency:peak,rms:Math.sqrt(wave.reduce((sum,v)=>sum+v*v,0)/wave.length)};
++        ).sampleSound = () => {
++          const spectrum = new Float32Array(meter.frequencyBinCount);
++          meter.getFloatFrequencyData(spectrum);
++          const wave = new Float32Array(meter.fftSize);
++          meter.getFloatTimeDomainData(wave);
++          let peak = 0,
++            level = -Infinity;
++          for (let i = 1; i < spectrum.length; i++) {
++            const hz = (i * this.sampleRate) / meter.fftSize;
++            if (hz >= 200 && hz <= 400 && spectrum[i] > level) {
++              peak = hz;
++              level = spectrum[i];
++            }
++          }
++          return {
++            frequency: peak,
++            rms: Math.sqrt(
++              wave.reduce((sum, v) => sum + v * v, 0) / wave.length,
++            ),
++          };
+         };
+       }
+     };
+   });
+-  await page.emulateMedia({reducedMotion:'reduce'}); await challenge(page);
++}
++
++
++test('三音提交实际输出与槽位一致，含错误组合与重复音回听',async({page})=>{
++  test.setTimeout(90000);await installSoundMeter(page);
++  await page.emulateMedia({reducedMotion:'reduce'});await challenge(page);await sequence(page);
+   await page.getByRole('button',{name:'♪ 声音关',exact:true}).click();
+-  for (const [note,hz] of [['C',261.63],['D',293.66],['E',329.63]] as const) {
+-    await page.waitForTimeout(800);
+-    await page.getByRole('button',{name:`选择材料 ${note}`,exact:true}).click();
+-    await page.waitForTimeout(250);
+-    const signal=await page.evaluate(()=>(window as unknown as {sampleSound:()=>{frequency:number;rms:number}}).sampleSound());
+-    expect(signal.rms).toBeGreaterThan(0.005);
+-    expect(Math.abs(signal.frequency-hz)).toBeLessThan(3);
++  async function listenToSlots(frequencies:number[],result=false) {
++    for(const [i,hz] of frequencies.entries()) {
++      const slot=page.locator(result?`[data-result-slot="${i}"]`:`[data-slot="${i}"]`);
++      await expect(slot).toHaveClass(/sounding/);
++      // FFT窗口包含起音与前一音的尾部；在本槽仍发声时等到有效谱峰，不能用下一槽凑通过。
++      await expect.poll(async()=>{
++        const active=await slot.evaluate(el=>el.classList.contains('sounding'));
++        const sample=await page.evaluate(()=>(window as unknown as {sampleSound:()=>{frequency:number;rms:number}}).sampleSound());
++        return active && sample.rms>.005 && Math.abs(sample.frequency-hz)<3;
++      },{timeout:600,intervals:[30],message:`槽位${i+1}应实际发出${hz}Hz且保持可闻输出`}).toBe(true);
++    }
+   }
+-  await page.getByRole('button',{name:'♪ 声音开',exact:true}).click();
+-  await page.getByRole('button',{name:'选择材料 C',exact:true}).click();
+-  await page.waitForTimeout(900);
+-  const silent=await page.evaluate(()=>(window as unknown as {sampleSound:()=>{rms:number}}).sampleSound());
+-  expect(silent.rms).toBeLessThan(0.00001);
+-});
++  for(const [i,id] of ['C','D','E'].entries())await put(page,id,i);
++  await page.getByRole('button',{name:'试运行 ♪'}).click();
++  await listenToSlots([261.63,293.66,329.63]);
++  await expect(page.locator('#feedback')).toContainText('还没对上');
++  for(const [i,id] of ['E','D','C'].entries())await put(page,id,i);
++  await page.getByRole('button',{name:'试运行 ♪'}).click();
++  await listenToSlots([329.63,293.66,261.63]);
++  await expect(page.locator('#world')).toHaveAttribute('data-phase','complete');
++  await page.getByRole('button',{name:'回听我的组合 ♪'}).click();
++  await listenToSlots([329.63,293.66,261.63],true);
++  await page.getByRole('button',{name:'再玩一次 ↻'}).click();await challenge(page,false);await sequence(page);
++  await page.getByRole('button',{name:'♪ 声音关',exact:true}).click();
++  for(const [i,id] of ['C','E','C'].entries())await put(page,id,i);
++  await page.getByRole('button',{name:'试运行 ♪'}).click();await listenToSlots([261.63,329.63,261.63]);
++  await expect(page.locator('#world')).toHaveAttribute('data-phase','complete');
++  await page.getByRole('button',{name:'回听我的组合 ♪'}).click();await listenToSlots([261.63,329.63,261.63],true);
++});
+--- a/app/tests/game.test.ts
++++ b/app/tests/game.test.ts
+@@ -1,111 +1,189 @@
+-import { test } from 'node:test';
+-import assert from 'node:assert/strict';
+-import { createGame, act } from '../src/game.ts';
+-
+-test('玩家先靠近机关，才能读说明并亲手练习；错误材料不开桥', () => {
+-  let game = createGame();
+-  game = act(game, { type: 'approach' });
+-  game = act(game, { type: 'arrived', run: game.run });
+-  game = act(game, { type: 'next' });
+-  game = act(game, { type: 'next' });
+-  assert.equal(game.phase, 'practice');
+-  game = act(game, { type: 'select', id: 'D' });
+-  game = act(game, { type: 'submit' });
+-  assert.equal(game.phase, 'practice');
+-  assert.equal(game.result, 'wrong');
+-  assert.equal(game.practiceDone, false);
+-});
++import { test } from "node:test";
++import assert from "node:assert/strict";
++import { createGame, act } from "../src/game.ts";
++import type { Game } from "../src/game.ts";
+ 
+ function practice() {
+   let g = createGame();
+-  for (const a of [{ type: 'approach' }, { type: 'arrived', run: 1 }, { type: 'next' }, { type: 'next' }] as const) g = act(g, a);
+-  return g;
++  g = act(g, { type: "approach" });
++  g = act(g, { type: "arrived", run: g.run });
++  g = act(g, { type: "next" });
++  return act(g, { type: "next" });
++}
++function answer(g: Game, ids: ("C" | "D" | "E")[]) {
++  ids.forEach((id, index) => {
++    g = act(g, { type: "select", id });
++    g = act(g, { type: "place", index });
++  });
++  return act(g, { type: "submit" });
++}
++function finish(g: Game) {
++  return act(g, {
++    type: "playbackFinished",
++    run: g.run,
++    taskId: g.submission!.taskId,
++    submissionId: g.submission!.id,
++  });
+ }
+ function challenge() {
+   let g = practice();
+-  g = act(g, { type: 'select', id: 'C' });
+-  g = act(g, { type: 'submit' });
+-  g = act(g, { type: 'enterChallenge' });
++  for (const id of ["C", "D", "E"] as const) {
++    g = finish(answer(g, [id]));
++    g = act(g, { type: "continue" });
++  }
+   return g;
+ }
+-test('练习正确后直接进入挑战并清空选择；桥打开后才让角色通过', () => {
++test("三个引导关系完成后才能收起教学；撤表后根据re选择D", () => {
+   let g = practice();
+-  assert.equal(act(g, { type: 'enterChallenge' }).phase, 'practice');
+-  g = act(g, { type: 'select', id: 'C' });
+-  g = act(g, { type: 'submit' });
+-  g = act(g, { type: 'enterChallenge' });
+-  assert.equal(g.phase, 'challenge');
+-  assert.equal(g.selected, null);
+-  assert.equal(g.result, null);
+-  assert.equal(act(g, { type: 'submit' }).result, 'empty');
+-  g = act(g, { type: 'select', id: 'D' });
+-  g = act(g, { type: 'submit' });
+-  assert.equal(g.phase, 'challenge');
+-  g = act(g, { type: 'select', id: 'C' });
+-  g = act(g, { type: 'submit' });
+-  assert.equal(g.phase, 'bridge');
+-  assert.equal(act(g, { type: 'exitReached', run: g.run }).phase, 'bridge');
+-  assert.deepEqual(act(g, { type: 'submit' }), g);
+-  g = act(g, { type: 'bridgeReady', run: g.run });
+-  assert.equal(g.phase, 'crossing');
+-  g = act(g, { type: 'exitReached', run: g.run });
+-  assert.equal(g.phase, 'complete');
++  assert.equal(act(g, { type: "continue" }).phase, "practice");
++  g = finish(answer(g, ["C"]));
++  g = act(g, { type: "continue" });
++  assert.equal(g.phase, "practice");
++  assert.equal(g.taskIndex, 1);
++  g = finish(answer(g, ["D"]));
++  g = act(g, { type: "continue" });
++  g = finish(answer(g, ["E"]));
++  g = act(g, { type: "continue" });
++  assert.equal(g.phase, "challenge");
++  assert.deepEqual(g.slots, [null]);
++  g = answer(g, ["D"]);
++  assert.equal(g.result, "right");
++  assert.equal(g.phase, "challenge");
++  g = finish(g);
++  assert.equal(g.phase, "challenge");
+ });
+ 
+-test('帮助/竖屏/后台互不覆盖；关闭帮助保留选择并标记辅助', () => {
+-  let g = act(challenge(), { type: 'select', id: 'D' });
+-  g = act(g, { type: 'help', open: true });
+-  g = act(g, { type: 'portrait', value: true });
+-  g = act(g, { type: 'suspend' });
+-  assert.equal(act(g, { type: 'submit' }).result, null);
+-  g = act(g, { type: 'resume' });
+-  assert.equal(g.suspended, true);
+-  g = act(g, { type: 'portrait', value: false });
+-  g = act(g, { type: 'resume' });
++test("空提交不算错；首答保留，正确提交后播放中求助不追改记录", () => {
++  let g = challenge();
++  g = act(g, { type: "submit" });
++  assert.equal(g.result, "empty");
++  assert.equal(g.records.c1, undefined);
++  g = answer(g, ["C"]);
++  const first = g.records.c1!.firstSubmission;
++  assert.deepEqual(first, { answer: ["C"], correct: false, helped: false });
++  assert.deepEqual(act(g, { type: "submit" }), g);
++  g = finish(g);
++  g = answer(g, ["D"]);
++  g = act(g, { type: "help", open: true });
++  assert.equal(g.records.c1!.helpUsed, false);
++  assert.deepEqual(g.records.c1!.firstSubmission, first);
++  assert.equal(g.records.c1!.wrongCount, 1);
++  assert.equal(g.records.c1!.submissionCount, 2);
++});
++test("回看保留选择与槽位，暂停和过期播放不能推进", () => {
++  let g = answer(challenge(), ["D"]);
++  const original = g;
++  g = act(g, { type: "help", open: true });
++  g = act(g, { type: "portrait", value: true });
++  g = act(g, { type: "suspend" });
++  assert.deepEqual(finish(g), g);
++  assert.equal(act(g, { type: "resume" }).suspended, true);
++  g = act(g, { type: "portrait", value: false });
++  g = act(g, { type: "resume" });
+   assert.equal(g.help, true);
+-  assert.equal(act(g, { type: 'select', id: 'C' }).selected, 'D');
+-  g = act(g, { type: 'help', open: false });
+-  assert.equal(g.selected, 'D');
+-  assert.equal(g.helpUsed, true);
+-  assert.equal(act(g, { type: 'submit' }).result, 'wrong');
++  g = act(g, { type: "help", open: false });
++  assert.deepEqual(g.slots, ["D"]);
++  assert.deepEqual(
++    act(g, {
++      type: "playbackFinished",
++      run: 0,
++      taskId: "c1",
++      submissionId: g.submission!.id,
++    }),
++    g,
++  );
++  assert.equal(finish(g).phase, "challenge");
++  assert.equal(original.help, false);
+ });
+ 
+-test('完整复玩使旧动画回调失效，清除提示记录；暂停时动画不能推进', () => {
+-  let g = challenge();
+-  g = act(g, { type: 'select', id: 'C' });
+-  g = act(g, { type: 'submit' });
+-  g = act(g, { type: 'suspend' });
+-  assert.equal(act(g, { type: 'bridgeReady', run: 1 }).phase, 'bridge');
+-  g = act(g, { type: 'resume' });
+-  g = act(g, { type: 'bridgeReady', run: 1 });
+-  g = act(g, { type: 'exitReached', run: 1 });
+-  g = act(g, { type: 'replay' });
+-  assert.equal(g.phase, 'arrival');
+-  assert.equal(g.run, 2);
+-  assert.equal(g.helpUsed, false);
+-  g = act(g, { type: 'approach' });
+-  assert.equal(act(g, { type: 'arrived', run: 1 }).phase, 'approach');
+-  assert.equal(act(g, { type: 'arrived', run: 2 }).phase, 'intro');
++test("两道单音不提前开桥；三槽顺序错误可修正，最终播放完成才通行", () => {
++  let g = finish(answer(challenge(), ["D"]));
++  assert.equal(g.phase, "challenge");
++  g = act(g, { type: "continue" });
++  assert.equal(g.taskIndex, 1);
++  g = finish(answer(g, ["E"]));
++  g = act(g, { type: "continue" });
++  assert.deepEqual(g.slots, [null, null, null]);
++  g = answer(g, ["C", "D", "E"]);
++  assert.equal(g.result, "wrong");
++  g = finish(g);
++  assert.equal(g.phase, "challenge");
++  g = answer(g, ["E", "D", "C"]);
++  assert.equal(g.result, "right");
++  assert.equal(g.phase, "challenge");
++  assert.equal(g.records.c3!.submissionCount, 2);
++  g = finish(g);
++  assert.equal(g.phase, "bridge");
+ });
+ 
+-test('未选材料不提交，同一材料再点取消，失败可直接替换', () => {
+-  let g = challenge();
+-  assert.equal(act(g, { type: 'submit' }).result, 'empty');
+-  g = act(g, { type: 'select', id: 'D' });
+-  g = act(g, { type: 'select', id: 'D' });
+-  assert.equal(g.selected, null);
+-  g = act(g, { type: 'select', id: 'E' });
+-  g = act(g, { type: 'submit' });
+-  assert.equal(g.result, 'wrong');
+-  g = act(g, { type: 'select', id: 'C' });
+-  assert.equal(g.selected, 'C');
+-  assert.equal(act(g, { type: 'submit' }).phase, 'bridge');
++test("更换题目使旧提交失效；空槽不计错，帮助与首答逐题独立", () => {
++  let g = answer(challenge(), ["D"]);
++  const old = g.submission!;
++  g = finish(g);
++  g = act(g, { type: "continue" });
++  assert.deepEqual(
++    act(g, {
++      type: "playbackFinished",
++      run: g.run,
++      taskId: old.taskId,
++      submissionId: old.id,
++    }),
++    g,
++  );
++  g = act(g, { type: "help", open: true });
++  g = act(g, { type: "help", open: false });
++  assert.equal(g.records.c1!.helpUsed, false);
++  g = finish(answer(g, ["E"]));
++  assert.equal(g.records.c2!.firstSubmission!.helped, true);
++  g = act(g, { type: "continue" });
++  g = act(g, { type: "select", id: "C" });
++  g = act(g, { type: "place", index: 0 });
++  g = act(g, { type: "place", index: 2 });
++  assert.deepEqual(g.slots, ["C", null, "C"]);
++  g = act(g, { type: "submit" });
++  assert.equal(g.result, "empty");
++  assert.equal(g.records.c3, undefined);
++  assert.deepEqual(act(g, { type: "place", index: 4 }), g);
+ });
+ 
+-test('通关之后回看说明不追溯修改独立完成记录', () => {
+-  let g=challenge();
+-  g=act(g,{type:'select',id:'C'}); g=act(g,{type:'submit'});
+-  g=act(g,{type:'bridgeReady',run:g.run}); g=act(g,{type:'exitReached',run:g.run});
+-  g=act(g,{type:'help',open:true});
+-  assert.equal(g.helpUsed,false);
++test("完成摘要区分首答、重试与帮助；新run保留上一轮且重复音可通过", () => {
++  let g = challenge();
++  g = finish(answer(g, ["C"]));
++  g = finish(answer(g, ["D"]));
++  g = act(g, { type: "continue" });
++  g = act(g, { type: "help", open: true });
++  g = act(g, { type: "help", open: false });
++  g = finish(answer(g, ["E"]));
++  g = act(g, { type: "continue" });
++  g = finish(answer(g, ["E", "D", "C"]));
++  g = act(g, { type: "bridgeReady", run: g.run });
++  g = act(g, { type: "exitReached", run: g.run });
++  g = act(g, { type: "replay" });
++  assert.equal(g.run, 2);
++  assert.deepEqual(
++    g.lastResult?.attempts.map((a) => a.kind),
++    ["retry", "help", "first"],
++  );
++  assert.deepEqual(g.lastResult?.sequence, ["E", "D", "C"]);
++  assert.deepEqual(g.records, {});
++  g = act(g, { type: "approach" });
++  g = act(g, { type: "arrived", run: 2 });
++  g = act(g, { type: "next" });
++  g = act(g, { type: "next" });
++  for (const id of ["C", "D", "E"] as const) {
++    g = finish(answer(g, [id]));
++    g = act(g, { type: "continue" });
++  }
++  g = finish(answer(g, ["E"]));
++  g = act(g, { type: "continue" });
++  g = finish(answer(g, ["D"]));
++  g = act(g, { type: "continue" });
++  g = answer(g, ["C", "E", "C"]);
++  assert.equal(g.result, "right");
++  assert.equal(g.records.c3!.firstSubmission!.helped, false);
++  assert.equal(finish(g).phase, "bridge");
++  assert.deepEqual(
++    g.lastResult?.attempts.map((a) => a.kind),
++    ["retry", "help", "first"],
++  );
+ });

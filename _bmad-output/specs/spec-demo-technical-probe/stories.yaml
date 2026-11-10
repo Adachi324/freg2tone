@@ -1,0 +1,16 @@
+- id: "1"
+  title: 可运行的单场景音乐机关技术样本
+  description: >-
+    实现 SPEC.md 的 CAP-1 至 CAP-4，从平面说明与亲手练习进入真实 3D 挑战，以声音、机关和角色反馈完成体验。
+    按 acceptance.md 执行规则与浏览器检查，交付真机体验入口并单列待用户验证项。
+  spec_checkpoint: false
+  done_checkpoint: true
+  invoke_dev_with: >-
+    用户授权开发细节全权把控，避免过度设计；只做当前探针，一个前端应用，无后端、通用关卡引擎或编辑器。
+    保留真实 3D 与可修改的手绘样本，不能用整图切换代替空间反馈。
+- id: "2"
+  title: 让教学与挑战发生在同一个立体花园
+  description: 用户确认取消固定的维度切换；保持立体场景，以纸面教学和精简任务提示衔接练习与挑战。
+  spec_checkpoint: false
+  done_checkpoint: true
+  invoke_dev_with: 沿用单场景，删除不需要的转场分支，不增加依赖或通用系统。

@@ -1,0 +1,293 @@
+{
+  "installed_at": "2026-09-17T09:05:24.460730+00:00",
+  "project": "/Users/yichen_yang/projects/mg_ground",
+  "bmad": {
+    "package": "bmad-method",
+    "version": "6.12.0",
+    "reference_tag_commit": "05bfbd46d00766ec88eb9b42e76be2c575d64d7b",
+    "scope": "project",
+    "skill_root": "/Users/yichen_yang/projects/mg_ground/.agents/skills",
+    "count": 29
+  },
+  "matt": {
+    "repo": "mattpocock/skills",
+    "commit": "959a8e9f1edc3adbe2f7e3054bb6fbefa6696260",
+    "backup": "/Users/yichen_yang/.codex/skill-backups/bmad-matt-20260917-170306",
+    "skills": [
+      {
+        "skill": "code-review",
+        "action": "unchanged"
+      },
+      {
+        "skill": "codebase-design",
+        "action": "unchanged"
+      },
+      {
+        "skill": "diagnosing-bugs",
+        "action": "unchanged"
+      },
+      {
+        "skill": "domain-modeling",
+        "action": "installed"
+      },
+      {
+        "skill": "grill-me",
+        "action": "updated"
+      },
+      {
+        "skill": "grill-with-docs",
+        "action": "installed"
+      },
+      {
+        "skill": "grilling",
+        "action": "installed"
+      },
+      {
+        "skill": "tdd",
+        "action": "installed"
+      }
+    ]
+  },
+  "verification": {
+    "codex_skills_list": {
+      "matched": 37,
+      "errors": [],
+      "selected_skills": [
+        {
+          "name": "bmad-advanced-elicitation",
+          "path": "/Users/yichen_yang/projects/mg_ground/.agents/skills/bmad-advanced-elicitation/SKILL.md",
+          "scope": "repo",
+          "enabled": true
+        },
+        {
+          "name": "bmad-agent-analyst",
+          "path": "/Users/yichen_yang/projects/mg_ground/.agents/skills/bmad-agent-analyst/SKILL.md",
+          "scope": "repo",
+          "enabled": true
+        },
+        {
+          "name": "bmad-agent-architect",
+          "path": "/Users/yichen_yang/projects/mg_ground/.agents/skills/bmad-agent-architect/SKILL.md",
+          "scope": "repo",
+          "enabled": true
+        },
+        {
+          "name": "bmad-agent-dev",
+          "path": "/Users/yichen_yang/projects/mg_ground/.agents/skills/bmad-agent-dev/SKILL.md",
+          "scope": "repo",
+          "enabled": true
+        },
+        {
+          "name": "bmad-agent-pm",
+          "path": "/Users/yichen_yang/projects/mg_ground/.agents/skills/bmad-agent-pm/SKILL.md",
+          "scope": "repo",
+          "enabled": true
+        },
+        {
+          "name": "bmad-agent-ux-designer",
+          "path": "/Users/yichen_yang/projects/mg_ground/.agents/skills/bmad-agent-ux-designer/SKILL.md",
+          "scope": "repo",
+          "enabled": true
+        },
+        {
+          "name": "bmad-architecture",
+          "path": "/Users/yichen_yang/projects/mg_ground/.agents/skills/bmad-architecture/SKILL.md",
+          "scope": "repo",
+          "enabled": true
+        },
+        {
+          "name": "bmad-brainstorming",
+          "path": "/Users/yichen_yang/projects/mg_ground/.agents/skills/bmad-brainstorming/SKILL.md",
+          "scope": "repo",
+          "enabled": true
+        },
+        {
+          "name": "bmad-build",
+          "path": "/Users/yichen_yang/projects/mg_ground/.agents/skills/bmad-build/SKILL.md",
+          "scope": "repo",
+          "enabled": true
+        },
+        {
+          "name": "bmad-build-auto",
+          "path": "/Users/yichen_yang/projects/mg_ground/.agents/skills/bmad-build-auto/SKILL.md",
+          "scope": "repo",
+          "enabled": true
+        },
+        {
+          "name": "bmad-code-review",
+          "path": "/Users/yichen_yang/projects/mg_ground/.agents/skills/bmad-code-review/SKILL.md",
+          "scope": "repo",
+          "enabled": true
+        },
+        {
+          "name": "bmad-correct-course",
+          "path": "/Users/yichen_yang/projects/mg_ground/.agents/skills/bmad-correct-course/SKILL.md",
+          "scope": "repo",
+          "enabled": true
+        },
+        {
+          "name": "bmad-create-epics-and-stories",
+          "path": "/Users/yichen_yang/projects/mg_ground/.agents/skills/bmad-create-epics-and-stories/SKILL.md",
+          "scope": "repo",
+          "enabled": true
+        },
+        {
+          "name": "bmad-customize",
+          "path": "/Users/yichen_yang/projects/mg_ground/.agents/skills/bmad-customize/SKILL.md",
+          "scope": "repo",
+          "enabled": true
+        },
+        {
+          "name": "bmad-deep-recon",
+          "path": "/Users/yichen_yang/projects/mg_ground/.agents/skills/bmad-deep-recon/SKILL.md",
+          "scope": "repo",
+          "enabled": true
+        },
+        {
+          "name": "bmad-forge-idea",
+          "path": "/Users/yichen_yang/projects/mg_ground/.agents/skills/bmad-forge-idea/SKILL.md",
+          "scope": "repo",
+          "enabled": true
+        },
+        {
+          "name": "bmad-help",
+          "path": "/Users/yichen_yang/projects/mg_ground/.agents/skills/bmad-help/SKILL.md",
+          "scope": "repo",
+          "enabled": true
+        },
+        {
+          "name": "bmad-party-mode",
+          "path": "/Users/yichen_yang/projects/mg_ground/.agents/skills/bmad-party-mode/SKILL.md",
+          "scope": "repo",
+          "enabled": true
+        },
+        {
+          "name": "bmad-prd",
+          "path": "/Users/yichen_yang/projects/mg_ground/.agents/skills/bmad-prd/SKILL.md",
+          "scope": "repo",
+          "enabled": true
+        },
+        {
+          "name": "bmad-prfaq",
+          "path": "/Users/yichen_yang/projects/mg_ground/.agents/skills/bmad-prfaq/SKILL.md",
+          "scope": "repo",
+          "enabled": true
+        },
+        {
+          "name": "bmad-product-brief",
+          "path": "/Users/yichen_yang/projects/mg_ground/.agents/skills/bmad-product-brief/SKILL.md",
+          "scope": "repo",
+          "enabled": true
+        },
+        {
+          "name": "bmad-project-context",
+          "path": "/Users/yichen_yang/projects/mg_ground/.agents/skills/bmad-project-context/SKILL.md",
+          "scope": "repo",
+          "enabled": true
+        },
+        {
+          "name": "bmad-qa-generate-e2e-tests",
+          "path": "/Users/yichen_yang/projects/mg_ground/.agents/skills/bmad-qa-generate-e2e-tests/SKILL.md",
+          "scope": "repo",
+          "enabled": true
+        },
+        {
+          "name": "bmad-retrospective",
+          "path": "/Users/yichen_yang/projects/mg_ground/.agents/skills/bmad-retrospective/SKILL.md",
+          "scope": "repo",
+          "enabled": true
+        },
+        {
+          "name": "bmad-review",
+          "path": "/Users/yichen_yang/projects/mg_ground/.agents/skills/bmad-review/SKILL.md",
+          "scope": "repo",
+          "enabled": true
+        },
+        {
+          "name": "bmad-spec",
+          "path": "/Users/yichen_yang/projects/mg_ground/.agents/skills/bmad-spec/SKILL.md",
+          "scope": "repo",
+          "enabled": true
+        },
+        {
+          "name": "bmad-sprint-planning",
+          "path": "/Users/yichen_yang/projects/mg_ground/.agents/skills/bmad-sprint-planning/SKILL.md",
+          "scope": "repo",
+          "enabled": true
+        },
+        {
+          "name": "bmad-ux",
+          "path": "/Users/yichen_yang/projects/mg_ground/.agents/skills/bmad-ux/SKILL.md",
+          "scope": "repo",
+          "enabled": true
+        },
+        {
+          "name": "bmad-walkthrough",
+          "path": "/Users/yichen_yang/projects/mg_ground/.agents/skills/bmad-walkthrough/SKILL.md",
+          "scope": "repo",
+          "enabled": true
+        },
+        {
+          "name": "code-review",
+          "path": "/Users/yichen_yang/.codex/skills/code-review/SKILL.md",
+          "scope": "user",
+          "enabled": true
+        },
+        {
+          "name": "codebase-design",
+          "path": "/Users/yichen_yang/.codex/skills/codebase-design/SKILL.md",
+          "scope": "user",
+          "enabled": true
+        },
+        {
+          "name": "diagnosing-bugs",
+          "path": "/Users/yichen_yang/.codex/skills/diagnosing-bugs/SKILL.md",
+          "scope": "user",
+          "enabled": true
+        },
+        {
+          "name": "domain-modeling",
+          "path": "/Users/yichen_yang/.codex/skills/domain-modeling/SKILL.md",
+          "scope": "user",
+          "enabled": true
+        },
+        {
+          "name": "grill-me",
+          "path": "/Users/yichen_yang/.codex/skills/grill-me/SKILL.md",
+          "scope": "user",
+          "enabled": true
+        },
+        {
+          "name": "grill-with-docs",
+          "path": "/Users/yichen_yang/.codex/skills/grill-with-docs/SKILL.md",
+          "scope": "user",
+          "enabled": true
+        },
+        {
+          "name": "grilling",
+          "path": "/Users/yichen_yang/.codex/skills/grilling/SKILL.md",
+          "scope": "user",
+          "enabled": true
+        },
+        {
+          "name": "tdd",
+          "path": "/Users/yichen_yang/.codex/skills/tdd/SKILL.md",
+          "scope": "user",
+          "enabled": true
+        }
+      ]
+    },
+    "matt_source_byte_comparison": "passed",
+    "bmad_build_render": "passed",
+    "bmad_review_customization": "passed",
+    "bmad_brainstorm_customization": "passed",
+    "language": "简体中文"
+  },
+  "adaptations": [
+    "AGENTS.md",
+    "docs/agents/workflow.md",
+    "_bmad/custom/bmad-build.toml",
+    "_bmad/custom/bmad-code-review.toml"
+  ],
+  "status": "Skills installed and discovery/configuration verified; product work and deployment not started."
+}
