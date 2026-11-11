@@ -1,0 +1,5 @@
+stories:
+  - id: '1'
+    title: 音频与按钮可靠性审查修复
+    status: done
+    file: SPEC.md

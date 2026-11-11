@@ -28,6 +28,22 @@ jobs:
         working-directory: app
         env:
           DEPLOY_BASE: /music/
+      - name: Install browser for interaction regression
+        working-directory: app
+        run: npx playwright install --with-deps chromium
+      - name: Verify audio and button interactions
+        working-directory: app
+        run: |
+          npm run preview > /tmp/fret-preview.log 2>&1 &
+          PREVIEW_PID=$!
+          trap 'kill "$PREVIEW_PID" || true' EXIT
+          for attempt in $(seq 1 30); do
+            if curl -fsS http://127.0.0.1:8877/lesson-1/ > /dev/null; then break; fi
+            sleep 1
+          done
+          node tests/audio-interaction-browser.mjs
+          node tests/explore-feedback-browser.mjs
+          node tests/lesson-browser.mjs
       - uses: actions/upload-artifact@v4
         with:
           name: site

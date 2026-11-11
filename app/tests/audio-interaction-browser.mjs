@@ -1,0 +1,12 @@
+import {chromium} from '@playwright/test';
+import assert from 'node:assert/strict';
+const browser=await chromium.launch({headless:true,...(process.env.PLAYWRIGHT_EXECUTABLE_PATH?{executablePath:process.env.PLAYWRIGHT_EXECUTABLE_PATH}:{})});
+const p=await browser.newPage();const errors=[];p.on('pageerror',e=>errors.push(e.message));
+await p.addInitScript(()=>{const original=AudioContext.prototype.resume;let first=true;AudioContext.prototype.resume=function(){if(first){first=false;return new Promise(()=>{});}return original.call(this);};window.starts=[];const start=OscillatorNode.prototype.start;OscillatorNode.prototype.start=function(t){window.starts.push(this.frequency.value);return start.call(this,t);};});
+await p.goto('http://127.0.0.1:8877/lesson-1/');await p.getByRole('button',{name:'02 看与听'}).click();await p.getByRole('button',{name:'播放示范',exact:true}).click();await p.getByText('声音未能启动或播放被中断，请再次点击重试。',{exact:true}).waitFor();
+await p.getByRole('button',{name:'播放示范',exact:true}).click();await p.getByText('正在播放…再次点击可重新播放或切换。',{exact:true}).waitFor();
+await p.locator('summary').click();await p.getByRole('button',{name:'1弦12品',exact:true}).click();await p.waitForTimeout(100);assert.ok((await p.evaluate(()=>window.starts)).some(f=>Math.abs(f-659.255)<.1));
+await p.getByRole('button',{name:'将所选音设为试听起音'}).click();await p.getByText('已选 1 弦 12 品 · E5',{exact:true}).waitFor();
+await p.getByRole('button',{name:'05 独立听觉'}).click();await p.getByRole('button',{name:'听参考音程'}).click();await p.getByRole('button',{name:'1弦7品',exact:true}).click();await p.waitForTimeout(1800);await p.getByRole('button',{name:'提交答案',exact:true}).click();await p.getByText('请先完整听一次参考音程，再提交。').waitFor();
+await p.getByRole('button',{name:'听参考音程'}).click();await p.getByText('播放完成，可以重听。',{exact:true}).waitFor();await p.getByRole('button',{name:'提交答案',exact:true}).click();await p.getByText('本题记为独立首答完成。',{exact:false}).waitFor();
+assert.deepEqual(errors,[]);console.log('PASS resume timeout/retry, rapid replacement, click-to-listen, selection feedback, interrupted reference gate, completed reference');await browser.close();

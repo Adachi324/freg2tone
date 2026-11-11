@@ -34,7 +34,7 @@ export function initWiki() {
   });
   renderArticle();
 }
-export function initPanel(applyPreset) {
+export function initPanel() {
   const panel = document.querySelector('#knowledge'), picker = document.querySelector('#article-select');
   let opener;
   const wide = matchMedia('(min-width:1200px)');
@@ -43,10 +43,6 @@ export function initPanel(applyPreset) {
     const article = articleById(id); picker.value = article.id;
     document.querySelector('#panel-article').innerHTML = articleMarkup(article,'h2');
     const actions = document.querySelector('#panel-actions'); actions.replaceChildren();
-    if (false) {
-      const button = document.createElement('button'); button.className = 'primary'; button.textContent = '在指板查看';
-      button.onclick = () => { applyPreset(article.preset); close(); }; actions.append(button);
-    }
     const link = document.createElement('a'); link.href = `../wiki/#${article.id}`; link.textContent = '打开完整文章 ↗'; actions.append(link);
     panel.scrollTop = 0;
   }
@@ -55,7 +51,8 @@ export function initPanel(applyPreset) {
     if (!panel.open) { if (wide.matches) { panel.show(); document.body.classList.add('panel-open'); } else panel.showModal(); }
     document.querySelector('#close-wiki').focus();
   }
-  function close() { panel.close(); }
+  function close() { if(panel.open) panel.close(); }
+  panel.addEventListener('click',event=>{if(event.target!==panel)return;const r=panel.getBoundingClientRect();if(event.clientX<r.left||event.clientX>r.right||event.clientY<r.top||event.clientY>r.bottom)close();});
   panel.addEventListener('close',() => { document.body.classList.remove('panel-open'); opener?.focus(); });
   panel.addEventListener('keydown',event => { if (event.key === 'Escape') { event.preventDefault(); close(); } });
   wide.addEventListener('change',() => { if (panel.open) close(); });

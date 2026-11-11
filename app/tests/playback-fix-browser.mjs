@@ -10,7 +10,7 @@ assert.ok(await page.locator('.root[data-note="55"]').count());
 await page.getByRole('button',{name:'小星星 · G4 高八度'}).click();assert.ok(await page.locator('.root[data-note="67"]').count());await page.getByRole('button',{name:'停止声音'}).click();
 await page.locator('summary').click();await page.getByRole('button',{name:'1弦12品',exact:true}).click();await page.getByRole('button',{name:'只听所选音',exact:true}).click();await page.waitForTimeout(100);
 assert.ok((await page.evaluate(()=>window.peaks)).includes(.195));await page.getByRole('button',{name:'停止声音'}).click();
-await page.getByRole('button',{name:'将所选音设为试听起音'}).click();assert.ok(await page.locator('.root[data-note="76"]').count());await page.getByRole('button',{name:'播放示范',exact:true}).click();await page.getByText('这个音程的目标超出当前指板最高音 E5',{exact:false}).waitFor();await page.reload();assert.ok(await page.locator('.root[data-note="76"]').count());
+await page.getByRole('button',{name:'将所选音设为试听起音'}).click();assert.ok(await page.locator('.root[data-note="76"]').count());await page.getByRole('button',{name:/播放音程|播放示范/}).click();await page.getByText('这个音程的目标超出当前指板最高音 E5',{exact:false}).waitFor();await page.reload();assert.ok(await page.locator('.root[data-note="76"]').count());
 await page.getByRole('button',{name:'04 换起音'}).click();assert.equal(await page.getByRole('button',{name:'将所选音设为试听起音'}).count(),0);
 await page.goto('http://127.0.0.1:8877/explore/');
 await page.evaluate(()=>localStorage.setItem('mg-explore-v1',JSON.stringify({root:'C',display:'notes',scope:'all',scale:false,chord:{root:'C',quality:'major',index:4,linked:true},selection:null})));
