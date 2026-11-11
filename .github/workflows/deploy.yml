@@ -44,6 +44,7 @@ jobs:
           node tests/audio-interaction-browser.mjs
           node tests/explore-feedback-browser.mjs
           node tests/lesson-browser.mjs
+          node tests/home-browser.mjs
       - uses: actions/upload-artifact@v4
         with:
           name: site

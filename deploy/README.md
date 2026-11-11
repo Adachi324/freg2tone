@@ -1,6 +1,6 @@
 # 自动发布
 
-生产入口：https://43.142.118.254/music/ （跳转第一章）。原游戏在 /music/index.html。
+生产入口：https://43.142.118.254/music/ （跳转动效首页）。原游戏在 /music/index.html。
 推送 main 后 GitHub Actions 测试、构建、上传并原子切换。PR 只检查。可在 Actions 手动重新运行。
 
 服务器：fretdeploy 无 sudo，只拥有 /srv/fret2tone；管理员维护 /usr/local/bin/fret2tone-activate。GitHub Secrets 为 DEPLOY_KEY / DEPLOY_KNOWN_HOSTS，均不入库。只需22端口允许Actions SSH连接，443用于访问；本机SSH已通，实际Actions连通性须由首次流水线确认。

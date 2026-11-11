@@ -1,0 +1,5 @@
+stories:
+  - id: '1'
+    title: 设计首页接入与真实导航
+    status: done
+    file: SPEC.md

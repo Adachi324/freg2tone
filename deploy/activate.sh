@@ -9,7 +9,7 @@ release="$root/releases/$version"
 staging=$(mktemp -d "$root/releases/.staging.XXXXXX")
 trap 'rm -rf "$staging"' EXIT
 tar -xzf "$root/incoming/$version.tar.gz" -C "$staging" --no-same-owner
-for page in index.html lesson-1/index.html explore/index.html wiki/index.html; do
+for page in index.html home/index.html lesson-1/index.html explore/index.html wiki/index.html; do
   test -s "$staging/$page"
 done
 printf '%s\n' "$version" > "$staging/version.txt"
