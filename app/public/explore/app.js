@@ -7,7 +7,7 @@ const $=s=>document.querySelector(s),key='mg-explore-v1';
 let state={root:'C',display:'hidden',scope:'all',scale:false,chord:null,selection:null};
 try{const saved=JSON.parse(localStorage.getItem(key));if(saved&&roots.includes(saved.root))state={...state,...saved};}catch{}
 if(!['notes','degrees','hidden'].includes(state.display))state.display='hidden';
-if(state.selection&&(!Number.isInteger(state.selection.string)||state.selection.string<1||state.selection.string>6||!Number.isInteger(state.selection.fret)||state.selection.fret<0||state.selection.fret>12))state.selection=null;
+if(state.selection&&(!Number.isInteger(state.selection.string)||state.selection.string<1||state.selection.string>6||!Number.isInteger(state.selection.fret)||state.selection.fret<0||state.selection.fret>15))state.selection=null;
 if(state.chord&&(!roots.includes(state.chord.root)||!['major','minor'].includes(state.chord.quality)||!chordShapes(state.chord.root,state.chord.quality)[state.chord.index]))state.chord=null;
 let popup=null;
 const player=createPlayer(m=>document.querySelectorAll('[data-midi]').forEach(b=>b.classList.toggle('sounding',Number(b.dataset.midi)===m)),()=>{},m=>$('#audio-status').textContent=m);
@@ -19,10 +19,10 @@ function render(){
  $('#key-title').textContent=displayRoot(state.root)+' 大调';
  $('#layers').innerHTML=(state.scale?`<div class="layer">${displayRoot(state.root)} 大调音阶 <button id="hear-scale">试听</button><button id="remove-scale">移除音阶</button></div>`:'')+(c?`<div class="layer">${displayRoot(c.root)} ${c.quality==='major'?'大':'小'}三和弦 · ${shape?.name||'无可用指型'} ${associated(state.root,c.root,c.quality,c.index).length?'':'· 非调内和弦'} <button id="prev">‹</button><span>指型 ${c.index+1}/${chordShapes(c.root,c.quality).length}</span><button id="next">›</button><button id="link" aria-pressed="${c.linked}">关联音阶 ${c.linked?'开':'关'}</button><button id="remove-chord">移除和弦</button>${c.linked?`<p>${groups.length?groups.map(g=>['低把位','当前把位','高把位'][g.role+1]+'：六弦起点 '+g.start+' 品').join(' · ')+(groups.length<3?' · 指板边界，部分相邻把位不可用':''):'非调内和弦：保留指型，不显示关联音阶'}</p>`:''}</div>`:'');
  const board=$('#fretboard');board.replaceChildren();
- for(let f=-1;f<=12;f++){const x=document.createElement('span');x.className='fret-label';x.textContent=f<0?'':f===0?'空弦':f;board.append(x);}
+ for(let f=-1;f<=15;f++){const x=document.createElement('span');x.className='fret-label';x.textContent=f<0?'':f===0?'空弦':f;board.append(x);}
  for(let s=1;s<=6;s++){
  const label=document.createElement('span');label.className='string-label';label.textContent=s+' '+pitchName(noteAt(s,0))+(shape?(shape.frets[6-s]===null?' ×':shape.frets[6-s]===0?' ○':''):'');board.append(label);
- for(let f=0;f<=12;f++){
+ for(let f=0;f<=15;f++){
  const midi=noteAt(s,f),tone=tones.find(t=>t.pc===midi%12),roles=groups.filter(g=>g.notes.some(n=>n.string===s&&n.fret===f)).map(g=>g.role),chord=shape&&shape.frets[6-s]===f;
  const cell=document.createElement('div');cell.className='fret '+(f===0?'open':'');cell.style.setProperty('--thickness',1+(s-1)*.4+'px');
  const b=document.createElement('button');b.dataset.midi=midi;b.dataset.string=s;b.dataset.fret=f;
@@ -32,7 +32,7 @@ function render(){
  b.setAttribute('aria-label',`${s}弦${f}品 ${spelledPitch(midi,name)}${chord?' 和弦按弦点':''}${roles.map(r=>['低把位','当前把位','高把位'][r+1]).join('、')}`);
  b.onclick=()=>{state.selection={string:s,fret:f};sound([midi]);render();};cell.append(b);board.append(cell);
  }}
- for(let f=-1;f<=12;f++){const x=document.createElement('span');x.className='position-marker';x.textContent=[3,5,7,9].includes(f)?'●':f===12?'● ●':'';board.append(x);}
+ for(let f=-1;f<=15;f++){const x=document.createElement('span');x.className='position-marker';x.textContent=[3,5,7,9,15].includes(f)?'●':f===12?'● ●':'';board.append(x);}
  if(state.selection){const {string:s,fret:f}=state.selection,m=noteAt(s,f),t=(shape?.frets[6-s]===f?scaleNotes(c.root,c.quality):tones).find(t=>t.pc===m%12);$('#selected-note').textContent=`${s} 弦 ${f} 品 · ${t?spelledPitch(m,t.name):pitchName(m).split(' / ').map(n=>spelledPitch(m,n)).join(' / ')} · ${tones.find(t=>t.pc===m%12)?'调内级数 '+tones.find(t=>t.pc===m%12).degree:'调外音'}`;$('#replay').disabled=false;}
  const bind=(id,fn)=>{if($(id))$(id).onclick=fn;};
  bind('#remove-scale',()=>{state.scale=false;render()});bind('#hear-scale',()=>sound([...tones.map(t=>60+roots.indexOf(state.root)+t.step),72+roots.indexOf(state.root)]));

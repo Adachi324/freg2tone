@@ -14,3 +14,17 @@ test('all offered voicings are complete triads and 3NPS shapes stay playable wit
  assert.deepEqual(positions('C')[0].notes.filter(n=>n.string===6).map(n=>n.fret),[0,1,3]);
  assert.deepEqual(chordShapes('A','minor')[1].frets,[null,0,2,2,1,0]);
 });
+test('C major adds open C, G and D CAGED shapes without changing saved E/A indices',()=>{
+ const shapes=chordShapes('C','major');
+ assert.deepEqual(shapes.map(s=>s.frets),[[8,10,10,9,8,8],[null,3,5,5,5,3],[null,3,2,0,1,0],[8,7,5,5,5,8],[null,null,10,12,13,12]]);
+ assert.equal(chordShapes('C','minor').length,2);
+ assert.deepEqual(chordShapes('D','major').find(s=>s.name.startsWith('D 型')).frets,[null,null,0,2,3,2]);
+});
+
+test('15-fret boundary includes C D shape and rejects fret 16',()=>{assert.equal(noteAt(1,15),79);assert.throws(()=>noteAt(1,16),RangeError);assert.deepEqual(chordShapes('C')[4].frets,[null,null,10,12,13,12]);});
+test('expanding board retains the old filtered shape indices',()=>{
+ assert.equal(chordShapes('Eb','major')[0].name,'A 型横按');
+ assert.deepEqual(chordShapes('Eb','major')[0].frets,[null,6,8,8,8,6]);
+ assert.equal(chordShapes('Ab','major')[0].name,'E 型横按');
+ for(const r of roots) assert.equal(chordShapes(r,'major').length,5);
+});

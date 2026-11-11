@@ -28,25 +28,37 @@ export function spelledPitch(midi,name) {
   return name + ((midi - natural - accidental) / 12 - 1);
 }
 export function noteAt(string, fret) {
-  if (!Number.isInteger(string) || string < 1 || string > 6 || !Number.isInteger(fret) || fret < 0 || fret > 12) throw new RangeError('弦或品位超出范围');
+  if (!Number.isInteger(string) || string < 1 || string > 6 || !Number.isInteger(fret) || fret < 0 || fret > 15) throw new RangeError('弦或品位超出范围');
   return opens[string - 1] + fret;
 }
 
 export function chordShapes(root, quality='major') {
  const pc=roots.indexOf(root); if(pc<0||!['major','minor'].includes(quality)) return [];
  const e=(pc-4+12)%12,a=(pc-9+12)%12;
- return [{name:'E 型横按',frets:[e,e+2,e+2,e+(quality==='major'?1:0),e,e]}, {name:'A 型横按',frets:[null,a,a+2,a+2,a+(quality==='major'?2:1),a]}].filter(s=>s.frets.every(f=>f===null||f<=12));
+ // 先保留原有 E/A 顺序；新增型只追加，兼容已保存的指型索引。
+ const shapes=[{name:'E 型横按',frets:[e,e+2,e+2,e+(quality==='major'?1:0),e,e]}, {name:'A 型横按',frets:[null,a,a+2,a+2,a+(quality==='major'?2:1),a]}];
+ // 旧版过滤后的 E/A 索引保持不变，新进入范围的型排在其后。
+ shapes.sort((x,y)=>Number(x.frets.some(f=>f!==null&&f>12))-Number(y.frets.some(f=>f!==null&&f>12)));
+ if(quality==='major') {
+  const c=pc,g=(pc-7+12)%12,d=(pc-2+12)%12;
+  shapes.push(
+   {name:c===0?'C 型开放':'C 型横按',frets:[null,c+3,c+2,c,c+1,c]},
+   {name:g===0?'G 型开放':'G 型横按',frets:[g+3,g+2,g,g,g,g+3]},
+   {name:d===0?'D 型开放':'D 型横按',frets:[null,null,d,d+2,d+3,d+2]}
+  );
+ }
+ return shapes.filter(s=>s.frets.every(f=>f===null||(f>=0&&f<=15)));
 }
 export function positions(root) {
  const pcs=scaleNotes(root,'major').map(n=>n.pc), result=[];
- for(let start=0;start<=12;start++) {
+ for(let start=0;start<=15;start++) {
   if(!pcs.includes((40+start)%12)) continue;
   let pitch=40+start; const notes=[];
   for(let string=6;string>=1;string--) for(let n=0;n<3;n++) {
    if(notes.length){do{pitch++}while(!pcs.includes(pitch%12));}
    notes.push({string,fret:pitch-opens[string-1]});
   }
-  if(notes.every(n=>n.fret>=0&&n.fret<=12)) result.push({start,notes});
+  if(notes.every(n=>n.fret>=0&&n.fret<=15)) result.push({start,notes});
  }
  return result;
 }

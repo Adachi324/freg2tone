@@ -19,8 +19,8 @@ export function createPlayer(onNote, onEnd, onError) {
         const time = start + index * .45;
         const oscillator = context.createOscillator(), gain = context.createGain();
         oscillator.type = 'triangle'; oscillator.frequency.value = 440 * 2 ** ((midi - 69) / 12);
-        gain.gain.setValueAtTime(0,time); gain.gain.linearRampToValueAtTime(.13,time+.012);
-        gain.gain.exponentialRampToValueAtTime(.001,time+.55);
+        gain.gain.setValueAtTime(0,time); gain.gain.linearRampToValueAtTime(.195,time+.012);
+        gain.gain.exponentialRampToValueAtTime(.0015,time+.55);
         oscillator.connect(gain); gain.connect(context.destination);
         oscillator.onended = () => { oscillator.disconnect(); gain.disconnect(); };
         oscillator.start(time); oscillator.stop(time+.6); voices.push(oscillator);
