@@ -11,3 +11,8 @@ stories:
     title: 整合验证与发布
     status: done
     file: stories/3-verification.md
+
+  - id: '4'
+    title: 教学判定播放审查与修复
+    status: done
+    file: stories/4-review-fixes.md

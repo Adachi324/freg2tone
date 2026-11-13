@@ -49,6 +49,8 @@ jobs:
           node tests/course-browser.mjs
           node tests/course-flow-browser.mjs
           node tests/course-help-browser.mjs
+          node tests/course-tabs-browser.mjs
+          node tests/course-audit-browser.mjs
       - uses: actions/upload-artifact@v4
         with:
           name: site

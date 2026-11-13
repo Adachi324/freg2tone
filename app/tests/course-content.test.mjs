@@ -33,3 +33,15 @@ test('独立音乐预期：级数、跨弦音高、七和弦和两小节转录',
  assert.deepEqual(c(8).hearing[1].notes,[53,57,60,57,55,59,62,59]);assert.equal(c(8).hearing[1].answer,2);
  for(const chapter of chapters){const seen=chapter.steps.filter(s=>s.notes.length).map(s=>JSON.stringify(s.notes));for(const phase of ['hearing','review'])for(const q of chapter[phase].filter(q=>q.kind==='hearing')){assert.ok(!seen.includes(JSON.stringify(q.notes)),`${q.id} repeats lesson`);if(phase==='review')assert.ok(!chapter.hearing.some(h=>JSON.stringify(h.notes)===JSON.stringify(q.notes)),`${q.id} repeats same-day hearing`);}}
 });
+test('第五章迁移与第七章隔天解决使用新材料，旧题标识可追溯',()=>{
+ const progression=chapters.find(c=>c.id===5).practice[0];
+ assert.match(progression.prompt,/C–F–Am–G/);
+ assert.equal(progression.options[progression.answer],'G–C–Em–D');
+ assert.equal(progression.id,'5-practice-1-v2');
+ assert.equal(progression.previousVersions[0].id,'5-practice-1');
+ const resolution=chapters.find(c=>c.id===7).review[1];
+ assert.match(resolution.prompt,/D7/);
+ assert.equal(resolution.options[resolution.answer],'F♯→G，C→B是常见解决');
+ assert.equal(resolution.id,'7-review-2-v2');
+ assert.equal(resolution.previousVersions[0].id,'7-review-2');
+});

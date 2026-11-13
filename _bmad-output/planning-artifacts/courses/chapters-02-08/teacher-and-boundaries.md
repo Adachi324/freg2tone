@@ -51,3 +51,6 @@ B部分分别播放两小节4/4、每音一拍的8音旋律，以及两小节根
 # 知识核对来源
 
 2026-11-13复查：[Open Music Theory：Triads](https://viva.pressbooks.pub/openmusictheory/chapter/triads/) 用于核对三和弦性质、组成与转位；[Seventh Chords](https://viva.pressbooks.pub/openmusictheory/chapter/seventh-chords/) 用于核对七和弦组成。音阶距离与课程顺序沿用既有大纲；具体音符、节奏与练习均为本项目自编并逐音核对。来源只支持知识事实，不证明本课学习效果。
+
+## 2026-11-13审查修订
+第五章独立迁移改为 I–IV–vi–V（C–F–Am–G → G–C–Em–D），避免直接重复教学的 I–vi–IV–V。第七章隔天解决题迁移到 D7→G（F♯→G、C→B），不再复问当堂 G7→C。两题版本升为v2；旧版首答与完成方式继续可查，不能用旧题成绩宣称新材料通过。原当堂完成日期和隔天资格保留。

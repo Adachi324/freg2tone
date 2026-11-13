@@ -7,3 +7,10 @@ test('知识访问仅辅助已开始未完成题',()=>{const s={records:{},activ
 import {beginQuestion,helpOpen,navigationHelps} from '../public/course/model.js';
 test('同章多个已开始未完成题都记录帮助，未开始题不创建',()=>{const s={records:{}};beginQuestion(s,'practice:one',10);beginQuestion(s,'hearing:one',10);visit(s,11);assert.equal(s.records['practice:one'].help,true);assert.equal(s.records['hearing:one'].help,true);assert.equal(s.records['review:one'],undefined);s.records['practice:one']=answer(s.records['practice:one'],0,0);const frozen=s.records['practice:one'];helpOpen(s);assert.equal(s.records['practice:one'],frozen)});
 test('只有资料导航标帮助，目录首页与切章链接不标',()=>{assert.equal(navigationHelps('/course/'),false);assert.equal(navigationHelps('/home/'),false);assert.equal(navigationHelps('/course/index.html'),false);assert.equal(navigationHelps('/wiki/'),true);assert.equal(navigationHelps('/explore/'),true);assert.equal(navigationHelps('/lesson-1/'),true)});
+import {mergeProgress} from '../public/course/model.js';
+test('两页已提交不同首答时保留最早持久首答及至少两次尝试，重复合并幂等',()=>{
+ const state={chapters:{2:{records:{q:{first:0,attempts:1,correct:true,help:false}}}}};
+ const remote={chapters:{2:{records:{q:{first:1,attempts:1,correct:false,help:true}},completed:'2026-11-12'}}};
+ mergeProgress(state,remote);assert.deepEqual(state.chapters[2].records.q,{first:1,attempts:2,correct:true,help:true});
+ mergeProgress(state,remote);assert.equal(state.chapters[2].records.q.attempts,2);assert.equal(state.chapters[2].completed,'2026-11-12');
+});
