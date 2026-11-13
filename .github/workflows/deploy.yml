@@ -22,7 +22,7 @@ jobs:
           cache-dependency-path: app/package-lock.json
       - run: npm ci
         working-directory: app
-      - run: node --experimental-strip-types --test tests/game.test.ts tests/lesson-web.test.mjs tests/explore-model.test.mjs tests/explore-v1.test.mjs
+      - run: node --experimental-strip-types --test tests/game.test.ts tests/lesson-web.test.mjs tests/explore-model.test.mjs tests/explore-v1.test.mjs tests/course-model.test.mjs tests/course-content.test.mjs
         working-directory: app
       - run: npm run build
         working-directory: app
@@ -45,6 +45,10 @@ jobs:
           node tests/explore-feedback-browser.mjs
           node tests/lesson-browser.mjs
           node tests/home-browser.mjs
+          node tests/course-race-browser.mjs
+          node tests/course-browser.mjs
+          node tests/course-flow-browser.mjs
+          node tests/course-help-browser.mjs
       - uses: actions/upload-artifact@v4
         with:
           name: site

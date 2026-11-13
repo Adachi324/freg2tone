@@ -1,0 +1,13 @@
+stories:
+  - id: '1'
+    title: 章节2至8完整内容
+    status: done
+    file: stories/1-content.md
+  - id: '2'
+    title: 课程运行与证据记录
+    status: done
+    file: stories/2-runtime.md
+  - id: '3'
+    title: 整合验证与发布
+    status: done
+    file: stories/3-verification.md
