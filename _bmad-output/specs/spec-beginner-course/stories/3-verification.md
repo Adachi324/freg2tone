@@ -1,6 +1,6 @@
 ---
 title: 初学者课程独立内容审查与软件验证
-status: in-review
+status: done
 date: 2026-11-13
 ---
 ## 内容审查
@@ -23,3 +23,8 @@ date: 2026-11-13
 - 完整既有与新增规则测试26/26通过；diff空白检查通过。
 - Codex内置浏览器本次成功打开localhost:8877/course/，实际点击第二章并核验教学内容与入口；在右侧保留页面。三种尺寸交互覆盖仍为自动化Chromium模拟，不是真机。
 - GitHub Actions已纳入课程规则、可达、完整代表流程、帮助标记及音频竞态回归。服务器发布脚本新增course/index.html完整性门槛；网关不变。
+
+## 发布结果
+- 代码提交：0299ac14951bcc5398b19420e9bcf1373415bcf5。GitHub Actions run 43351907686 全部通过，包含旧页面交互与本轮新增课程回归，自动部署成功。
+- https://43.142.118.254/music/version.txt 与上述 SHA 一致；course/home/lesson-1/explore/wiki 均 HTTP 200，线上首页含课程目录链接。
+- 文档收尾提交不改运行代码，以 [skip ci] 跳过重复部署；部署版本仍为上述已验证代码。
