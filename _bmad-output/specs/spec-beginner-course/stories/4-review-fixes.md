@@ -47,3 +47,6 @@ baseline_commit: db722d92eb61a6e620aa5ae7cedfe3d1a7df2b2a
 - 2–8入口/未听门槛，2/4/6屏幕指板，2章完整作答/次日复测，8章慢速整句均覆盖；桌面/竖屏/横屏无整体溢出或pageerror。
 - 专项真实音频调度参考/两个不同候选八音，正常.65秒与慢速.975秒间隔通过；失败/停止/切速/候选替换拦截及恢复通过。
 - 新增course-tabs与course-audit纳入GitHub Actions。截图app/test-results/beginner-course/cr-chapter5-desktop.png及既有三尺寸截图。
+
+## 线上交付
+2026-11-13：GitHub Actions run 43414404207 全绿并自动部署。线上version.txt为398fcbdff1401abbf1f64e2977374eaf92a9e813；course/app.js、model.js、curriculum.js与本地已验证版本逐字节一致；course/home/lesson-1/explore/wiki均HTTP 200。后续文档收尾提交使用[skip ci]，不改已部署运行代码。
